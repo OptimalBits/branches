@@ -7,8 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "gitrepo.h"
 
 int main(int argc, char *argv[])
 {
+	GitRepo *repo;
+	
+	repo = [[GitRepo alloc] initWithUrl:[NSURL fileURLWithPath:@"/Users/manuel/dev/git/cpp-gpengine/.git" isDirectory:YES]];
+	
+	[repo dealloc];
+	
     return NSApplicationMain(argc,  (const char **) argv);
 }
