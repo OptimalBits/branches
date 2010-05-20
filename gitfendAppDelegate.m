@@ -7,13 +7,24 @@
 //
 
 #import "gitfendAppDelegate.h"
+#import "gitrepo.h"
+
+
+
 
 @implementation gitfendAppDelegate
 
 @synthesize window;
+@synthesize repos;
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-	// Insert code here to initialize your application 
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification 
+{
+	
+
+	
+	
+//	[repo dealloc];
+
 }
 
 @end
