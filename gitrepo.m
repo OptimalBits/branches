@@ -3,39 +3,39 @@
 //  gitfend
 //
 //  Created by Manuel Astudillo on 5/8/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 FlipZap. All rights reserved.
 //
 
 #import "gitrepo.h"
 
 @implementation GitRepo
 
+@synthesize url;
+@synthesize refs;
+
 - (id) initWithUrl: (NSURL*) path
 {	
     if ( self = [super init] )
-    {
-		heads = [[NSMutableDictionary alloc] init];
-		tags = [[NSMutableDictionary alloc] init];
-		remotes = [[NSMutableDictionary alloc] init];
-
+    {		
+		[path retain];
+		url = path;
 		
-		[self parseRefs: path];
+		refs = [[NSMutableDictionary alloc] init];
+
+		[self parseRefs];
 	}
     return self;
 }
 
 -(void) dealloc
-{
-	[heads dealloc];
-	[tags dealloc];
-	[remotes dealloc];
-	
-	
+{	
+	[refs dealloc];
+	[url release];
 	[super dealloc];
 }
 
 
-- (void) parseRefs: (NSURL*) url
+- (void) parseRefs
 {
 	NSError *error;
 	NSFileManager *fileManager;
@@ -62,30 +62,28 @@
 			
 			NSString *sha1 = [lineElements objectAtIndex:0];
 			
-			if ( [lineElements count] > 2 )
+			if ( [lineElements count] >= 2 )
 			{
 				NSArray *ref = [[lineElements objectAtIndex:1] componentsSeparatedByString:@"/"];
 				
 				if ([ref count] > 2 )
 				{
 					NSString *refType = [ref objectAtIndex:1];
-					if ( [refType isEqualToString:@"heads"] )
+					NSMutableDictionary *dict = [refs objectForKey:refType];
+					if ( dict == nil )
 					{
-						[heads setValue:[ref objectAtIndex:2] forKey:sha1];
+						dict = [[NSMutableDictionary alloc] init];
+						[refs setValue:dict forKey:refType];
+					}
+					
+					if ( [refType isEqualToString:@"heads"] || 
+						 [refType isEqualToString:@"tags"] ||
+						 [refType isEqualToString:@"stash"] )
+					{
+						[dict setValue:[ref objectAtIndex:2] forKey:sha1];
 						continue;
 					}
-					
-					if ( [refType isEqualToString:@"tags"] )
-					{
-						[tags setValue:[ref objectAtIndex:2] forKey:sha1];
-						continue;
-					}
-					
-					if ( [refType isEqualToString:@"stash"] )
-					{
-						//	[self.stash setValue:[ref objectAtIndex:2]: forKey:sha1];
-					}
-					
+						 
 					if ( [refType isEqualToString:@"remotes"] )
 					{
 						NSArray *tail;
@@ -96,7 +94,16 @@
 						
 						tail = [ref subarrayWithRange:range];
 						
-						[remotes setValue:tail forKey:sha1];
+						NSString *remote = [tail objectAtIndex:0];
+						
+						NSMutableDictionary *remoteRef = [dict objectForKey:remote];
+						if ( remoteRef == nil )
+						{
+							remoteRef = [[NSMutableDictionary alloc] init];
+							[dict setValue:remoteRef forKey:remote];
+						}
+						
+						[remoteRef setValue:[tail objectAtIndex:1] forKey:sha1];
 						continue;
 					}
 				}
@@ -119,57 +126,65 @@
 		
 		for(NSURL *u in urls)
 		{
-			NSLog([u absoluteString]);
+			NSMutableDictionary *dict;
 			
-			NSString *sha1 = [NSString stringWithContentsOfURL:url usedEncoding:&encoding error:&error];
+			NSString *refType = [u lastPathComponent];
 			
-			if ( sha1 != nil )
+			NSArray *fileRefs = [fileManager contentsOfDirectoryAtURL:u includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
+			
+			if ( [fileRefs count] > 0 )
 			{
-				NSString *filename = [u lastPathComponent];
-				NSString *refType  = [[u URLByDeletingLastPathComponent] lastPathComponent];
-				
-				if ( [refType isEqualToString:@"heads"] )
+				dict = [refs objectForKey:refType];
+				if ( dict == nil )
 				{
-					[heads setValue:filename forKey:sha1];
-					continue;
-				}
-				
-				if ( [refType isEqualToString:@"tags"] )
-				{
-					[tags setValue:filename forKey:sha1];
-					continue;
-				}
-				
-				if ( [refType isEqualToString:@"stash"] )
-				{
-					//	[self.stash setValue:[ref objectAtIndex:2]: forKey:sha1];
+					dict = [[NSMutableDictionary alloc] init];
+					[refs setValue:dict forKey:refType];
 				}
 			}
-			else if ( [[u lastPathComponent] isEqualToString:@"remotes"] )
+			
+			for(NSURL *ref in fileRefs)
 			{
-				NSArray *remotePathComponents = [fileManager contentsOfDirectoryAtURL:u includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
-
-				for ( NSURL *remote in remotePathComponents )
+				NSString *sha1 = [NSString stringWithContentsOfURL:ref usedEncoding:&encoding error:&error];
+			
+				if ( sha1 != nil ) // Otherwise we hare handling a directory.
 				{
-					NSArray *remoteSubPathComponents = [fileManager contentsOfDirectoryAtURL:remote includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
-					for ( NSURL *subPath in remoteSubPathComponents )
+					NSString *filename = [ref lastPathComponent];
+				
+					[dict setValue:filename forKey:sha1];
+				}
+				else if ( [[u lastPathComponent] isEqualToString:@"remotes"] )
+				{
+					NSArray *remotePathComponents = [fileManager contentsOfDirectoryAtURL:u includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
+
+					for ( NSURL *remote in remotePathComponents )
 					{
-						NSString *sha1 = [NSString stringWithContentsOfURL:subPath usedEncoding:&encoding error:&error];
-					
-						if ( sha1 != nil )
+						NSArray *remoteSubPathComponents = [fileManager contentsOfDirectoryAtURL:remote includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
+	
+						if ( [remoteSubPathComponents count] > 0 )
 						{
-							NSString *filename = [subPath lastPathComponent];
+							NSDictionary *remoteRefs = [[NSMutableDictionary alloc] init];
 						
-							[remotes setValue:filename forKey:sha1];
-							continue;
+							[dict setValue:remoteRefs forKey:[remote lastPathComponent]];
+
+							for ( NSURL *subPath in remoteSubPathComponents )
+							{
+								NSString *sha1 = [NSString stringWithContentsOfURL:subPath usedEncoding:&encoding error:&error];
+					
+								if ( sha1 != nil )
+								{
+									NSString *filename = [subPath lastPathComponent];
+						
+									[remoteRefs setValue:filename forKey:sha1];
+									continue;
+								}
+							}
 						}
 					}
 				}
-			}
+			} // for(NSURL *ref in urls)
 		}
 	}
 }
-
 @end
 
 

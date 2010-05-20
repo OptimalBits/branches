@@ -10,16 +10,18 @@
 
 @interface GitRepo : NSObject {
 	NSString *description;
+			
+	//GitConfig *config;
 	
-	NSMutableDictionary *heads;		// example key,pair: refs/heads/master 08567abbeb383da4fae88f4e5a5beb6bd30ffee7
-	NSMutableDictionary *remotes;
-	NSMutableDictionary *tags;
-	
-	//GitConfig *config;	
+	NSURL* url;
 }
 
+@property (retain) NSURL* url;
+@property (readonly) NSMutableDictionary *refs;
+
 - (id) initWithUrl: (NSURL*) path;
--(void) parseRefs: (NSURL*) root; // Parses refs and pack_refs
+- (void) dealloc;
+- (void) parseRefs; // Parses refs and pack_refs
 
 
 @end
