@@ -7,11 +7,13 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "gitfendRepositories.h"
 
 @interface gitfendAppDelegate : NSObject <NSApplicationDelegate> {
     NSWindow *window;
 }
 
+@property (assign) IBOutlet gitfendRepositories *repos;
 @property (assign) IBOutlet NSWindow *window;
 
 @end
