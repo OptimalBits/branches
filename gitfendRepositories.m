@@ -8,7 +8,8 @@
 
 #import "gitfendRepositories.h"
 #import "gitrepo.h"
-
+#import "gitpackfile.h"
+#import "NSDataExtension.h"
 
 @implementation gitfendRepositories
 
@@ -19,8 +20,17 @@
 		repositories = [[NSMutableArray alloc] init];
 		
 		GitRepo *repo;
+		NSURL *indexUrl = [NSURL fileURLWithPath:@"/Users/manuel/dev/git/cpp-gpengine/.git/objects/pack/pack-cfc7f4eb1d3e31966376a206af5f31c6e4546b49.idx" isDirectory:NO];
+		NSURL *packUrl = [NSURL fileURLWithPath:@"/Users/manuel/dev/git/cpp-gpengine/.git/objects/pack/pack-cfc7f4eb1d3e31966376a206af5f31c6e4546b49.pack" isDirectory:NO];
+				
+		GitPackFile *packFile = [GitPackFile alloc];
+		packFile = [packFile initWithIndexURL:indexUrl andPackURL:packUrl];
+			
+		NSData *obj = [packFile getObjectFromShaCString:"8635df152f8f7968a30c95ca5aee34a5f51cbb00"];
 		
 		repo = [[GitRepo alloc] initWithUrl:[NSURL fileURLWithPath:@"/Users/manuel/dev/gitfend/.git" isDirectory:YES]];
+		
+		[repo revisionHistoryFor:[NSData dataWithHexCString:"e5d78ba749356f01066eb9d7ec149da27e6d55c8"] withPackFile:packFile];
 		
 		[self addRepo:repo];
 	}
