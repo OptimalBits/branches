@@ -7,6 +7,12 @@
 //
 
 #import "gitrepo.h"
+#import "gitpackfile.h"
+#import "gitcommitobject.h"
+
+
+static void recurseCommits( NSMutableArray *history, GitObject *obj, GitPackFile *packFile );
+
 
 @implementation GitRepo
 
@@ -185,6 +191,47 @@
 		}
 	}
 }
+
+- (NSArray*) revisionHistoryFor:(NSData*) sha1 withPackFile: (GitPackFile*) packFile
+{
+	NSMutableArray *history = [[NSMutableArray alloc] init];
+	
+	GitObject *obj = [packFile getObject:sha1];
+	
+	recurseCommits( history, obj, packFile );
+	
+	[history autorelease];
+	return history;
+}
+
 @end
+
+
+static void recurseCommits( NSMutableArray *history, GitObject *obj, GitPackFile *packFile )
+{
+	while ( [obj isKindOfClass:[GitCommitObject class]] ) 
+	{
+		GitCommitObject *commit = (GitCommitObject*) obj;
+		[history addObject:commit];
+		
+		if ( [commit.parents count] > 1 )
+		{
+			for (NSData *key in commit.parents)
+			{
+				obj = [packFile getObject:key];
+				recurseCommits( history, obj, packFile );
+			}
+		}
+		else if ( [commit.parents count] == 1 )
+		{
+			obj = [packFile getObject:[commit.parents objectAtIndex:0]];
+		}
+		else {
+			obj = nil;
+		}
+	}
+}
+
+
 
 
