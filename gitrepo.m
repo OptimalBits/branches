@@ -29,7 +29,7 @@
 
 -(void) dealloc
 {	
-	[refs dealloc];
+	[refs release];
 	[url release];
 	[super dealloc];
 }
