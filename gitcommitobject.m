@@ -3,12 +3,19 @@
 //  gitfend
 //
 //  Created by Manuel Astudillo on 5/22/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 CodeTonic. All rights reserved.
 //
 
 #import "gitcommitobject.h"
 #import "RegexKitLite.h"
 #import "NSDataExtension.h"
+
+const NSString *msgRegExp = @"\n\n((?s:.*))";
+const NSString *regExpTree = @"tree\\s([0-9a-f]{40})";
+const NSString *regExpParent = @"parent\\s([0-9a-f]{40})";
+const NSString *regExpAuthor = @"author\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(\\-))[0-9]+)";
+const NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(\\-))[0-9]+)";
+
 
 @implementation GitAuthor
 

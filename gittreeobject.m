@@ -3,12 +3,23 @@
 //  gitfend
 //
 //  Created by Manuel Astudillo on 5/25/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 CodeTonic. All rights reserved.
 //
 
 #import "gittreeobject.h"
 
+
+@implementation GitTreeNode
+
+@synthesize sha1;
+@synthesize mode;
+
+@end
+
+
 @implementation GitTreeObject
+
+@synthesize tree;
 
 - (id) initWithData: (NSData*) data
 {

@@ -3,11 +3,16 @@
 //  gitfend
 //
 //  Created by Manuel Astudillo on 5/12/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 CodeTonic. All rights reserved.
 //
 
 #import "gitfendController.h"
 #import "ImageAndTextCell.h"
+#import "NSDataExtension.h"
+#import "gitcommitobject.h"
+#import "GitFrontTree.h"
+
+#import "GitFrontBrowseController.h"
 
 #define MAIN_COLUMN_ID	@"Main"
 

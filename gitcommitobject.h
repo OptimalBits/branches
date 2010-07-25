@@ -3,15 +3,19 @@
 //  gitfend
 //
 //  Created by Manuel Astudillo on 5/22/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 CodeTonic. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 #import "gitobject.h"
 
+
 @interface GitAuthor : NSObject
 {
-
+	NSString *name;
+	NSString *email;
+	NSDate *time;
+	NSString *offutc;
 }
 
 @property (readwrite, retain) NSString *name;

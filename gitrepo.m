@@ -3,21 +3,85 @@
 //  gitfend
 //
 //  Created by Manuel Astudillo on 5/8/10.
-//  Copyright 2010 FlipZap. All rights reserved.
+//  Copyright 2010 CodeTonic. All rights reserved.
 //
 
 #import "gitrepo.h"
-#import "gitpackfile.h"
+#import "gitobject.h"
 #import "gitcommitobject.h"
+#import "NSDataExtension.h"
+
+static void recurseCommits( GitRepo *repo, NSMutableArray *history, GitObject *obj );
 
 
-static void recurseCommits( NSMutableArray *history, GitObject *obj, GitPackFile *packFile );
+
+@implementation GitHistoryVisitor
+
+@synthesize history;
+
+-(id) init
+{
+	if ( self = [super init] )
+	{
+		history = [[NSMutableArray alloc] init];
+	}
+	return self;
+}
+
+-(BOOL) visit:(GitObject *)object
+{
+	[history addObject: object];
+	
+	//NSLog( [[[object author  ]time] description] );
+	return YES;
+}
+
+-(void) dealloc
+{
+	[history release];
+	[super dealloc];
+}
+
+@end
+
+
+
+@implementation GitReference
+
+-(id) initWithName: (NSString*) refName andSha: (NSData*) refSha1
+{
+	if ( self = [super init] )
+    {		
+		[refName retain];
+		[refSha1 retain];
+		
+		name = refName;
+		sha1 = refSha1;		
+	}
+    return self;
+}
+
+-(NSString*) description
+{
+	return name;
+}
+
+-(void) dealloc
+{
+	[name release];
+	[sha1 release];
+	[super dealloc];
+}
+
+@end
+
 
 
 @implementation GitRepo
 
 @synthesize url;
 @synthesize refs;
+@synthesize objectStore;
 
 - (id) initWithUrl: (NSURL*) path
 {	
