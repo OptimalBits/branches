@@ -56,15 +56,15 @@ const NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((
 	if ( self = [super init] )
     {
 		const char *_sha1;
-		
-		NSString *msgRegExp = @"\n\n((?s:.*))";
-		
-		NSString *regExpTree = @"tree\\s([0-9a-f]{40})";
-		NSString *regExpParent = @"parent\\s([0-9a-f]{40})";
-		NSString *regExpAuthor = @"author\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(\\-))[0-9]+)";
-		NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(\\-))[0-9]+)";
-		
+		const char *bytes = [data bytes];
+				
 		NSString *commitString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+		if ( commitString == nil ) // we need a more robust algorythm to parse commit messages...
+								   // since Cocoa just return nil if the string is not 100% UTF8 compliant.
+		{
+			[self dealloc];
+			return nil;
+		}
 		
 		[self setSha1:key];
 		
@@ -114,6 +114,21 @@ const NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((
 	}
 	
 	return self;
+}
+
+- (BOOL) isEqual:(id)object
+{
+	return [[self sha1] isEqualToData: [object sha1]];
+}
+
+-(NSUInteger) hash
+{
+	return *((NSUInteger*)[[self sha1] bytes]);
+}
+
+-(NSComparisonResult) compareDate:(GitCommitObject*) obj
+{
+	return [[[obj author] time] compare:[[self author] time]];
 }
 
 @end

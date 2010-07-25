@@ -25,22 +25,33 @@
 
 -(id) initWithName: name email: email andTime: time;
 
-
 @end
 
 
 @interface GitCommitObject : GitObject 
 {
+	NSData *sha1;
+	NSMutableArray *parents;
+	NSData *tree;
+	
+	NSString *message;
+	
+	GitAuthor *author;
+	GitAuthor *committer;
 }
 
-@property (readwrite, retain) NSData *tree;
-@property (readwrite, retain) NSMutableArray *parents;
-@property (readwrite, retain) NSString *message;
 @property (readwrite, retain) NSData *sha1;
+@property (readwrite, retain) NSMutableArray *parents;
+@property (readwrite, retain) NSData *tree;
+
+@property (readwrite, retain) NSString *message;
+
 @property (readwrite, retain) GitAuthor *author;
 @property (readwrite, retain) GitAuthor *committer;
 
-
 - (id) initWithData: (NSData*) data sha1: (NSData*) sha1;
+- (BOOL) isEqual:(id)object;
+-(NSUInteger) hash;
+-(NSComparisonResult) compareDate:(GitCommitObject*) obj;
 
 @end
