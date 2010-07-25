@@ -20,6 +20,7 @@
 + (NSData *) dataWithHexCString:(const char *) hex;
 + (NSData *) dataWithHexString:(NSString *) hex;
 
++ (NSData *)dataWithZlibInflate: (const uint8_t*) bytes length: (uint32_t) length;
 
 // COBS is an encoding that eliminates 0x00.
 - (NSData *) encodeCOBS;

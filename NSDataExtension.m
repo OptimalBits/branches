@@ -153,6 +153,7 @@
 	
 	i = 0;
 	j = 0;
+	
 	while ( ( string[j] != 0 && string[j+1] != 0 ) && ( i < 256 ) )
 	{
 		buffer[i] = ((atoi[string[j] - '0']) << 4) + (atoi[string[j+1] - '0']);
@@ -167,6 +168,54 @@
 {
 	return [NSData dataWithHexCString:[hex UTF8String]];
 }
+
+
+// 
++ (NSData *)dataWithZlibInflate: (const uint8_t*) bytes length: (uint32_t) length
+{
+	if (length  == 0) return nil;
+	
+	unsigned half_length = length / 2;
+	
+	NSMutableData *decompressed = [NSMutableData dataWithLength: length];
+	BOOL done = NO;
+	int status;
+	
+	z_stream strm;
+	strm.next_in = (Bytef *)bytes;
+	strm.avail_in = 0xffffffff; // we assume inf. input data.
+	strm.total_out = 0;
+	strm.zalloc = Z_NULL;
+	strm.zfree = Z_NULL;
+	
+	if (inflateInit (&strm) != Z_OK) return nil;
+	
+	while (!done)
+	{
+		if (strm.total_out >= [decompressed length])
+		{
+			[decompressed increaseLengthBy: half_length];
+		}
+			
+		strm.next_out  = [decompressed mutableBytes] + strm.total_out;
+		strm.avail_out = [decompressed length] - strm.total_out;
+		
+		// Inflate another chunk.
+		status = inflate (&strm, Z_SYNC_FLUSH);
+		if (status == Z_STREAM_END) done = YES;
+		else if (status != Z_OK) break;
+	}
+	if (inflateEnd (&strm) != Z_OK) return nil;
+	
+	// Set real length.
+	if (done)
+	{
+		[decompressed setLength: strm.total_out];
+		return decompressed;
+	}
+	else return nil;
+}
+
 
 
 - (NSString *) base32String
@@ -509,26 +558,26 @@ static const unsigned long crc32table[] =
 
 // Hash function, by DamienBob
 
-#define HEComputeDigest(method)						\ 
-method##_CTX ctx;								\ 
-unsigned char digest[method##_DIGEST_LENGTH];		\ 
-method##_Init(&ctx);							\ 
-method##_Update(&ctx, [self bytes], [self length]);		\ 
+#define HEComputeDigest(method)						\
+method##_CTX ctx;								\
+unsigned char digest[method##_DIGEST_LENGTH];		\
+method##_Init(&ctx);							\
+method##_Update(&ctx, [self bytes], [self length]);		\
 method##_Final(digest, &ctx);
 
-#define HEComputeDigestNSData(method)				\ 
-HEComputeDigest(method)						\ 
+#define HEComputeDigestNSData(method)				\
+HEComputeDigest(method)						\
 return [NSData dataWithBytes:digest length:method##_DIGEST_LENGTH];
 
-#define HEComputeDigestNSString(method)				\ 
-static char __HEHexDigits[] = "0123456789abcdef";		\ 
-unsigned char digestString[2*method##_DIGEST_LENGTH];\ 
-unsigned int i;									\ 
-HEComputeDigest(method)						\ 
-for(i=0; i<method##_DIGEST_LENGTH; i++) {				\ 
-	digestString[2*i]   = __HEHexDigits[digest[i] >> 4];	\ 
-	digestString[2*i+1] = __HEHexDigits[digest[i] & 0x0f];\ 
-}											\ 
+#define HEComputeDigestNSString(method)				\
+static char __HEHexDigits[] = "0123456789abcdef";		\
+unsigned char digestString[2*method##_DIGEST_LENGTH];\
+unsigned int i;									\
+HEComputeDigest(method)						\
+for(i=0; i<method##_DIGEST_LENGTH; i++) {				\
+	digestString[2*i]   = __HEHexDigits[digest[i] >> 4];	\
+	digestString[2*i+1] = __HEHexDigits[digest[i] & 0x0f];\
+}											\
 return [NSString stringWithCString:(char *)digestString length:2*method##_DIGEST_LENGTH];
 
 #define SHA1_CTX				SHA_CTX
