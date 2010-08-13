@@ -100,8 +100,9 @@
 {
     if (anImage != image)
 	{
+		[anImage retain];
         [image release];
-        image = [anImage retain];
+        image = anImage;
 		[image setSize:NSMakeSize(kIconImageSize, kIconImageSize)];
     }
 }
