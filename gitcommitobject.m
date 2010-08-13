@@ -10,11 +10,11 @@
 #import "RegexKitLite.h"
 #import "NSDataExtension.h"
 
-const NSString *msgRegExp = @"\n\n((?s:.*))";
-const NSString *regExpTree = @"tree\\s([0-9a-f]{40})";
-const NSString *regExpParent = @"parent\\s([0-9a-f]{40})";
-const NSString *regExpAuthor = @"author\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(\\-))[0-9]+)";
-const NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(\\-))[0-9]+)";
+NSString *msgRegExp = @"\n\n((?s:.*))";
+NSString *regExpTree = @"tree\\s([0-9a-f]{40})";
+NSString *regExpParent = @"parent\\s([0-9a-f]{40})";
+NSString *regExpAuthor = @"author\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(\\-))[0-9]+)";
+NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(\\-))[0-9]+)";
 
 
 @implementation GitAuthor
@@ -56,11 +56,14 @@ const NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((
 	if ( self = [super init] )
     {
 		const char *_sha1;
-		const char *bytes = [data bytes];
 				
-		NSString *commitString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-		if ( commitString == nil ) // we need a more robust algorythm to parse commit messages...
-								   // since Cocoa just return nil if the string is not 100% UTF8 compliant.
+		// fastestEncoding?
+		
+		NSString *commitString = 
+			[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+		if ( commitString == nil ) 
+		// we need a more robust algorythm to parse commit messages...
+		// since Cocoa just return nil if the string is not 100% UTF8 compliant.
 		{
 			[self dealloc];
 			return nil;
@@ -72,7 +75,6 @@ const NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((
 		tree = [NSData dataWithHexCString:_sha1];
 		
 		matches = [commitString arrayOfCaptureComponentsMatchedByRegex:regExpParent];
-		count = [matches count];
 		
 		parents = [[NSMutableArray alloc] init];
 		for( NSArray *parentMatch in matches )
