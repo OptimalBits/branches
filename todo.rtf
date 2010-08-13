@@ -1,0 +1,93 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf320
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs20 \cf0 TODOS:\
+======\
+\
+Repository View\
+---------------\
+\
+* Sort the contens of the dicts, so that all repos look homogenous.\
+- Use BOLD for every repo name, this will help visualizing where a repo starts and ends.\
+- Use softer gray for the REPOSITORIES root.\
+- Add Drag & Drop for adding, deleting and changing repos place.\
+- Do not allow to add a repo that is already added.\
+- Change name for the repos ( and bind it to the name present in the description file ).\
+- After adding a new repo, open the tree and put the selector on top of the added repo.\
+- When starting the application, show it with the REPOSITORIES root open ( so that a list of all available repos can be seen ).\
+* Show the current HEAD in a repo. I need to think how to show this in a proper way ( maybe the first entry in a repo should be \
+something like: "master (HEAD )" or: HEAD: master\
+* The HEAD could be presented after the repo name, also, when selecting the repo, we could make the\
+head revision as the actual one in browse, history, etc windows:\
+  Ex. gitfend-> master\
+  gitfend @ master\
+\
+- Superimpose an icon on the branch that is actually mapped to the HEAD.\
+- Make the view as the email application.\
+\
+- Add grouping support ( as in Xcode, where you can create folders and subfolders and \
+move repositories inside them ).\
+\
+- Submodules support!\
+\
+- When the repo name is selected, show the working dir files, marking the files that are tracked, and the ones\
+that are not. In this view, it will be possible to add and remove files. As a subcase of add, it will be possible to\
+stage already added files, using partial or full file commits.\
+\
+\
+Branch Management\
+-----------------\
+\
+- Mark somehow the current branch in every repository, maybe with some different color, or using bold ( read current branch from HEAD ).\
+\
+- Add support for creating and deleting branches. When deleting a branch, check if the branch has data not yet merged into some other\
+branch, if that is the case, give an Extra Warning that the branch has not yet been merged, are you sure you want to delete?\
+\
+- The branch button will show which branches have been merged into the marked branch, and in which branches the marked one has been merged into, if any!.\
+\
+- Switch branch -> checkout branch, but check if there are uncommited changes in current branch, and if there are propose to stash the changes.\
+\
+- List branches sorted by name ( in the repository browser ).\
+\
+\
+Stash Support\
+-------------\
+\
+- Create Stash.\
+- Pop Stash\
+- List Stashes: Not needed since we can see them in the repository under "Stash".\
+- It should be possible to Apply a given stash.\
+\
+- Create Branch from stash.\
+- Browsing into a stash.\
+\
+{\field{\*\fldinst{HYPERLINK "http://progit.org/book/ch6-3.html"}}{\fldrslt http://progit.org/book/ch6-3.html}}\
+\
+Staging\
+-------\
+\
+- Stage patches\
+- Stage whole files.\
+\
+Repository Configuration\
+------------------------\
+\
+- Add a contextual menu in the repository view, and place a repository configuration:\
+	- Manage git Config file.\
+	\
+- Contextual menu for creating tags from a given branch.\
+\
+Searching Capabilities:\
+-----------------------\
+- Search in history.\
+- Search commit in a packfile, by author, by Commiter, by Message ( usefull to find orfan commits ).\
+- Search for orfan git objects ( finds trees, commits, blobs that are orfan ).\
+- Context Menu on search result page, to for example delete an object, or find branch where the object belongs, etc.\
+\
+\
+\
+\
+\
+}
