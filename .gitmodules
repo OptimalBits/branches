@@ -1,0 +1,3 @@
+[submodule "SSHCore"]
+	path = SSHCore
+	url = git@github.com:manast/SSHCore.git
