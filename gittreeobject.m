@@ -14,6 +14,14 @@
 @synthesize sha1;
 @synthesize mode;
 
+- (void) dealloc
+{
+    [sha1 release];
+    [mode release];
+    [super dealloc];
+
+}
+
 @end
 
 
@@ -46,37 +54,63 @@
 				i++;
 			}
 			
-			modeAndName = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(start,len)] encoding:NSUTF8StringEncoding];
-			
+			modeAndName = [[[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(start,len)] encoding:NSUTF8StringEncoding] autorelease];
+
 			sha1 = [data subdataWithRange:NSMakeRange(start+len+1, 20)];
 			i +=21;
 			
-			[tree setObject:[modeAndName componentsSeparatedByString:@" "] forKey:sha1];
+			NSArray *modeAndNameArray = [modeAndName componentsSeparatedByString:@" "];
+			
+			GitTreeNode *node = [[[GitTreeNode alloc] init] autorelease];
+			[node setMode:[modeAndNameArray objectAtIndex:0]];
+			[node setSha1:sha1];
+			
+			[tree setObject:node forKey:[modeAndNameArray objectAtIndex:1]];
 		}
 	}
 	
 	return self;
 }
 
-/*
-def parse_tree(text):
- ret = {}
- count = 0
- l = len(text)
- while count < l:
-	mode_end = text.index(' ', count)
-	mode = int(text[count:mode_end], 8)
-
-	name_end = text.index('\0', mode_end)
-	name = text[mode_end+1:name_end]
-
-	count = name_end+21
-
-	sha = text[name_end+1:count]
-
-	ret[name] = (mode, sha_to_hex(sha))
-
-return ret
-*/
+- (GitTreeObject*) treeDiff: (GitTreeObject*) prevTree
+{
+	GitTreeObject *resultTree = [[GitTreeObject alloc] init];
+	NSMutableSet *filenameSet = [[NSMutableSet alloc] init];
+	
+	[filenameSet addObjectsFromArray:[tree allKeys]];
+	[filenameSet addObjectsFromArray:[[prevTree tree] allKeys]];
+	
+	for ( NSString *filename in filenameSet )
+	{
+		GitTreeNode *obj = [[prevTree tree] objectForKey:filename];
+		GitTreeNode *newObj = [tree objectForKey:filename];
+		
+		if ( obj )
+		{
+			if ( newObj )
+			{
+				if ( [[obj sha1] isEqualToData: [newObj sha1]] == NO )
+				{
+					// Object Modified.
+					[[resultTree tree] setObject:newObj forKey: filename];
+				}
+			}
+			else
+			{
+				// Object Deleted.
+			}
+		}
+		else
+		{
+			// Object Added.
+			[[resultTree tree] setObject:newObj forKey: filename];
+		}
+	}
+	
+	[filenameSet release];
+	
+	return [resultTree autorelease];
+}
 
 @end
+
