@@ -33,19 +33,26 @@ typedef struct
 
 @end
 
-
+typedef struct 
+{
+	NSData *data;
+	uint32_t type;
+} GitRawObject;
 
 @interface GitPackFile : NSObject 
 {
 	NSURL *pack;
 	GitPackIndex *index;
 	
-	NSFileHandle *packFileHandle;
+	NSData *packFile;
 }
 
 - (id) initWithIndexURL:(NSURL*) indexURL andPackURL:(NSURL*) packURL;
 - (id) getObject:(NSData*) key;
 - (id) getObjectFromShaCString:(char*) string;
+
+-(void) getRawObject:(uint32_t) offset output: (GitRawObject*) rawObject;
+-(void) getRawObjectWithKey:(NSData *)key output:(GitRawObject *)rawObject;
 
 - (void) dealloc;
 

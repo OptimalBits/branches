@@ -14,6 +14,8 @@
 #import "NSDataExtension.h"
 
 
+NSData *patch_delta( NSData *src, NSData *delta );
+
 @implementation GitPackIndex
 
 - (id) initWithURL:(NSURL*) index largerThan2G: (BOOL*) largePack;
@@ -90,9 +92,10 @@
 	int end;
 	int i;
 	uint8_t idx;
-	uint8_t *shaKey = (uint8_t*) [key bytes];
-	uint32_t offset;
+	uint8_t *shaKey;
+	uint32_t offset = 0;
 	
+	shaKey = (uint8_t*) [key bytes];
 	idx = shaKey[0];
 	
 	if ( idx == 0 )
@@ -102,28 +105,29 @@
 	else
 	{
 		start = fanouts[idx-1];
-		end = fanouts[idx];
-		
-		while ( start <= end )
-		{
-			int c;
-			i = ( start + end ) / 2;
-			c = memcmp( &keys[i], shaKey, sizeof(Sha1Key) );
-			if ( c < 0 )
-			{
-				start = i + 1;
-			}
-			else if ( c > 0 )
-			{
-				end = i - 1;
-			}
-			else
-			{
-				offset = offsets[i];
-				break;
-			}
-		}
-	}
+    }
+    
+    end = fanouts[idx];
+    
+    while ( start <= end )
+    {
+        int c;
+        i = ( start + end ) / 2;
+        c = memcmp( &keys[i], shaKey, sizeof(Sha1Key) );
+        if ( c < 0 )
+        {
+            start = i + 1;
+        }
+        else if ( c > 0 )
+        {
+            end = i - 1;
+        }
+        else
+        {
+            offset = offsets[i];
+            break;
+        }
+    }
 	
 	return offset;
 }
@@ -142,8 +146,23 @@
 		pack = packURL;
 		
 		index = [[GitPackIndex alloc] initWithURL: indexURL largerThan2G:NO];
+		
+		// We may need to open this file to avoid problems if using git from
+		// the command line at the same time ( fopen ).
+		NSString *path = [packURL path];
+
+		packFile = [NSData dataWithContentsOfMappedFile:path];
+		[packFile retain];
 	}
 	return self;
+}
+
+-(void) dealloc
+{
+	[packFile release];
+    [pack release];
+	[index release];
+	[super dealloc];
 }
 
 #define OBJ_COMMIT	1
@@ -161,89 +180,30 @@
 	return [self getObject:byteKey];
 }
 
-
 - (id) getObject:(NSData*) key
 {
-	NSError *error;
-	uint8_t byte;
-	uint8_t type;
-	uint32_t offset = [index findObjectOffset:key];
-	uint64_t objectSize;
-	uint64_t bytesToRead;
-	int i;
-	
-	GitObject *object = nil;
-	NSData *baseSha1;
 	NSData *data;
+	GitObject *object = nil;
+	GitRawObject rawObject;
 	
-	NSString *debug;
-	
-	if ( packFileHandle == nil )
-	{
-		packFileHandle = [NSFileHandle fileHandleForReadingFromURL: pack error:&error];
-	}
-	
-	// seek to offset
-	[packFileHandle seekToFileOffset:offset];
-	
-	// read type and size
-	[[packFileHandle readDataOfLength:1] getBytes:&byte length:1];
+	[self getRawObjectWithKey:key output:&rawObject];
 
-    type = (byte >> 4) & 0x07;
-    objectSize = byte & 0x0f;
-	i = 0;
-	while ( byte & 0x80 )
+	data = rawObject.data;
+	if ( data == nil )
 	{
-		[[packFileHandle readDataOfLength:1] getBytes:&byte length:1];
-		objectSize += (byte & 0x7f) << ((i * 7 ) + 4);
-	    i ++;
+		return nil;
 	}
 	
-	bytesToRead = objectSize;
-	bytesToRead += ( type == OBJ_OFS_DELTA ) ? 8 : 0;
-	bytesToRead += ( type == OBJ_REF_DELTA ) ? 20: 0;
-	
-	// Lets hope that compressed data is always less than uncompressed...
-	NSData *compressedData = [packFileHandle readDataOfLength:bytesToRead];
-	
-	if ( type == OBJ_OFS_DELTA )
-	{
-		const uint8_t *b = [compressedData bytes];
-		uint64_t offset;
-		
-		i = 0;
-		offset = b[0] & 0x7f;
-		while ( b[i] & 0x80 ) 
-		{
-			i ++;
-			//offset += (b[i] & 0x7f) << ((i * 7));
-			offset = ((offset + 1) << 7 ) | (b[i] & 0x7f);
-		} 
-		
-		data = [[compressedData subdataWithRange:NSMakeRange(i+1, objectSize)] zlibInflate];
-	}
-	else if ( type == OBJ_REF_DELTA )
-	{
-		baseSha1 = [compressedData subdataWithRange:NSMakeRange(0, 20)];
-		data = [[compressedData subdataWithRange:NSMakeRange(20, objectSize)]zlibInflate];
-	}
-	else
-	{
-		data = [compressedData zlibInflate];
-	}
-	
-	debug = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-
-	switch( type )
+	switch( rawObject.type )
 	{
 		case OBJ_COMMIT:
-			object = [[GitCommitObject alloc] initWithData: data sha1: key];
+			object = [[[GitCommitObject alloc] initWithData: data sha1: key] autorelease];
 			break;
 		case OBJ_TREE:
-			object = [[GitTreeObject alloc] initWithData: data];
+			object = [[[GitTreeObject alloc] initWithData: data] autorelease];
 			break;
 		case OBJ_BLOB:
-			object = [[GitBlobObject alloc] initWithData: data];
+			object = [[[GitBlobObject alloc] initWithData: data] autorelease];
 			break;
 		case OBJ_TAG:
 			break;
@@ -256,93 +216,182 @@
 	return object;
 }
 
-
-- (void) dealloc
+-(void) getRawObjectWithKey:(NSData *)key output:(GitRawObject *)rawObject
 {
-//	[packFileHandle release];
+	uint32_t offset;
+	offset = [index findObjectOffset:key];
 	
-	free( index );
-	[super dealloc];
+	[self getRawObject:offset output:rawObject];
 }
 
-/*
- 
-#include "git-compat-util.h"
-#include "delta.h"
- 
-void *patch_delta( const void *src_buf, 
-                   unsigned long src_size,
-				   const void *delta_buf, 
-				   unsigned long delta_size,
-				   unsigned long *dst_size)
-18 {
-	19 	const unsigned char *data, *top;
-	20 	unsigned char *dst_buf, *out, cmd;
-	21 	unsigned long size;
-	22 
-	23 	if (delta_size < DELTA_SIZE_MIN)
-		24 		return NULL;
-	25 
-	26 	data = delta_buf;
-	27 	top = (const unsigned char *) delta_buf + delta_size;
-	28 
-	29 	// make sure the orig file size matches what we expect 
-	30 	size = get_delta_hdr_size(&data, top);
-	31 	if (size != src_size)
-		32 		return NULL;
-	33 
-	34 	// now the result size 
-	35 	size = get_delta_hdr_size(&data, top);
-	36 	dst_buf = xmallocz(size);
-	37 
-	38 	out = dst_buf;
-	39 	while (data < top) {
-		40 		cmd = *data++;
-		41 		if (cmd & 0x80) {
-			42 			unsigned long cp_off = 0, cp_size = 0;
-			43 			if (cmd & 0x01) cp_off = *data++;
-			44 			if (cmd & 0x02) cp_off |= (*data++ << 8);
-			45 			if (cmd & 0x04) cp_off |= (*data++ << 16);
-			46 			if (cmd & 0x08) cp_off |= ((unsigned) *data++ << 24);
-			47 			if (cmd & 0x10) cp_size = *data++;
-			48 			if (cmd & 0x20) cp_size |= (*data++ << 8);
-			49 			if (cmd & 0x40) cp_size |= (*data++ << 16);
-			50 			if (cp_size == 0) cp_size = 0x10000;
-			51 			if (cp_off + cp_size < cp_size ||
-							52 			    cp_off + cp_size > src_size ||
-							53 			    cp_size > size)
-				54 				break;
-			55 			memcpy(out, (char *) src_buf + cp_off, cp_size);
-			56 			out += cp_size;
-			57 			size -= cp_size;
-			58 		} else if (cmd) {
-				59 			if (cmd > size)
-					60 				break;
-				61 			memcpy(out, data, cmd);
-				62 			out += cmd;
-				63 			data += cmd;
-				64 			size -= cmd;
-				65 		} else {
-					66 			//
-								// 67 			 * cmd == 0 is reserved for future encoding
-								// 68 			 * extensions. In the mean time we must fail when
-								// 69 			 * encountering them (might be data corruption).
-								// 70 			
-					71 			error("unexpected delta opcode 0");
-					72 			goto bad;
-					73 		}
-		74 	}
-	75 
-	76 	// sanity check
-	77 	if (data != top || size != 0) {
-		78 		error("delta replay has gone wild");
-		79 		bad:
-		80 		free(dst_buf);
-		81 		return NULL;
-		82 	}
-	83 
-	84 	*dst_size = out - dst_buf;
-	85 	return dst_buf;
-	86 }*/
+-(void) getRawObject:(uint32_t) offset output: (GitRawObject*) rawObject
+{
+	uint8_t byte;
+	uint8_t type;
+	
+	uint64_t objectSize;
+	int i;
+	
+	NSData *baseSha1;
+	NSData *data;
+	
+	
+	const uint8_t *packFileData = [packFile bytes];
+	
+	// seek to offset
+	packFileData += offset;
+	
+	byte = *packFileData++;
+	
+    type = (byte >> 4) & 0x07;
+    objectSize = byte & 0x0f;
+	i = 0;
+	while ( byte & 0x80 )
+	{
+		byte = *packFileData++;
+		objectSize += (byte & 0x7f) << ((i * 7 ) + 4);
+	    i ++;
+	}
+	
+	if ( type == OBJ_OFS_DELTA )
+	{
+		uint64_t relOffset;
+		
+		relOffset = *packFileData & 0x7f;
+		while ( *packFileData & 0x80 ) 
+		{
+			packFileData ++;
+			relOffset = ((relOffset + 1) << 7 ) | (*packFileData & 0x7f);
+		} 
+		packFileData++;
+		
+		data = [NSData dataWithZlibInflate: packFileData length: objectSize];
+		
+		if ( data )
+		{
+			[self getRawObject:offset-relOffset output:rawObject];
+			data = patch_delta( rawObject->data, data );
+		}
+		type = rawObject->type;
+	}
+	else if ( type == OBJ_REF_DELTA )
+	{
+		baseSha1 = [NSData dataWithBytes:packFileData length:20];
+		packFileData += 20;
+		
+		data = [NSData dataWithZlibInflate: packFileData length: objectSize];
+		[self getRawObjectWithKey:baseSha1 output:rawObject];
+		data = patch_delta( rawObject->data, data );
+		type = rawObject->type;
+	}
+	else
+	{
+		data = [NSData dataWithZlibInflate: packFileData length: objectSize];
+	}
+	
+	rawObject->data = data;
+	rawObject->type = type;
+}
+
+
+unsigned long get_delta_hdr_size( const unsigned char **datap,
+								  const unsigned char *top)
+{
+	const unsigned char *data = *datap;
+	unsigned long cmd, size = 0;
+	int i = 0;
+	do {
+		cmd = *data++;
+		size |= (cmd & 0x7f) << i;
+		i += 7;
+	} while (cmd & 0x80 && data < top);
+	*datap = data;
+	return size;
+}
+
+NSData *patch_delta( NSData *src, NSData *delta )
+{
+	const void *src_buf = [src bytes];
+	unsigned long src_size = [src length];
+	const void *delta_buf = [delta bytes];
+	unsigned long delta_size = [delta length];
+	
+	const unsigned char *data, *top;
+	unsigned char *dst_buf, *out, cmd;
+	unsigned long size;
+	
+	// if (delta_size < DELTA_SIZE_MIN)
+	//			return NULL;
+	
+	data = delta_buf;
+	top = (const unsigned char *) delta_buf + delta_size;
+	
+	// make sure the orig file size matches what we expect 
+	size = get_delta_hdr_size(&data, top);
+	if (size != src_size)
+		return NULL;
+	
+	// now the result size 
+	size = get_delta_hdr_size(&data, top);
+	
+	NSMutableData *dst = [NSMutableData dataWithLength:size];
+	dst_buf = [dst mutableBytes];
+	
+	out = dst_buf;
+	while (data < top) 
+	{
+		cmd = *data++;
+		if (cmd & 0x80) 
+		{
+			unsigned long cp_off = 0, cp_size = 0;
+			if (cmd & 0x01) cp_off = *data++;
+			if (cmd & 0x02) cp_off |= (*data++ << 8);
+			if (cmd & 0x04) cp_off |= (*data++ << 16);
+			if (cmd & 0x08) cp_off |= ((unsigned) *data++ << 24);
+			if (cmd & 0x10) cp_size = *data++;
+			if (cmd & 0x20) cp_size |= (*data++ << 8);
+			if (cmd & 0x40) cp_size |= (*data++ << 16);
+			if (cp_size == 0) cp_size = 0x10000;
+			if (cp_off + cp_size < cp_size ||
+				cp_off + cp_size > src_size ||
+				cp_size > size)
+				break;
+			memcpy(out, (char *) src_buf + cp_off, cp_size);
+			out += cp_size;
+			size -= cp_size;
+		} 
+		else if (cmd) 
+		{
+			if (cmd > size)
+				break;
+			memcpy(out, data, cmd);
+			out += cmd;
+			data += cmd;
+			size -= cmd;
+		} 
+		else 
+		{
+			//
+			// 	     * cmd == 0 is reserved for future encoding
+			// 		 * extensions. In the mean time we must fail when
+			// 	     * encountering them (might be data corruption).
+			// 			
+			NSLog(@"unexpected delta opcode 0");
+			goto bad;
+		}
+	}
+	
+	// sanity check
+	if (data != top || size != 0)
+	{
+		NSLog(@"delta replay has gone wild");
+	bad:
+		free(dst_buf);
+		return NULL;
+	}
+	
+	//*dst_size = out - dst_buf;
+	return dst;
+}
 
 @end
