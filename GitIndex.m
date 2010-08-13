@@ -8,6 +8,10 @@
 
 #import "GitIndex.h"
 
+#include <sys/stat.h>
+
+#define ENTRY_INFO_SIZE 62
+#define ENTRY_NUL_SIZE 1
 
 @implementation GitIndexEntry
 
@@ -25,6 +29,7 @@
 static uint32_t parseHeader( GitIndex *index, NSFileHandle *file );
 static void readStatInfo( EntryInfo *entryInfo, NSFileHandle *file );
 static void readEntry( NSMutableDictionary *entries, NSFileHandle *file );
+static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
 
 @implementation GitIndex
 
@@ -38,7 +43,8 @@ static void readEntry( NSMutableDictionary *entries, NSFileHandle *file );
 		
 		entries = [[NSMutableDictionary alloc] init];
 		
-		NSFileHandle *file = [NSFileHandle fileHandleForReadingFromURL: url error:&error];
+		NSFileHandle *file = [NSFileHandle fileHandleForReadingFromURL: url 
+																 error:&error];
 		
 		numEntries = parseHeader(self, file);
 		
@@ -58,6 +64,54 @@ static void readEntry( NSMutableDictionary *entries, NSFileHandle *file );
 	[super dealloc];
 }
 
+-(NSArray*) modifiedFiles:(NSURL*) workDir
+{
+	NSError *error;
+	NSMutableArray *fileArray;
+	
+	fileArray = [[[NSMutableArray alloc] init] autorelease];
+	
+	for (GitIndexEntry *entry in entries)
+	{
+		NSURL *fileUrl;
+		NSFileHandle *file;
+		struct stat fileStat;
+		
+		fileUrl = [NSURL URLWithString:[entry filename] relativeToURL:workDir];
+		
+		file = [NSFileHandle fileHandleForReadingFromURL:fileUrl
+												   error:&error];
+		
+		if ( fstat([file fileDescriptor], &fileStat ) == 0 )
+		{
+			if ( checkStat( &fileStat, entry ) )
+			{
+				[fileArray addObject:entry];
+			}
+		}
+	}
+	
+	return fileArray;
+}
+
+-(NSArray*) status:(NSData*) tree objectStore:(GitObjectStore*) objectStore
+{
+	// Populate tree ( flatten filenames into a path relative to working dir
+	// to match the format of the index entries, and put in a dictionary
+	
+	// Iterate through the entries in the index:
+	// Added Status: If an entry is not in the populated tree
+
+	// Modified status, if the Sha1 key in the index differs from the blob 
+	// associated to the same file in the tree.
+	
+	// Removed: an populated tree entry is not in the index.
+	// Note: We may find appropiate to hold the index entries in a dictionary:
+	// ( filename, GitIndexEntry ).
+	
+	return nil;
+}
+
 
 @end
 
@@ -71,17 +125,24 @@ static uint32_t parseHeader( GitIndex *index, NSFileHandle *file )
 	  readDataOfLength:sizeof(header)] 
 	  getBytes:header length:sizeof(header)];
 	
-	if (strncmp( header, "DIRC", 4) )
+	if (strncmp( header, "DIRC", 4) == 0 )
 	{
 		[[file 
 		  readDataOfLength:sizeof(version)] 
 		  getBytes:&version length:sizeof(version)];
 		
-		[[file 
-		  readDataOfLength:sizeof(numEntries)] 
-		  getBytes:&numEntries length:sizeof(numEntries)];
+		version = CFSwapInt32BigToHost( version );
 		
-		return numEntries;
+		if ( version == 2 )
+		{
+			[[file 
+			  readDataOfLength:sizeof(numEntries)] 
+			  getBytes:&numEntries length:sizeof(numEntries)];
+		
+			  numEntries = CFSwapInt32BigToHost( numEntries );
+		
+			 return numEntries;
+		}
 	}
 	
 	return 0;
@@ -90,7 +151,7 @@ static uint32_t parseHeader( GitIndex *index, NSFileHandle *file )
 /*
 <INDEX_ENTRY>:	
 	<INDEX_ENTRY_STAT_INFO>
-	<ENTRY_ID>
+	<ENTRY_ID> // Sha1
 	<ENTRY_FLAGS>
 	<ENTRY_NAME> <NUL>
 	<ENTRY_ZERO_PADDING>;
@@ -116,54 +177,110 @@ static uint32_t parseHeader( GitIndex *index, NSFileHandle *file )
 static void readEntry( NSMutableDictionary *entries, NSFileHandle *file )
 {
 	uint32_t nameSize;
-	uint32_t numReadBytes;
+	uint32_t entryLength;
 	uint32_t skipBytes;
 	
-	GitIndexEntry *entry = [[GitIndexEntry alloc] init];
+	GitIndexEntry *entry = [[[GitIndexEntry alloc] init] autorelease];
 	
 	readStatInfo( [entry entryInfo], file );
 	
 	// read name
 	nameSize = [entry entryInfo]->flags & 0x0fff;
 	
-	NSString *filename = [[NSString alloc]
-						 initWithData:[file readDataOfLength:nameSize] 
-						 encoding: NSUTF8StringEncoding];
-	[filename autorelease];
-	
-	[entry setFilename: filename];
+	NSString *filename = [[[NSString alloc]
+						   initWithData:[file readDataOfLength:nameSize] 
+						   encoding: NSUTF8StringEncoding] autorelease];
 
-	[entries setObject:entry forKey:filename];
-
-	// skip zero padding.
-	numReadBytes = ((sizeof(EntryInfo) + nameSize + 8) & ~7);
-    skipBytes = ( ( numReadBytes + 8 ) & ~7 ) - numReadBytes;
-	
-	[file seekToFileOffset:[file offsetInFile] + skipBytes];
-	
+	if ( filename )
+	{
+		[entry setFilename: filename];
+		
+		[entries setObject:entry forKey:filename];
+		
+		// skip zero padding.
+		entryLength = ENTRY_INFO_SIZE + nameSize + ENTRY_NUL_SIZE;
+		
+		if (entryLength & 0x07)
+		{
+			skipBytes = 8 - ( entryLength & 0x07 ) + ENTRY_NUL_SIZE;
+		}
+		else
+		{
+			skipBytes = 1;
+		}
+		
+		[file seekToFileOffset:[file offsetInFile] + skipBytes];
+	}
 }
 
 static void readStatInfo( EntryInfo *entryInfo, NSFileHandle *file )
 {
 	[[file 
-	  readDataOfLength:sizeof(EntryInfo)] 
-	  getBytes:entryInfo length:sizeof(EntryInfo)];
+	  readDataOfLength:ENTRY_INFO_SIZE] 
+	  getBytes:entryInfo length:ENTRY_INFO_SIZE];
 	
 	// Swap Data if necessary:
-	entryInfo->ctime = NSSwapBigLongLongToHost( entryInfo->ctime );
-	entryInfo->mtime = NSSwapBigLongLongToHost( entryInfo->mtime );
+	entryInfo->stat.ctime = NSSwapBigLongLongToHost( entryInfo->stat.ctime );
+	entryInfo->stat.mtime = NSSwapBigLongLongToHost( entryInfo->stat.mtime );
 	
-	entryInfo->dev	= NSSwapBigLongToHost( entryInfo->dev );
-	entryInfo->inode = NSSwapBigLongToHost( entryInfo->inode );
-	entryInfo->mode	= NSSwapBigLongToHost( entryInfo->mode );
-	entryInfo->uid	= NSSwapBigLongToHost( entryInfo->uid );
-	entryInfo->gid	= NSSwapBigLongToHost( entryInfo->gid );
-	entryInfo->size	= NSSwapBigLongToHost( entryInfo->size );
+	entryInfo->stat.dev	  = NSSwapBigLongToHost( entryInfo->stat.dev );
+	entryInfo->stat.inode = NSSwapBigLongToHost( entryInfo->stat.inode );
+	entryInfo->stat.mode  = NSSwapBigLongToHost( entryInfo->stat.mode );
+	entryInfo->stat.uid	  = NSSwapBigLongToHost( entryInfo->stat.uid );
+	entryInfo->stat.gid	  = NSSwapBigLongToHost( entryInfo->stat.gid );
+	entryInfo->stat.size  = NSSwapBigLongToHost( entryInfo->stat.size );
 	
 	entryInfo->flags = NSSwapBigShortToHost( entryInfo->flags );
 }
 
+static int checkStat( struct stat *fileStat, GitIndexEntry* entry )
+{	
+	EntryInfoStat entryStat;
+	
+	entryStat = [entry entryInfo]->stat;
+	
+	if ( entryStat.ctime != fileStat->st_ctime )
+	{
+		return -1;
+	}
 
+	if ( entryStat.mtime != fileStat->st_mtime )
+	{
+		return -1;
+	}
+
+	if ( entryStat.dev != fileStat->st_dev )
+	{
+		return -1;
+	}
+
+	if ( entryStat.gid != fileStat->st_gid )
+	{
+		return -1;
+	}
+
+	if ( entryStat.uid != fileStat->st_uid )
+	{
+		return -1;
+	}
+
+	if ( entryStat.inode != fileStat->st_ino )
+	{
+		return -1;
+	}
+
+	if ( entryStat.mode != fileStat->st_mode )
+	{
+		return -1;
+	}
+
+	if ( entryStat.size != fileStat->st_size )
+	{
+		return -1;
+	}	
+	
+	return 0;
+}
 
 
 
