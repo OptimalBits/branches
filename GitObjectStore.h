@@ -46,7 +46,9 @@
     This is because the whole history can take a really long time to be computed.
  
  */
--(NSArray*) fileHistory:(NSString*) filename fromCommit: sha1 maxItems: (uint32_t) max;
+-(NSArray*) fileHistory:(NSString*) filename 
+			 fromCommit:(NSData*) sha1 
+			   maxItems:(uint32_t) max;
 
 
 /**

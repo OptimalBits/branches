@@ -26,7 +26,7 @@
 	GitCommitObject *prevCommit;
 }
 
-@property (readonly) NSArray *history;
+@property (readonly) NSMutableArray *history;
 @property (readwrite, retain) NSData *prevSha1;
 @property (readwrite, retain) GitCommitObject *prevCommit;
 
@@ -282,6 +282,9 @@ static GitObject *parseObject( NSData* data, NSData* key );
 }
 */
 
+/**
+	Depth First Traversing.
+ */
 - (void) walk: (NSData*) commitSha with:(id) visitor
 {
 	NSMutableSet *visited = [[NSMutableSet alloc] init];
@@ -319,9 +322,8 @@ static GitObject *parseObject( NSData* data, NSData* key );
 			}
 		}
 		
-		NSLog([[[obj author ]time] description]);
+	//	NSLog([[[obj author ]time] description]);
 		[obj release];
-		
 	}
 	
 	[nodeStack release];
@@ -407,6 +409,7 @@ static GitObject *parseObject( NSData* data, NSData* key );
 	tree, since it traverses the history just once.
  
  */
+/*
 - (NSDictionary*) lastModifiedCommits:(GitTreeObject*) tree sha1: (NSData*) sha1
 {
 	NSMutableSet *remainingFiles;
@@ -422,17 +425,21 @@ static GitObject *parseObject( NSData* data, NSData* key );
 	
 	// Note, use also walk with proper visitor object.
 }
-
+*/
+ 
 -(NSArray*) fileHistory:(NSString*) filename 
-			fromCommit: sha1 
-			maxItems: (uint32_t) max
+			 fromCommit:(NSData*) sha1 
+			   maxItems:(uint32_t) max
 {
 	GitFileHistoryVisitor *visitor = [GitFileHistoryVisitor alloc];
-	visitor = [visitor initWithFile:filename commit:sha1 objectStore:self maxItems:max];
+	visitor = [visitor initWithFile:filename 
+							 commit:sha1 
+						objectStore:self 
+						   maxItems:max];
 	
 	[self walk:sha1 with:visitor];
 
-	NSArray *history = [visitor history];
+	NSMutableArray *history = [visitor history];
 	
 	if ( [history count] == 0 )
 	{
@@ -488,14 +495,13 @@ static GitPackFile *readPackFile( NSURL *url )
 		
 		for ( NSURL *key in packSet )
 		{
-			NSURL *indexURL = [key URLByAppendingPathExtension:@"idx"];
+			NSURL *indexURL= [key URLByAppendingPathExtension:@"idx"];
 			NSURL *packURL = [key URLByAppendingPathExtension:@"pack"];
 			
 			packFile = [[GitPackFile alloc] initWithIndexURL:indexURL andPackURL:packURL];
 		}
 		
 		[packSet release];
-		[fileManager release];
 	}
 	
 	return packFile;
@@ -524,7 +530,7 @@ static GitObject *parseObject( NSData* data, NSData* key )
 	
 	if ( strncmp( "tree", (char*)bytes, 4 ) == 0)
 	{
-		return [[GitTreeObject alloc] 
+		return [[GitTreeObject alloc]
 				initWithData: objectData];
 	}
 	
