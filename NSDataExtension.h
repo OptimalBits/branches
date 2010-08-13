@@ -3,7 +3,7 @@
 //  gitfend
 //
 //  Created by Manuel Astudillo on 5/23/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 CodeTonic. All rights reserved.
 //  
 
 #import <Foundation/Foundation.h>
@@ -38,11 +38,11 @@
 - (unsigned int)crc32;
 
 // Hash
-- (NSData*) md5Digest;
+- (NSData*)   md5Digest;
 - (NSString*) md5DigestString;
-- (NSData*) sha1Digest;
+- (NSData*)   sha1Digest;
 - (NSString*) sha1DigestString;
-- (NSData*) ripemd160Digest;
+- (NSData*)   ripemd160Digest;
 - (NSString*) ripemd160DigestString;
 
 @end
