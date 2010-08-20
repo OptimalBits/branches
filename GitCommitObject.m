@@ -22,7 +22,7 @@ NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(
 @synthesize name;
 @synthesize email;
 @synthesize time;
-@synthesize offutc;
+@synthesize gmtSeconds;
 
 -(id) initWithName: _name email: _email andTime: _time
 {
@@ -31,13 +31,38 @@ NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(
 		[self setName:_name];
 		[self setEmail:_email];
 		[self setTime:[NSDate dateWithTimeIntervalSince1970:[_time doubleValue]]];
+
+		// Todo compute hourse+seconds to seconds
+		[self setGmtSeconds:0];
 	}
 	
 	return self;
 }
 
+// TODO: <TZ_OFFSET_SIGN> <TZ_OFFSET_HOURS> <TZ_OFFSET_MIN>
+//
+//
+//  NSTimeZone ( create it using UTC value ( GMT is the same )->
+//  timeZoneForSecondsFromGMT
+//  NSCalender setTimeZone
+//  NSDate
+//
+// [[[NSCalendar currentCalendar] timeZone] secondsFromGMT]
+
+-(NSString*) encode:(NSString*) user
+{
+	return [NSString stringWithFormat:@"\"%@\" %@ <%@> %d -0000\n",
+									  user,
+									  name,
+									  email,
+									  (u_int64_t)[time timeIntervalSince1970]];
+}
+
 
 @end
+
+
+static NSString* encodeParents( NSArray *parents );
 
 @implementation GitCommitObject
 
@@ -47,6 +72,21 @@ NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(
 @synthesize parents;
 @synthesize message;
 @synthesize sha1;
+
+- (id) initWithTree:(NSData*) tree 
+			parents:(NSArray*) parents
+			message:(NSString*) message
+			 author:(GitAuthor*) author
+		   commiter:(GitAuthor*) commiter
+{
+	if ( self = [super init] )
+	{
+		
+	}
+	return self;
+}
+
+
 
 - (id) initWithData: (NSData*) data sha1: (NSData*) key
 {
@@ -118,6 +158,20 @@ NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(
 	return self;
 }
 
+-(NSData*) data
+{
+	NSString *format = @"\"tree\" %@\n%@%@%@\n%@";
+	
+	NSString *commit = [NSString stringWithFormat:format, 
+												  [tree base16String],
+												  encodeParents(parents),
+												  [author encode:@"author"],
+												  [committer encode:@"committer"],
+												  message];
+	
+	return [commit dataUsingEncoding:NSUTF8StringEncoding];
+}
+
 - (BOOL) isEqual:(id)object
 {
 	return [[self sha1] isEqualToData: [object sha1]];
@@ -134,3 +188,19 @@ NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(
 }
 
 @end
+
+static NSString* encodeParents( NSArray *parents )
+{
+	NSMutableString *string = [[[NSString alloc] init] autorelease];
+	
+	for ( NSData *parent in parents )
+	{
+		[string appendFormat:@" %@\n", [parent base16String]];
+	}
+	
+	return string;
+}
+							
+							
+						
+						

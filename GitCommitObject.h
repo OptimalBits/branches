@@ -10,20 +10,44 @@
 #import "gitobject.h"
 
 
-@interface GitAuthor : NSObject
+@interface GitUserInfo : NSObject
 {
 	NSString *name;
 	NSString *email;
 	NSDate *time;
-	NSString *offutc;
+	NSInteger *gmtSeconds;
 }
 
 @property (readwrite, retain) NSString *name;
 @property (readwrite, retain) NSString *email;
 @property (readwrite, retain) NSDate *time;
-@property (readwrite, retain) NSString *offutc;
+@property (readwrite, retain) NSTimeZone *offutc;
+
+/*
+- (id)initWithTimestamp: (NSTimeInterval)seconds timeZoneOffset: (NSString *)offset {
+    return [self initWithDate:[NSDate dateWithTimeIntervalSince1970:seconds]
+                     timeZone:[NSTimeZone timeZoneWithStringOffset:offset]];
+}
+ */
+
+@end
+
+@interface GitAuthor : NSObject
+{
+	NSString *name;
+	NSString *email;
+	NSDate *time;
+	NSInteger gmtSeconds;
+}
+
+@property (readwrite, retain) NSString *name;
+@property (readwrite, retain) NSString *email;
+@property (readwrite, retain) NSDate *time;
+@property (readwrite, assign)   NSInteger gmtSeconds;
 
 -(id) initWithName: name email: email andTime: time;
+
+-(NSString*) encode:(NSString*) user;
 
 @end
 
@@ -49,7 +73,20 @@
 @property (readwrite, retain) GitAuthor *author;
 @property (readwrite, retain) GitAuthor *committer;
 
+
+- (id) initWithTree:(NSData*) tree 
+			parents:(NSArray*) parents
+			message:(NSString*) message
+			 author:(GitAuthor*) author
+		   commiter:(GitAuthor*) commiter;
+
 - (id) initWithData: (NSData*) data sha1: (NSData*) sha1;
+
+/**
+	Returns the commit as a serialized NSData object.
+ */
+- (NSData*) data;
+
 - (BOOL) isEqual:(id)object;
 -(NSUInteger) hash;
 -(NSComparisonResult) compareDate:(GitCommitObject*) obj;
