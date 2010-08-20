@@ -14,45 +14,46 @@
  
  */
 
-NSString *description;
-NSTextStorage *text;
 
 @interface GitFrontTreeLeaf: NSObject
 {
-	NSString* description;
+	NSString* name;
 	NSTextStorage* text;
 	NSData *sha1;
+	NSImage*  icon;
 	GitRepo *repo;
 }
 
-@property (readwrite, retain) NSString* description;
+@property (readwrite, retain) NSString* name;
 @property (readwrite, retain) NSTextStorage* text;
 @property (readwrite, retain) NSData *sha1;
+@property (readwrite, retain) NSImage*  icon;
 @property (readwrite, retain) GitRepo *repo;
 
-
 @end
-
 
 @interface GitFrontTree : NSObject 
 {
 	NSMutableArray	*children;
-	NSString* description;
-	NSImage*  nodeIcon;
+	NSString* name;
+	NSImage*  icon;
 	GitRepo *repo;
+
+	NSDictionary *iconsDict;
 }
 
-@property (readwrite, retain) NSString* description;
-@property (readwrite, retain) NSImage*  nodeIcon;
+@property (readwrite, retain) NSString* name;
+@property (readwrite, retain) NSImage*  icon;
 @property (readwrite, retain) GitRepo *repo;
 
+-(id) initTreeWithRepo:(GitRepo*) repo icons:(NSDictionary*) icons;
 
--(id) initTreeWithRepo:(GitRepo*) repo;
+-(id) initTreeWithIcons:(NSDictionary*) icons;
 
 -(void) addChildren:(id) ref key: (id) key;
 
+-(void) addLeaf:(id) content key:(id) key;
+
 -(NSArray*) children;
-
-
 
 @end
