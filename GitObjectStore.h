@@ -19,10 +19,10 @@
 
 @interface GitObjectStore : NSObject {
 	NSURL *url;
+	NSURL *objectsUrl;
 	GitPackFile *packFile;
 	NSMutableArray *packFiles; // There can be more than one, so we need to have an array.	
 }
-
 
 /**
 	Init with the url pointing to the .git directory.
@@ -31,6 +31,8 @@
 -(id) initWithUrl:(NSURL*) url;
 
 -(id) getObject:(NSData*) sha1;
+
+
 
 -(void) walk: (NSData*) commitSha with: (id) visitor;
 

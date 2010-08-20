@@ -114,6 +114,7 @@
 
 static GitPackFile *readPackFile( NSURL *url );
 static GitObject *parseObject( NSData* data, NSData* key );
+static void writeObject( NSData *object, NSURL *baseUrl );
 
 @implementation GitObjectStore
 
@@ -124,6 +125,8 @@ static GitObject *parseObject( NSData* data, NSData* key );
     {
 		[_url retain];
 		url = _url;
+		
+		objectsUrl = [url URLByAppendingPathComponent:@"objects"];
 	
 		packFile = readPackFile( url );
 	}
@@ -154,8 +157,6 @@ static GitObject *parseObject( NSData* data, NSData* key );
 	
 	fileManager = [NSFileManager defaultManager];
 	
-	// TODO: Save a sorted array with the list of directories, to improve
-	// speed.
 	objectsPath = [url URLByAppendingPathComponent:@"objects"];
 	if ([objectsPath checkResourceIsReachableAndReturnError:&error] == YES)
 	{
@@ -392,12 +393,12 @@ static GitObject *parseObject( NSData* data, NSData* key );
 -(id) getTreeFromCommit:(NSData*) sha1
 {	
 	GitObject *object = [self getObject:sha1];
-	NSLog([sha1 description]);
+	NSLog([sha1 description], nil);
 	
 	if ( [object isKindOfClass:[GitCommitObject class]] )
 	{
 		GitCommitObject *commitObject = (GitCommitObject*) object;
-		NSLog([[commitObject tree] description] );
+		NSLog([[commitObject tree] description], nil  );
 		return [self getObject:[commitObject tree]];
 	}
 	return nil;
@@ -451,24 +452,28 @@ static GitObject *parseObject( NSData* data, NSData* key );
 	return history;
 }
 
-
-
-// TODO: implement adders...
--(void) addCommit
-{
+/**
+	This function will add the object to the database as a loose object.
 	
+ */
+-(void) addObject: (GitObject*) object
+{
+	NSData *encodedObject = encodeObject( object );
+	NSData *sha1 = [encodedObject sha1Digest];
+	
+	NSString *filename = [sha1 base16String];
+	
+	NSData *compressedObject = [encodedeObject zlibDeflate];
+	
+	writeObject( objectsUrl, compressedObject );
 }
 
--(void) addTree
-{
-	
-}
+@end
 
--(void) addBlob
-{
-	
-}
 
+//
+// Helpers
+//
 
 static GitPackFile *readPackFile( NSURL *url )
 {
@@ -514,7 +519,7 @@ static GitObject *parseObject( NSData* data, NSData* key )
 	size_t len = strlen( (char*) bytes ) + 1;
 	
 	NSData *objectData = 
-		[data subdataWithRange:NSMakeRange( len, [data length] - len)];
+	[data subdataWithRange:NSMakeRange( len, [data length] - len)];
 	
 	if ( strncmp( "commit", (char*)bytes, 6 ) == 0)
 	{
@@ -537,7 +542,55 @@ static GitObject *parseObject( NSData* data, NSData* key )
 	return nil;
 }
 
+static NSData *encodeObject( GitObject *object )
+{	
+	NSString *objectType;
+	NSString *header = [NSString alloc];
+	
+	if ( [object isKindOfClass:[GitBlobObject class]] )
+	{
+		objectType = @"blob";
+	}
+	else if ( [object isKindOfClass:[GitCommitObject class]] )
+	{
+		objectType = @"commit";
+	}	
+	else if ( [object isKindOfClass:[GitTreeObject class]] )
+	{
+		objectType = @"tree";
+	}		
+	/*	else if ( [object isKindOfClass:[GitTagObject class]] )
+	 {
+	 objectType = @"tag";
+	 }
+	 */	
+	
+	NSData *objectData = [object data];
+	header = [NSString stringWithFormat:@"\"%@\" %d",
+			  objectType, 
+			  [objectData length]];
+	NSMutableData *result = 
+	[NSMutableData dataWithCapacity:[header length]+[objectData length]+1];
+	
+	[result appendBytes:[header cStringUsingEncoding:NSUTF8StringEncoding]
+				 length:[header length]];
+	
+	[result appendData:objectData];
+	
+	return result;
+}
 
 
+static void writeObject( NSData *sha1,
+						 NSData *object, 
+						 NSURL *baseUrl )
+{
+	NSError *error;
+	
+	if ([baseUrl checkResourceIsReachableAndReturnError:&error] == YES)
+	{
+		NSString *fanout = [sha1 bytes][0]
+	}
+}
 
-@end
+
