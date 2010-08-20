@@ -3,213 +3,182 @@
 //  gitfend
 //
 //  Created by Manuel Astudillo on 5/15/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 CodeTonic. All rights reserved.
 //
 
-#import "gitfendRepositories.h"
-#import "gitrepo.h"
-#import "gitpackfile.h"
+#import "GitFrontRepositories.h"
+#import "GitRepo.h"
+#import "GitFrontTree.h"
+#import "GitFrontIcons.h"
 #import "NSDataExtension.h"
 
-@implementation gitfendRepositories
 
-- (id) init
+
+@implementation GitFrontRepositoriesLeaf
+	
+@synthesize repo;
+@synthesize name;
+@synthesize tree;
+
+-(id) initWithRepo:(GitRepo*) _repo
+{
+	if ( self = [super init] )
+	{
+		[_repo retain];
+		repo = _repo;
+		name = [[repo name] retain];
+		
+		tree = [[GitFrontTree alloc] initTreeWithRepo:repo 
+												icons:[GitFrontIcons icons]];
+	}
+	return self;
+}
+
+-(void) dealloc
+{
+	[repo release];
+	[name release];
+	[super dealloc];
+}
+
+- (NSImage*) icon
+{
+	return [[GitFrontIcons icons] objectForKey:@"git"];
+}
+
+- (void) encodeWithCoder: (NSCoder *)coder
+{
+	[coder encodeObject: name forKey:@"name"];
+	[coder encodeObject: [repo workingDir] forKey:@"repoUrl"];
+}
+
+- (id) initWithCoder: (NSCoder *)coder
+{
+	if (self = [super init])
+	{
+		name = [[coder decodeObjectForKey:@"name"] retain];
+		repo = [[GitRepo alloc] initWithUrl:[coder decodeObjectForKey:@"repoUrl"] 
+								   name:name];
+		tree = [[GitFrontTree alloc] initTreeWithRepo:repo 
+												icons:[GitFrontIcons icons]];
+	}
+	return self;
+}		
+
+
+@end
+
+
+@implementation GitFrontRepositories
+
+@synthesize name;
+@synthesize children;
+
+- (id) initWithName:(NSString*) _name
 {	
     if ( self = [super init] )
     {
-		repositories = [[NSMutableArray alloc] init];
-		
-		GitRepo *repo;
-		NSURL *indexUrl = [NSURL fileURLWithPath:@"/Users/manuel/dev/git/cpp-gpengine/.git/objects/pack/pack-cfc7f4eb1d3e31966376a206af5f31c6e4546b49.idx" isDirectory:NO];
-		NSURL *packUrl = [NSURL fileURLWithPath:@"/Users/manuel/dev/git/cpp-gpengine/.git/objects/pack/pack-cfc7f4eb1d3e31966376a206af5f31c6e4546b49.pack" isDirectory:NO];
-				
-		GitPackFile *packFile = [GitPackFile alloc];
-		packFile = [packFile initWithIndexURL:indexUrl andPackURL:packUrl];
-			
-		NSData *obj = [packFile getObjectFromShaCString:"8635df152f8f7968a30c95ca5aee34a5f51cbb00"];
-		
-		repo = [[GitRepo alloc] initWithUrl:[NSURL fileURLWithPath:@"/Users/manuel/dev/gitfend/.git" isDirectory:YES]];
-		
-		[repo revisionHistoryFor:[NSData dataWithHexCString:"e5d78ba749356f01066eb9d7ec149da27e6d55c8"] withPackFile:packFile];
-		
-		[self addRepo:repo];
-	}
+		[self setName:_name];
+		children = [[NSMutableArray alloc] init];
+    }
     return self;
 }
 
 -(void) dealloc
 {
-	[repositories dealloc];
+	[children release];
 	[super dealloc];
 }
 
-- (void) addRepo:(GitRepo *) repo
+- (void) addRepo:(GitRepo*) repo 
 {
-	[repositories addObject:repo];
+	[children addObject:[[GitFrontRepositoriesLeaf alloc] initWithRepo: repo]];
 }
 
-///////
-
-- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item
+- (void) insertRepo:(GitRepo*) repo atIndex:(NSUInteger) index
 {
-	if ( item == nil ) // return parent
-	{
-		return self;
-	}
-	else if ( item == self )
-	{
-		return [repositories objectAtIndex:index];
-	}
-	else if ([item isKindOfClass:[GitRepo class]])
-	{
-		NSMutableDictionary *refsDict = [item refs];
-		
-		return [refsDict objectForKey:[[refsDict allKeys] objectAtIndex:index]];
-	}
-	else if ([item isKindOfClass:[NSDictionary class]])
-	{
-		return [item objectForKey:[[item allKeys] objectAtIndex:index]];
-	}
+	[children insertObject:[[GitFrontRepositoriesLeaf alloc] initWithRepo: repo]
+				   atIndex:index];
+}
+
+- (id) addGroup:(NSString*) groupName
+{
+	GitFrontRepositories *node = 
+	[[GitFrontRepositories alloc] initWithName:groupName];
 	
-	return nil;
+	[children addObject:node];
+	
+	return node;
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item
+- (id) insertGroup:(NSString*) groupName atIndex:(NSUInteger) index
 {
-	if ([item isKindOfClass:[NSArray class]] || [item isKindOfClass:[NSDictionary class]])
-    {
-        if ([item count] > 0)
-		{
-            return YES;
-		}
-    }
-	else if ( item == self )
-	{
-		if ([repositories count] > 0)
-		{
-			return YES;
-		}
-	}
-	else if ( [item isKindOfClass:[GitRepo class]] )
-	{
-		if ( [[item refs] count] > 0 )
-		{
-			return YES;
-		}
-	}
-    
-	return NO;	
+	GitFrontRepositories *node = 
+		[[GitFrontRepositories alloc] initWithName:groupName];
+	
+	[children insertObject:node
+				   atIndex:index];
+	
+	return node;
 }
 
-- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
+- (void) insertNode:(id) node atIndex:(NSUInteger) index
 {
-	if ( item == nil )
-	{
-		return 1;// we may have other things than repos in the future. [repositories count];
-	}
-	else if ( item == self )
-	{
-		return [repositories count];
-	}
-	else if ([item isKindOfClass:[NSDictionary class]])
-	{
-		return [item count];
-	}
-	else if ([item isKindOfClass:[GitRepo class]])
-	{
-		return [[item refs] count];
-	}
-	else
-	{
-		return 0;
-	}
+	[children insertObject:node atIndex:index];
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
+- (void) addNode:(id) node
 {
-	// NSOutlineView calls this for each column in your NSOutlineView, for each item.
-	// You need to work out what you want displayed in each column; in our case we
-	// create in Interface Builder two columns, one called "Key" and the other "Value".
-	// 
-	// If the NSOutlineView is after the key for an item, we use either the NSDictionary
-	// key for that item, or we count from 0 for NSArrays. 
-	//
-	// Note that you can find the parent of a given item using [outlineView parentForItem:item];
-			
-	if ([[[tableColumn headerCell] stringValue] compare:@"Main"] == NSOrderedSame) 
+	[children addObject:node];
+}
+
+
+
+- (NSUInteger) indexOfChild:(id) item
+{
+	NSUInteger index;
+	
+	index = [children indexOfObject:item];
+	if ( index == NSNotFound )
 	{
-		// Return the key for this item. First, get the parent array or dictionary.
-		// If the parent is nil, then that must be root, so we'll get the root
-		// dictionary.
-		
-		if ([item isKindOfClass:[gitfendRepositories class]]) 
+		index = 0;
+		for ( id c in children )
 		{
-			return @"REPOSITORIES";
-		}
-		else if ([item isKindOfClass:[GitRepo class]]) 
-		{
-			NSURL *url = [item url];
-			return [url path];
-		} 
-		else if ([item isKindOfClass:[NSDictionary class]])
-		{
-			id parentObject = [outlineView parentForItem:item] ? [outlineView parentForItem:item] : self;
-			if ([parentObject isKindOfClass:[NSDictionary class]]) 
+			if ( [c isKindOfClass:[GitFrontRepositoriesLeaf class]] && 
+				 [c tree] == item )
 			{
-				// Dictionaries have keys, so we can return the key name. We'll assume
-				// here that keys/objects have a one to one relationship.
-				
-				return [[parentObject allKeysForObject:item] objectAtIndex:0];
+				return index;
 			}
-			else if ([parentObject isKindOfClass:[GitRepo class]]) 
-			{
-				return [[[parentObject refs] allKeysForObject:item] objectAtIndex:0];
-			} 
-			else if ([parentObject isKindOfClass:[NSArray class]]) 
-			{
-				// Arrays don't have keys (usually), so we have to use a name
-				// based on the index of the object.
-				
-				return [NSString stringWithFormat:@"Item %d", [parentObject indexOfObject:item]];
-			}
+			index ++;
 		}
-		else if ([item isKindOfClass:[NSString class]]) 
-		{
-			return item;
-		}
-			
-		/*
-		id parentObject = [outlineView parentForItem:item] ? [outlineView parentForItem:item] : self;
-				
-		if ([parentObject isKindOfClass:[NSDictionary class]]) 
-		{
-			// Dictionaries have keys, so we can return the key name. We'll assume
-			// here that keys/objects have a one to one relationship.
-					
-			return [[parentObject allKeysForObject:item] objectAtIndex:0];
-		} 
-		else if ([parentObject isKindOfClass:[NSArray class]]) 
-		{
-			// Arrays don't have keys (usually), so we have to use a name
-			// based on the index of the object.
-					
-			return [NSString stringWithFormat:@"Item %d", [parentObject indexOfObject:item]];
-		}
-		else if ([parentObject isKindOfClass:[gitfendRepositories class]]) 
-		{
-			return [[item url] path];
-		}
-		 */
-	} 
-		
-	return nil;
-}
-			
-- (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
-{
-	// pass
+	}
+	else 
+	{
+		return index;
+	}
+
+	return NSNotFound;
 }
 
-			
+- (NSImage*) icon
+{
+	return [[GitFrontIcons icons] objectForKey:@"folderStack"];
+}
+
+- (void) encodeWithCoder: (NSCoder *)coder
+{
+	[coder encodeObject: name forKey:@"name"];
+	[coder encodeObject: children forKey:@"children"];	
+}
+
+- (id) initWithCoder: (NSCoder *)coder
+{
+	if (self = [super init])
+	{
+		name = [[coder decodeObjectForKey:@"name"] retain];
+		children = [[coder decodeObjectForKey:@"children"] retain];
+	}
+	return self;
+}		
 
 @end
