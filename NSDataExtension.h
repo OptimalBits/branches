@@ -17,10 +17,13 @@
 + (NSData *) dataWithBase32String:(NSString *)base32;
 - (NSString *) base32String;
 
+// Base 16 ( Hexadeciman ) encoding/decoding
 + (NSData *) dataWithHexCString:(const char *) hex;
 + (NSData *) dataWithHexString:(NSString *) hex;
+- (NSString*)base16String;
 
-+ (NSData *)dataWithZlibInflate: (const uint8_t*) bytes length: (uint32_t) length;
++ (NSData *)dataWithZlibInflate: (const uint8_t*) bytes 
+						 length: (uint32_t) length;
 
 // COBS is an encoding that eliminates 0x00.
 - (NSData *) encodeCOBS;
