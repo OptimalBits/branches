@@ -19,5 +19,14 @@
 
 //- (id) writeObject: (NSStream*) stream;
 
+/**
+	Returns a serialized version of the object in a NSData object.
+ */
+-(NSData*) data;
+
+/**
+	Returns the sha1 key associated to this object.
+ */
+-(NSData*) sha1;
 
 @end
