@@ -20,7 +20,6 @@
 
 @end
 
-
 @interface GitTreeObject : GitObject 
 {
 	NSMutableDictionary *tree;
@@ -28,7 +27,14 @@
 
 @property (readonly) NSMutableDictionary *tree;
 
-- (id) initWithData: (NSData*) data;
+-(id) init;
+
+-(id) initWithData: (NSData*) data;
+
+-(void) appendObject:(GitObject*) object 
+			filename:(NSString*) filename
+				mode:(NSString*) mode;
+
 
 /**
 	Returns a tree with the difference between trees.
