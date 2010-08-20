@@ -10,13 +10,13 @@ Repository View\
 ---------------\
 \
 * Sort the contens of the dicts, so that all repos look homogenous.\
-- Use BOLD for every repo name, this will help visualizing where a repo starts and ends.\
+x Use BOLD for every repo name, this will help visualizing where a repo starts and ends.\
 - Use softer gray for the REPOSITORIES root.\
-- Add Drag & Drop for adding, deleting and changing repos place.\
+* Add Drag & Drop for adding, deleting and changing repos place.\
 - Do not allow to add a repo that is already added.\
-- Change name for the repos ( and bind it to the name present in the description file ).\
-- After adding a new repo, open the tree and put the selector on top of the added repo.\
-- When starting the application, show it with the REPOSITORIES root open ( so that a list of all available repos can be seen ).\
+* Change name for the repos adn groups.\
+* After adding a new repo, open the tree and put the selector on top of the added repo.\
+* When starting the application, show it with the REPOSITORIES root open ( so that a list of all available repos can be seen ).\
 * Show the current HEAD in a repo. I need to think how to show this in a proper way ( maybe the first entry in a repo should be \
 something like: "master (HEAD )" or: HEAD: master\
 * The HEAD could be presented after the repo name, also, when selecting the repo, we could make the\
@@ -27,7 +27,7 @@ head revision as the actual one in browse, history, etc windows:\
 - Superimpose an icon on the branch that is actually mapped to the HEAD.\
 - Make the view as the email application.\
 \
-- Add grouping support ( as in Xcode, where you can create folders and subfolders and \
+* Add grouping support ( as in Xcode, where you can create folders and subfolders and \
 move repositories inside them ).\
 \
 - Submodules support!\
@@ -36,6 +36,10 @@ move repositories inside them ).\
 that are not. In this view, it will be possible to add and remove files. As a subcase of add, it will be possible to\
 stage already added files, using partial or full file commits.\
 \
+- Disable context menu options that are not possible depending on the selected row in the outline view.\
+\
+- undo/redo support for adding/removing/moving elements.\
+- Change the add Group and Add repository to the + symbol, ( from the * button ).\
 \
 Branch Management\
 -----------------\
@@ -85,6 +89,76 @@ Searching Capabilities:\
 - Search commit in a packfile, by author, by Commiter, by Message ( usefull to find orfan commits ).\
 - Search for orfan git objects ( finds trees, commits, blobs that are orfan ).\
 - Context Menu on search result page, to for example delete an object, or find branch where the object belongs, etc.\
+\
+\
+Diff/Merge View:\
+----------------\
+- Allow comparing two arbitrary revisions, even support comparing revisions from different repositories.\
+\
+\
+Twitter/Facebook/Github/Gitourious other social media support\
+-------------------------------------------------------------\
+\
+- Make possible announce new releases ( for example, new TAG creation ) in social tools.\
+- Maybe apple script based, so that it can be written as plugins!\
+\
+\
+Bug/Feature system integration\
+------------------------------\
+\
+- Mantis, Bugzilla, Jira, Trac, etc.\
+- Maybe apple script based, so that it can be written as plugins!\
+\
+\
+File Status View:\
+-----------------\
+\
+This view in the central view for a standard workflow. All the files in the working dir\
+are shown. The status for every file is presented. \
+1) Initially no files are tracked.\
+2) A file can be staged.\
+3) A file is tracked.\
+\
+- Show following states for every file:\
+	U - untracked.\
+	M - Modified.\
+	MA - Added.\
+	MD - Deleted\
+	S - Staged.\
+	R - Renamed.\
+	T - tracked.\
+\
+- Rename detection.\
+\
+- Staging support:\
+	- Add new files.\
+	- Remove files.\
+	- Rename files.\
+	- Add diff hunks.\
+	- Apply patches.\
+	\
+	\
+Staging and commiting:\
+---------------------\
+\
+- Support for storing objects in the object store.\
+- Support for creating blob objects.\
+- Support for creating commit objects.\
+- support for creating tree objects.\
+- Create a commit object from current index ( tree + blobs + commit ).\
+- Update index.\
+\
+Diff View:\
+----------\
+- Before and After view.\
+- Interface similar to winmerge ( alt left, right for moving changes from one side to the other ).\
+\
+\
+\
+\
+\
+\
+\
 \
 \
 \
