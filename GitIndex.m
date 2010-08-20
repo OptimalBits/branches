@@ -17,6 +17,10 @@
 
 @synthesize filename;
 
+- (void) dealloc
+{
+	[filename release];
+}
 
 -(EntryInfo*) entryInfo
 {
@@ -64,36 +68,74 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
 	[super dealloc];
 }
 
--(NSArray*) modifiedFiles:(NSURL*) workDir
+/**
+	Returns a set with all the files in the working directory that have been
+	modified.
+ 
+    TODO: 
+	The current set could contain false positives. If the file size
+	is the same, lets compare the files byte for byte to check if they are
+	modified or not. False positives should update the entry data for that file,
+	for performance.
+	
+	Missing files must be handled somehow...
+ 
+ */
+-(NSSet*) modifiedFiles:(NSURL*) workDir
 {
 	NSError *error;
-	NSMutableArray *fileArray;
+	NSMutableSet *fileSet;
 	
-	fileArray = [[[NSMutableArray alloc] init] autorelease];
+	fileSet = [[[NSMutableSet alloc] init] autorelease];
 	
-	for (GitIndexEntry *entry in entries)
+	for (NSString *filename in entries)
 	{
 		NSURL *fileUrl;
 		NSFileHandle *file;
+		GitIndexEntry *entry;
 		struct stat fileStat;
+
+		entry = [entries objectForKey:filename];
+		if ( [entry entryInfo]->stat.ctime != 0 ) // Check if file is staged.
+		{
+			fileUrl = [NSURL URLWithString:filename relativeToURL:workDir];
 		
-		fileUrl = [NSURL URLWithString:[entry filename] relativeToURL:workDir];
-		
-		file = [NSFileHandle fileHandleForReadingFromURL:fileUrl
+			file = [NSFileHandle fileHandleForReadingFromURL:fileUrl
 												   error:&error];
 		
-		if ( fstat([file fileDescriptor], &fileStat ) == 0 )
-		{
-			if ( checkStat( &fileStat, entry ) )
+			if ( fstat([file fileDescriptor], &fileStat ) == 0 )
 			{
-				[fileArray addObject:entry];
+				if ( checkStat( &fileStat, entry ) )
+				{
+					[fileSet addObject:filename];
+				}
 			}
 		}
 	}
 	
-	return fileArray;
+	return fileSet;
 }
 
+-(BOOL) isFileTracked:(NSString*) filename
+{
+	if ( [entries objectForKey:filename] )
+	{
+		return YES;
+	}
+	else
+	{
+		return NO;
+	}
+}
+
+/**
+	Infer the status of the staged files:
+		- Added file.
+		- Removed file.
+		- Renamed file.
+		- Modified file.
+ 
+ */
 -(NSArray*) status:(NSData*) tree objectStore:(GitObjectStore*) objectStore
 {
 	// Populate tree ( flatten filenames into a path relative to working dir
@@ -105,13 +147,26 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
 	// Modified status, if the Sha1 key in the index differs from the blob 
 	// associated to the same file in the tree.
 	
-	// Removed: an populated tree entry is not in the index.
+	// Removed: a populated tree entry is not in the index.
 	// Note: We may find appropiate to hold the index entries in a dictionary:
 	// ( filename, GitIndexEntry ).
 	
 	return nil;
 }
 
+/*
+-(NSDictionary*) status:(NSData*) tree 
+			 workingDir:(NSURL*) workingDir
+				 ignore:(GitIgnore*) ignore
+{
+	NSMutableDictionary *dict;
+	NSMutableSet *processedFiles;
+	
+	dict = [[NSMutableDictionary alloc] init];
+		
+}
+*/
+ 
 
 @end
 
@@ -193,9 +248,45 @@ static void readEntry( NSMutableDictionary *entries, NSFileHandle *file )
 
 	if ( filename )
 	{
+		/*
+		NSArray *pathComponents = [filename pathComponents];
+
+		NSMutableDictionary *currentDict = entries;
+		NSUInteger index = [pathComponents count];
+		for ( NSString* component in pathComponents )
+		{
+			index --;
+			
+			id obj = [currentDict objectForKey:component];
+			if ( obj )
+			{
+				currentDict = obj;
+			}
+			else if ( index )
+			{
+				NSMutableDictionary *newDict = 
+					[[[NSMutableDictionary alloc] init] autorelease];
+				
+				[currentDict setObject:newDict forKey:component];
+			}
+			else
+			{
+				[entry setFilename: component];
+				
+				[currentDict setObject:entry forKey:component];
+			}
+		}
+		 */
+		
 		[entry setFilename: filename];
 		
 		[entries setObject:entry forKey:filename];
+		
+		NSLog(@"Index Entry: %@", filename);
+		{
+			NSData *sha1 = [NSData dataWithBytes:[entry entryInfo]->sha1 length:20];
+			NSLog(@"SHA1: %@", [sha1 description]);
+		}
 		
 		// skip zero padding.
 		entryLength = ENTRY_INFO_SIZE + nameSize + ENTRY_NUL_SIZE;
@@ -237,14 +328,23 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry )
 {	
 	EntryInfoStat entryStat;
 	
+	u_int64_t time;
+	
 	entryStat = [entry entryInfo]->stat;
 	
-	if ( entryStat.ctime != fileStat->st_ctime )
+	
+	time = fileStat->st_ctimespec.tv_sec;
+	time <<= 32;
+	time |= fileStat->st_ctimespec.tv_nsec;
+	if ( entryStat.ctime != time )
 	{
 		return -1;
 	}
 
-	if ( entryStat.mtime != fileStat->st_mtime )
+	time = fileStat->st_mtimespec.tv_sec;
+	time <<= 32;
+	time |= fileStat->st_mtimespec.tv_nsec;
+	if ( entryStat.mtime != time )
 	{
 		return -1;
 	}

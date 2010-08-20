@@ -1,6 +1,6 @@
 //
 //  GitIndex.h
-//  gitfend
+//  GitLib
 //
 //  Created by Manuel Astudillo on 6/12/10.
 //  Copyright 2010 CodeTonic. All rights reserved.
@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 
 @class GitObjectStore;
+@class GitBlobObject;
+@class GitIgnore;
 
 typedef struct
 {
@@ -35,10 +37,9 @@ typedef struct
 	NSString *filename;
 }
 
-@property (readwrite, retain) NSString *filename;
+@property (readwrite, copy) NSString *filename;
 
 -(EntryInfo*) entryInfo;
-
 
 
 @end
@@ -79,7 +80,9 @@ typedef struct
 
 
 /**
-	Returns an array of GitFileStatus objects:
+	Returns a dictionary of (name, GitFile) objects.
+ 
+ 
 	
 	( 3 status: Added, Deleted, Modified:
 		Added: file is in index but not in tree.
@@ -87,7 +90,17 @@ typedef struct
 	 Modified: Sha1 keys are different ( for the blob representing the file ).
 
  */
--(NSArray*) status:(NSData*) tree;
+-(NSArray*) status:(NSData*) tree 
+		workingDir:(NSURL*) workingDir
+			ignore:(GitIgnore*) ignore;
+
+
+/**
+	Returns the status of the given filename.
+	The 
+ 
+ */
+//-(GitFileStatus) fileStatus:(NSString*) filename;
 
 
 /**
@@ -97,14 +110,25 @@ typedef struct
 	have been modified.
 
  */
--(NSArray*) modifiedFiles:(NSURL*) workDir;
+-(NSSet*) modifiedFiles:(NSURL*) workDir;
+
+
+/**
+	Check if 
+	
+ */
+-(BOOL) isFileTracked:(NSString*) filename;
 
 /**
 	 
  */
 -(void) updateFilename: (NSURL*) url;
 
--(void) addFile:(NSURL*) url;
+/**
+	Adds a file to the index.
+ */
+-(void) addFile:(NSURL*) url blob:(GitBlobObject*) blob;
+
 -(void) removeFile:(NSURL*) url;
 
 ////
@@ -115,3 +139,5 @@ typedef struct
 -(void) commitTree:(NSData*) tree withParents:(NSArray*) parents;
 
 @end
+
+
