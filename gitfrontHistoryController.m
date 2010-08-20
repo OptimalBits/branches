@@ -15,29 +15,35 @@
 
 @implementation gitfrontHistoryController
 
-- (id) init
+-(id) init
 {
-	if ( self = [super init] )
+	if ( self = [super initWithNibName:@"History" bundle:nil] )
     {
-		GitRepo *repo;
-		NSURL *indexUrl = [NSURL fileURLWithPath:@"/Users/manuel/dev/git/cpp-gpengine/.git/objects/pack/pack-cfc7f4eb1d3e31966376a206af5f31c6e4546b49.idx" isDirectory:NO];
-		NSURL *packUrl = [NSURL fileURLWithPath:@"/Users/manuel/dev/git/cpp-gpengine/.git/objects/pack/pack-cfc7f4eb1d3e31966376a206af5f31c6e4546b49.pack" isDirectory:NO];
+		history = [[NSArray alloc] init];
+		[self setTitle:@"GitFront - History"];
 		
-		GitPackFile *packFile = [GitPackFile alloc];
-		packFile = [packFile initWithIndexURL:indexUrl andPackURL:packUrl];
-		
-		repo = [[GitRepo alloc] initWithUrl:[NSURL fileURLWithPath:@"/Users/manuel/dev/gitfend/.git" isDirectory:YES]];
-		
-		history = [repo revisionHistoryFor:[NSData dataWithHexCString:"e5d78ba749356f01066eb9d7ec149da27e6d55c8"] withPackFile:packFile];
-		[history retain];
+		historyView = [[self view] documentView];
+		[historyView retain];
+		[historyView setDataSource:self];
 	}
-    return self;
+	
+	return self;
 }
+
 
 -(void) dealloc
 {
 	[history release];
 	[super dealloc];
+}
+
+-(void) setHistory:(NSArray*) _history
+{
+	[_history retain];
+	[history release];
+	history = _history;
+
+	[historyView reloadData];
 }
 
 - (void) awakeFromNib
@@ -66,11 +72,11 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 	}
 	else if ( [[aTableColumn identifier] isEqual:@"date"] )
 	{		
-		NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+		NSDateFormatter *outputFormatter = [[[NSDateFormatter alloc] init] autorelease];
 		[outputFormatter setDateFormat:@"MMMM d, YYYY"];
 		
 		// TODO: For relative new commits, format the date differently ( example: yesterday, 3 days ago, or sunday, saturday )
-		
+		// Also do not show the year if we are in the same year, etc.
 		return [outputFormatter stringFromDate:[[obj author] time]];		
 	}
 	else if ( [[aTableColumn identifier] isEqual:@"author"] )
@@ -81,7 +87,6 @@ objectValueForTableColumn:(NSTableColumn *) aTableColumn
 	return @"";
 }
 
-
-
-
 @end
+
+

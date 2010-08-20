@@ -9,12 +9,14 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface gitfrontHistoryController : NSObject {
+@interface gitfrontHistoryController : NSViewController <NSTableViewDataSource> {
 	IBOutlet NSTableView *historyView;
 	
 	NSArray *history;
 
 }
+
+-(void) setHistory:(NSArray*) _history;
 
 - (void) awakeFromNib;
 
@@ -23,5 +25,8 @@
 - (id) tableView:(NSTableView *)tableView 
 	   objectValueForTableColumn:(NSTableColumn *) aTableColumn 
 	   row:(int) rowIndex;
+
+
+
 
 @end
