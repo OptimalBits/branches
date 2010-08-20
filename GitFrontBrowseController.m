@@ -1,6 +1,6 @@
 //
 //  GitFrontBrowseController.m
-//  gitfend
+//  GitFront
 //
 //  Created by Manuel Astudillo on 6/12/10.
 //  Copyright 2010 CodeTonic. All rights reserved.
@@ -46,7 +46,8 @@
 	
 		//[browseTree release];
 		
-		browseTree = [[GitFrontBrowseTree alloc] initWithCommit:commit objectStore:objectStore];
+		browseTree = [[GitFrontBrowseTree alloc] initWithCommit:commit 
+													objectStore:objectStore];
 		
 		
 		[browseView reloadData];

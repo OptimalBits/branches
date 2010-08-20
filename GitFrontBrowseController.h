@@ -12,7 +12,8 @@
 #import "GitFrontBrowseTree.h"
 
 
-@interface GitFrontBrowseController : NSViewController <NSOutlineViewDataSource> {
+@interface GitFrontBrowseController : NSViewController <NSOutlineViewDataSource> 
+{
 	IBOutlet NSOutlineView *browseView;
 	
 	NSData* tree;
@@ -26,16 +27,24 @@
 
 // NSOutlineViewDataSource protocol:
 
-- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item;
+- (id)outlineView:(NSOutlineView *)outlineView 
+			child:(NSInteger)index 
+		   ofItem:(id)item;
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item;
+- (BOOL)outlineView:(NSOutlineView *)outlineView 
+   isItemExpandable:(id)item;
 
-- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item;
+- (NSInteger)outlineView:(NSOutlineView *)outlineView 
+  numberOfChildrenOfItem:(id)item;
 
-- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
+- (id)outlineView:(NSOutlineView *)outlineView 
+objectValueForTableColumn:(NSTableColumn *)tableColumn 
+		   byItem:(id)item;
 
-- (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
-
+- (void)outlineView:(NSOutlineView *)outlineView 
+	 setObjectValue:(id)object 
+	 forTableColumn:(NSTableColumn *)tableColumn 
+			 byItem:(id)item;
 
 
 @end
