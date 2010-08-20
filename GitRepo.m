@@ -9,10 +9,9 @@
 #import "gitrepo.h"
 #import "gitobject.h"
 #import "gitcommitobject.h"
+#import "GitReference.h"
+#import "GitIndex.h"
 #import "NSDataExtension.h"
-
-static void recurseCommits( GitRepo *repo, NSMutableArray *history, GitObject *obj );
-
 
 
 @implementation GitHistoryVisitor
@@ -45,54 +44,73 @@ static void recurseCommits( GitRepo *repo, NSMutableArray *history, GitObject *o
 @end
 
 
+@interface GitRepo ()
 
-@implementation GitReference
-
--(id) initWithName: (NSString*) refName andSha: (NSData*) refSha1
-{
-	if ( self = [super init] )
-    {		
-		[refName retain];
-		[refSha1 retain];
-		
-		name = refName;
-		sha1 = refSha1;		
-	}
-    return self;
-}
-
--(NSString*) description
-{
-	return name;
-}
-
--(void) dealloc
-{
-	[name release];
-	[sha1 release];
-	[super dealloc];
-}
+- (void) parseRefs;
+- (void) parseHead:(NSURL*) path;
 
 @end
 
 
-
 @implementation GitRepo
 
+@synthesize name;
 @synthesize url;
+@synthesize workingDir;
+@synthesize head;
 @synthesize refs;
 @synthesize objectStore;
+@synthesize index;
 
-- (id) initWithUrl: (NSURL*) path
++ (BOOL) isValidRepo:(NSURL*) workingDir
+{
+	NSError *error;
+	
+	NSURL *repoDir = [workingDir URLByAppendingPathComponent:@".git"];
+	
+	if ([repoDir checkResourceIsReachableAndReturnError:&error] == YES)
+	{
+		// TODO: make some sanity checks
+	
+		return YES;
+	}
+	else
+	{
+		return NO;
+	}
+}
+
+- (id) initWithUrl: (NSURL*) _workingDir name:(NSString*) _name
 {	
     if ( self = [super init] )
-    {		
-		[path retain];
-		url = path;
+    {	
+		[_workingDir retain];
+		workingDir = _workingDir;
+		
+		url = [[workingDir URLByAppendingPathComponent:@".git"] retain];
+		
+		if ( _name != nil )
+		{
+			[self setName:_name];
+		}
+		else
+		{
+			NSArray *urlComponents = [url pathComponents];
+			
+			[self setName:
+			 [urlComponents objectAtIndex:[urlComponents count]-2]];
+		}
 		
 		refs = [[NSMutableDictionary alloc] init];
-
+		
+		objectStore = [[GitObjectStore alloc] initWithUrl: url];
+		
 		[self parseRefs];
+		
+		[self parseHead:url];
+		
+		index = [[GitIndex alloc] initWithUrl: 
+				 [url URLByAppendingPathComponent:@"index"]];
 	}
     return self;
 }
@@ -104,17 +122,77 @@ static void recurseCommits( GitRepo *repo, NSMutableArray *history, GitObject *o
 	[super dealloc];
 }
 
+- (void) encodeWithCoder: (NSCoder *)coder
+{
+	[coder encodeObject: workingDir forKey:@"repo_url"];
+	[coder encodeObject: name forKey:@"repo_name"];
+}
 
-- (void) parseRefs
+- (id) initWithCoder: (NSCoder *)coder
+{
+	return [self initWithUrl:[coder decodeObjectForKey:@"repo_url"]
+						name:[coder decodeObjectForKey:@"repo_name"]];
+}
+
+- (id) getObject:(NSData*) sha1
+{	
+	return [objectStore getObject:sha1];
+}
+
+
+-(NSData*) resolveReference:(NSString*) refName
+{
+	NSUInteger componentCount;
+	NSURL *uRefName = [NSURL URLWithString:refName];
+	NSArray *pathComponents = [uRefName pathComponents];
+	
+	componentCount = [pathComponents count];
+	
+	if ( componentCount >= 3 )
+	{
+		if ( [[pathComponents objectAtIndex:0] isEqualToString: @"refs"] )
+		{
+			NSDictionary *dict = refs;
+			NSUInteger componentIndex = 1;
+			
+			while ( componentIndex < componentCount )
+			{
+				id obj = [dict objectForKey:
+							[pathComponents objectAtIndex:componentIndex]];
+				if ( [obj isKindOfClass:[GitReference class]] )
+				{
+					GitReference *ref = obj;
+					return [ref resolve:self];
+				}
+				else if ( [obj isKindOfClass:[NSMutableDictionary class]] )
+				{
+					dict = obj;
+				}
+				else
+				{
+					NSLog(@"Error resolving reference %@", refName);
+				
+					for ( id o in dict )
+					{
+						NSLog(@"Object: %@ ", [o description] );
+					}
+				}
+				
+				componentIndex++;
+			}
+		}
+	}
+	
+	return nil;
+}
+
+
+// Private methods.
+
+-(void) parsePackedRefs
 {
 	NSError *error;
-	NSFileManager *fileManager;
 	NSURL *packedRefsPath;
-	NSURL *refsPath;
-	
-	//
-	// Parse packed refs
-	//
 	
 	packedRefsPath = [url URLByAppendingPathComponent:@"packed-refs"];
 	if ([packedRefsPath checkResourceIsReachableAndReturnError:&error] == YES)
@@ -122,7 +200,9 @@ static void recurseCommits( GitRepo *repo, NSMutableArray *history, GitObject *o
 		NSString *packedRefs;
 		NSStringEncoding encoding;
 		
-		packedRefs = [NSString stringWithContentsOfURL:packedRefsPath usedEncoding:&encoding error:&error];
+		packedRefs = [NSString stringWithContentsOfURL:packedRefsPath 
+										  usedEncoding:&encoding 
+												 error:&error];
 		
 		NSArray *lines = [packedRefs componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 		
@@ -130,171 +210,160 @@ static void recurseCommits( GitRepo *repo, NSMutableArray *history, GitObject *o
 		{
 			NSArray *lineElements = [line componentsSeparatedByString:@" "];
 			
-			NSString *sha1 = [lineElements objectAtIndex:0];
-			
 			if ( [lineElements count] >= 2 )
 			{
-				NSArray *ref = [[lineElements objectAtIndex:1] componentsSeparatedByString:@"/"];
+				NSString *sha1 = [lineElements objectAtIndex:0];
 				
-				if ([ref count] > 2 )
+				if ( [sha1 length] == 40 )
 				{
-					NSString *refType = [ref objectAtIndex:1];
-					NSMutableDictionary *dict = [refs objectForKey:refType];
-					if ( dict == nil )
-					{
-						dict = [[NSMutableDictionary alloc] init];
-						[refs setValue:dict forKey:refType];
-					}
+					GitReference *ref;
+					NSArray *refComponents = 
+						[[lineElements objectAtIndex:1] 
+							componentsSeparatedByString:@"/"];
 					
-					if ( [refType isEqualToString:@"heads"] || 
-						 [refType isEqualToString:@"tags"] ||
-						 [refType isEqualToString:@"stash"] )
+					NSUInteger componentsCount;
+					NSUInteger componentsIndex;
+					
+					NSMutableDictionary *dict = refs;
+					
+					componentsCount = [refComponents count];
+					componentsIndex = 1;
+					
+					while ( componentsIndex < ( componentsCount - 1 ) )
 					{
-						[dict setValue:[ref objectAtIndex:2] forKey:sha1];
-						continue;
-					}
-						 
-					if ( [refType isEqualToString:@"remotes"] )
-					{
-						NSArray *tail;
-						NSRange range;
+						NSMutableDictionary *nextDict;
 						
-						range.location = 2;
-						range.length = [ref count] - range.location;
+						NSString *component = 
+						[refComponents objectAtIndex:componentsIndex];
 						
-						tail = [ref subarrayWithRange:range];
-						
-						NSString *remote = [tail objectAtIndex:0];
-						
-						NSMutableDictionary *remoteRef = [dict objectForKey:remote];
-						if ( remoteRef == nil )
+						nextDict = [dict objectForKey:component];
+						if ( nextDict == nil )
 						{
-							remoteRef = [[NSMutableDictionary alloc] init];
-							[dict setValue:remoteRef forKey:remote];
+							nextDict = [[[NSMutableDictionary alloc] init] autorelease];
+							[dict setObject:nextDict forKey:component];
 						}
 						
-						[remoteRef setValue:[tail objectAtIndex:1] forKey:sha1];
-						continue;
+						dict = nextDict;
+						componentsIndex ++;
 					}
+					
+					NSString *refName = 
+					[refComponents objectAtIndex:componentsIndex];
+					ref = [[[GitReference alloc] initWithName:refName
+													  content:sha1] autorelease];
+					
+					[dict setObject:ref forKey:refName];
 				}
 			}
 		}
 	}
+}
+
+-(void) parseLooseRefsInDir:(NSURL*) dir 
+					   dict:(NSMutableDictionary*) dict
+				fileManager:(NSFileManager*) fileManager
+					  error:(NSError**) error
+{
 	
-	//
-	// Parse un-packed refs
-	//
+	NSStringEncoding encoding;
+	
+	NSArray *urls = 
+	[fileManager contentsOfDirectoryAtURL:dir 
+			   includingPropertiesForKeys:nil 
+								  options:NSDirectoryEnumerationSkipsHiddenFiles 
+									error:error];
+	for(NSURL *u in urls)
+	{
+		GitReference *ref;
+		NSString *component;
+		
+		NSMutableDictionary *nextDict;
+		
+		component = [u lastPathComponent];
+		
+		NSString *sha1 = [NSString stringWithContentsOfURL:u 
+											  usedEncoding:&encoding 
+													 error:error];
+		
+		if ( sha1 != nil ) // Otherwise we hare handling a directory.
+		{			
+			ref = [[[GitReference alloc] initWithName:component 
+											  content:sha1] autorelease];
+			
+			
+			[dict setObject:ref forKey:component];
+		}
+		
+		nextDict = [dict objectForKey:component];
+		if ( nextDict == nil )
+		{
+			nextDict = [[[NSMutableDictionary alloc] init] autorelease];
+			[dict setObject:nextDict forKey:component];
+		}
+		
+		[self parseLooseRefsInDir:u 
+							 dict:nextDict 
+					  fileManager:fileManager
+							error:error];
+	}
+}
+
+-(void) parseLooseRefs
+{
+	NSError *error;
+	NSFileManager *fileManager;
+	NSURL *refsPath;
 	
 	fileManager = [NSFileManager defaultManager];
 	
 	refsPath = [url URLByAppendingPathComponent:@"refs"];
 	if ([refsPath checkResourceIsReachableAndReturnError:&error] == YES)
 	{
-		NSStringEncoding encoding;
-		
-		NSArray *urls = [fileManager contentsOfDirectoryAtURL:refsPath includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
-		
-		for(NSURL *u in urls)
-		{
-			NSMutableDictionary *dict;
-			
-			NSString *refType = [u lastPathComponent];
-			
-			NSArray *fileRefs = [fileManager contentsOfDirectoryAtURL:u includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
-			
-			if ( [fileRefs count] > 0 )
-			{
-				dict = [refs objectForKey:refType];
-				if ( dict == nil )
-				{
-					dict = [[NSMutableDictionary alloc] init];
-					[refs setValue:dict forKey:refType];
-				}
-			}
-			
-			for(NSURL *ref in fileRefs)
-			{
-				NSString *sha1 = [NSString stringWithContentsOfURL:ref usedEncoding:&encoding error:&error];
-			
-				if ( sha1 != nil ) // Otherwise we hare handling a directory.
-				{
-					NSString *filename = [ref lastPathComponent];
-				
-					[dict setValue:filename forKey:sha1];
-				}
-				else if ( [[u lastPathComponent] isEqualToString:@"remotes"] )
-				{
-					NSArray *remotePathComponents = [fileManager contentsOfDirectoryAtURL:u includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
-
-					for ( NSURL *remote in remotePathComponents )
-					{
-						NSArray *remoteSubPathComponents = [fileManager contentsOfDirectoryAtURL:remote includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
-	
-						if ( [remoteSubPathComponents count] > 0 )
-						{
-							NSDictionary *remoteRefs = [[NSMutableDictionary alloc] init];
-						
-							[dict setValue:remoteRefs forKey:[remote lastPathComponent]];
-
-							for ( NSURL *subPath in remoteSubPathComponents )
-							{
-								NSString *sha1 = [NSString stringWithContentsOfURL:subPath usedEncoding:&encoding error:&error];
-					
-								if ( sha1 != nil )
-								{
-									NSString *filename = [subPath lastPathComponent];
-						
-									[remoteRefs setValue:filename forKey:sha1];
-									continue;
-								}
-							}
-						}
-					}
-				}
-			} // for(NSURL *ref in urls)
-		}
+		[self parseLooseRefsInDir:refsPath
+							 dict:refs
+					  fileManager:fileManager
+							error:&error];
 	}
 }
 
-- (NSArray*) revisionHistoryFor:(NSData*) sha1 withPackFile: (GitPackFile*) packFile
+- (void) parseRefs
 {
-	NSMutableArray *history = [[NSMutableArray alloc] init];
-	
-	GitObject *obj = [packFile getObject:sha1];
-	
-	recurseCommits( history, obj, packFile );
-	
-	[history autorelease];
-	return history;
+	[self parsePackedRefs];
+	[self parseLooseRefs];
 }
+
+- (void) parseHead:(NSURL*) path
+{
+	NSStringEncoding encoding;
+	NSError *error;
+	
+	NSURL *headPath = [path URLByAppendingPathComponent:@"HEAD"];
+	
+	NSString *headRef = [NSString stringWithContentsOfURL:headPath 
+											 usedEncoding:&encoding 
+													error:&error];
+	if ( headRef )
+	{
+		head = [[GitReference alloc] initWithName:@"HEAD"
+ 										  content:headRef];
+		NSLog(@"HEAD: %@", [head resolve:self]);
+		NSLog(@"HEAD -> %@", [head symbolicReference]);
+	}
+}
+
+- (NSArray*) revisionHistoryFor:(NSData*) sha1
+{
+	GitHistoryVisitor *historyVisitor = [[GitHistoryVisitor alloc] init];
+	[historyVisitor autorelease];
+	
+	[objectStore walk:sha1 with:historyVisitor];
+	
+	return [historyVisitor history];
+}
+
 
 @end
 
-
-static void recurseCommits( NSMutableArray *history, GitObject *obj, GitPackFile *packFile )
-{
-	while ( [obj isKindOfClass:[GitCommitObject class]] ) 
-	{
-		GitCommitObject *commit = (GitCommitObject*) obj;
-		[history addObject:commit];
-		
-		if ( [commit.parents count] > 1 )
-		{
-			for (NSData *key in commit.parents)
-			{
-				obj = [packFile getObject:key];
-				recurseCommits( history, obj, packFile );
-			}
-		}
-		else if ( [commit.parents count] == 1 )
-		{
-			obj = [packFile getObject:[commit.parents objectAtIndex:0]];
-		}
-		else {
-			obj = nil;
-		}
-	}
-}
 
 
 
