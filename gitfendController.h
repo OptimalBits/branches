@@ -42,9 +42,9 @@
 - (void) displayViewController:(NSViewController*) vc;
 
 - (IBAction) changeMainView:(id) sender;
-- (IBAction) addRepo: sender;
-- (IBAction) removeRepo: sender;
-- (IBAction) addGroup: sender;
+- (IBAction) addRepo:(id) sender;
+- (IBAction) removeRepo:(id) sender;
+- (IBAction) addGroup:(id) sender;
 
 
 - (void) addRepoFromUrl:(NSURL*) repoUrl;

@@ -54,33 +54,62 @@
 
 
 /**
+  Flattens the tree object so that every entry points to
+  a blob object.
+  
+  Note: the flattened structure is a convenient representation
+  for comparing tree objects against the index.
+ 
+  The keys of the dictionary are the filenames, and the value are 
+  GitTreeNode objects.
+  
+  */
+-(NSDictionary*) flattenTree:(GitTreeObject*) tree;
+
+
+/**
 	Returns the tree related to the given commit.
  */
 -(id) getTreeFromCommit:(NSData*) sha1;
 
 
 /**
- Returns a dictionary with every file in the given tree associated to the sha with the 
- last commit where it was modified.
+ Returns a dictionary with every file in the given tree associated to the sha 
+ with the last commit where it was modified.
  
  @param tree the tree with files.
  @param sha1 a sha1 key associated to the "head" commit for the operation.
  
  TODO: Move to a dedicated class GitCommits
  */
-- (NSDictionary*) lastModifiedCommits:(GitTreeObject*) tree sha1: (NSData*) sha1;
+- (NSDictionary*) lastModifiedCommits:(GitTreeObject*) tree 
+								 sha1:(NSData*) sha1;
 
-
-
-// TODO: implement adders...
 /**
 	Adds the given object to the object store.
  
+	returns the sha1 key if succesfull, nil otherwise.
+ 
  */
--(void) addObject: (GitObject*) object;
+-(NSData*) addObject: (GitObject*) object;
 
--(void) addCommit;
--(void) addTree;
--(void) addBlob;
+/**
+	Deletes an object from the object database.
+	
+	This function is meant to "undo" the addObject operation, and when it is 
+	known that no other object in the database is depending on it.
+	The common case is when adding objects to the index that are not yet 
+	committed, or when adding a file hunk by hunk, where the latest hunk
+	is always containing the previous hunks ( therefore they can be safely 
+	deleted ).
+ 
+	Note:
+	It can only delete objects that are loose. Note that it can delete 
+	an object even if other objects depend on it, creating corrupted object 
+	stores if used wrongly.
+ 
+ */
+-(BOOL) deleteObject: (NSData*) sha1;
+
 
 @end

@@ -17,6 +17,6 @@
 {
 }
 
-+(id) icons;
++(NSDictionary*) icons;
 
 @end

@@ -114,7 +114,10 @@
 
 static GitPackFile *readPackFile( NSURL *url );
 static GitObject *parseObject( NSData* data, NSData* key );
-static void writeObject( NSData *object, NSURL *baseUrl );
+static NSData *encodeObject( GitObject *object );
+static BOOL writeObject( NSData *sha1,
+						 NSData *object, 
+						 NSURL *baseUrl );
 
 @implementation GitObjectStore
 
@@ -126,15 +129,18 @@ static void writeObject( NSData *object, NSURL *baseUrl );
 		[_url retain];
 		url = _url;
 		
-		objectsUrl = [url URLByAppendingPathComponent:@"objects"];
+		objectsUrl = [[url URLByAppendingPathComponent:@"objects"] retain];
 	
 		packFile = readPackFile( url );
+		[packFile retain];
 	}
 	return self;
 }
 
 -(void) dealloc
 {
+	[packFile release];
+	[objectsUrl release];
 	[url release];
 	[super dealloc];
 }
@@ -456,16 +462,71 @@ static void writeObject( NSData *object, NSURL *baseUrl );
 	This function will add the object to the database as a loose object.
 	
  */
--(void) addObject: (GitObject*) object
+-(NSData*) addObject: (GitObject*) object
 {
 	NSData *encodedObject = encodeObject( object );
 	NSData *sha1 = [encodedObject sha1Digest];
 	
-	NSString *filename = [sha1 base16String];
+	NSData *compressedObject = [encodedObject zlibDeflate];
 	
-	NSData *compressedObject = [encodedeObject zlibDeflate];
+	if ( writeObject( sha1, compressedObject, objectsUrl ) )
+	{
+		return sha1;
+	}
+	else 
+	{
+		return nil;
+	}
+}
+
+-(void) flattenTreeRecursive:(GitTreeObject*) tree 
+						path:(NSString*) path
+					  result:(NSMutableDictionary*) flattenedTree
+{
+	NSDictionary *treeDict = [tree tree];
 	
-	writeObject( objectsUrl, compressedObject );
+	for ( NSString* key in treeDict )
+	{
+		NSString *filename;
+		GitTreeNode *node = [treeDict objectForKey:key];
+		
+		if ( path )
+		{
+			filename = [path stringByAppendingPathComponent:key];
+		}
+		else
+		{
+			filename = key;
+		}
+		
+		if ( [node mode] & kDirectory )
+		{
+			id subtree = [self getObject:[node sha1]];
+			if ( [subtree isKindOfClass:[GitTreeObject class]] )
+			{
+				[self flattenTreeRecursive:subtree
+									  path:filename
+									result:flattenedTree];
+			}
+		}
+		else
+		{
+			[flattenedTree setObject:node forKey:filename];
+		}
+	}
+}
+
+-(NSDictionary*) flattenTree:(GitTreeObject*) tree
+{
+	NSMutableDictionary *flattenedTree;
+	
+	flattenedTree = [[[NSMutableDictionary alloc] init] autorelease];
+	
+	[self flattenTreeRecursive:tree 
+						  path:nil 
+						result:flattenedTree];
+	
+	return flattenedTree;
 }
 
 @end
@@ -503,7 +564,8 @@ static GitPackFile *readPackFile( NSURL *url )
 			NSURL *indexURL= [key URLByAppendingPathExtension:@"idx"];
 			NSURL *packURL = [key URLByAppendingPathExtension:@"pack"];
 			
-			packFile = [[GitPackFile alloc] initWithIndexURL:indexURL andPackURL:packURL];
+			packFile = 
+				[[[GitPackFile alloc] initWithIndexURL:indexURL andPackURL:packURL] autorelease];
 		}
 		
 		[packSet release];
@@ -544,8 +606,8 @@ static GitObject *parseObject( NSData* data, NSData* key )
 
 static NSData *encodeObject( GitObject *object )
 {	
-	NSString *objectType;
-	NSString *header = [NSString alloc];
+	NSString *objectType = @"";
+	NSString *header;
 	
 	if ( [object isKindOfClass:[GitBlobObject class]] )
 	{
@@ -563,7 +625,7 @@ static NSData *encodeObject( GitObject *object )
 	 {
 	 objectType = @"tag";
 	 }
-	 */	
+	 */
 	
 	NSData *objectData = [object data];
 	header = [NSString stringWithFormat:@"\"%@\" %d",
@@ -581,16 +643,41 @@ static NSData *encodeObject( GitObject *object )
 }
 
 
-static void writeObject( NSData *sha1,
+static BOOL writeObject( NSData *sha1,
 						 NSData *object, 
 						 NSURL *baseUrl )
 {
 	NSError *error;
+	NSFileManager *fileManager;
+	
+	fileManager = [NSFileManager defaultManager];
+	
+	BOOL succeeded = NO;
 	
 	if ([baseUrl checkResourceIsReachableAndReturnError:&error] == YES)
 	{
-		NSString *fanout = [sha1 bytes][0]
+		NSString *fanout = [NSString stringWithFormat:@"%x",
+							(u_int32_t)((u_int8_t*)[sha1 bytes])[0]];
+		
+		NSString *filename = 
+			[[sha1 subdataWithRange:NSMakeRange( 1, 19 )] base16String];
+		
+		NSURL *path = [baseUrl URLByAppendingPathComponent:fanout];
+		
+		succeeded = [fileManager createDirectoryAtPath:[path path] 
+						   withIntermediateDirectories:YES 
+											attributes:nil 
+												 error:&error];
+		if ( succeeded == NO )
+		{
+			return NO;
+		}
+		
+		NSURL *url = [path URLByAppendingPathComponent:filename];
+		
+		succeeded = [object writeToURL:url atomically:YES];
 	}
-}
-
+	
+	return succeeded;
+} 
 

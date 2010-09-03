@@ -40,7 +40,7 @@ typedef struct
 @property (readwrite, copy) NSString *filename;
 
 -(EntryInfo*) entryInfo;
-
+-(NSData*) sha1;
 
 @end
 
@@ -80,20 +80,10 @@ typedef struct
 
 
 /**
-	Returns a dictionary of (name, GitFile) objects.
+	Returns a dictionary of (name, GitFileStatus) objects.
  
- 
-	
-	( 3 status: Added, Deleted, Modified:
-		Added: file is in index but not in tree.
-	  Deleted: file is in tree but not in index.
-	 Modified: Sha1 keys are different ( for the blob representing the file ).
-
  */
--(NSArray*) status:(NSData*) tree 
-		workingDir:(NSURL*) workingDir
-			ignore:(GitIgnore*) ignore;
-
+-(NSDictionary*) status:(NSDictionary*) flattenedTree;
 
 /**
 	Returns the status of the given filename.
@@ -104,20 +94,34 @@ typedef struct
 
 
 /**
-	Returns a list of the files that have been modified in the working directory.
+	Returns a list of the files that have been modified in the 
+	working directory.
  
-	i.e. do a stat in every file present in the index, and returns the ones that
-	have been modified.
-
+	i.e. do a stat in every file present in the index, and returns 
+	the ones that have been modified.
  */
 -(NSSet*) modifiedFiles:(NSURL*) workDir;
 
 
 /**
-	Check if 
+	Check if a file is tracked.
 	
  */
 -(BOOL) isFileTracked:(NSString*) filename;
+
+
+/**  
+	Return a set with all the ignored files 
+	in the repository.
+ */
+-(NSSet*) ignoredFiles:(NSURL*) workDir;
+ 
+
+/**
+	Return set with all the staged files.
+ */
+-(NSArray*) stagedFiles;
+
 
 /**
 	 
@@ -127,7 +131,9 @@ typedef struct
 /**
 	Adds a file to the index.
  */
--(void) addFile:(NSURL*) url blob:(GitBlobObject*) blob;
+-(void) addFile:(NSString*) filename sha1:(NSData*) sha1;
+
+
 
 -(void) removeFile:(NSURL*) url;
 

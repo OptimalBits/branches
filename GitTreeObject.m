@@ -6,7 +6,7 @@
 //  Copyright 2010 CodeTonic. All rights reserved.
 //
 
-#import "gittreeobject.h"
+#import "GitTreeObject.h"
 
 
 @implementation GitTreeNode
@@ -17,12 +17,17 @@
 - (void) dealloc
 {
     [sha1 release];
-    [mode release];
     [super dealloc];
 
 }
 
 @end
+
+
+
+
+
+static uint32 modeToInt( NSString* str );
 
 
 @implementation GitTreeObject
@@ -62,7 +67,7 @@
 			NSArray *modeAndNameArray = [modeAndName componentsSeparatedByString:@" "];
 			
 			GitTreeNode *node = [[[GitTreeNode alloc] init] autorelease];
-			[node setMode:[modeAndNameArray objectAtIndex:0]];
+			[node setMode:modeToInt([modeAndNameArray objectAtIndex:0])];
 			[node setSha1:sha1];
 			
 			[tree setObject:node forKey:[modeAndNameArray objectAtIndex:1]];
@@ -113,4 +118,25 @@
 }
 
 @end
+
+
+static uint32 modeToInt( NSString* str )
+{
+//	NSAssert( [str length] == 4, @"Mode must be 4 octals", nil );
+	
+	const char *cstring = [str UTF8String];
+	
+	u_int32_t mode;
+	
+	mode = cstring[0] - '0';
+	mode = (mode<<3) | cstring[1] - '0';
+	mode = (mode<<3) | cstring[2] - '0';
+	mode = (mode<<3) | cstring[3] - '0';
+	mode = (mode<<3) | cstring[4] - '0';
+	mode = (mode<<3) | cstring[5] - '0';
+	
+	return mode;
+}
+
+
 

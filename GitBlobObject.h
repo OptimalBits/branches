@@ -14,5 +14,6 @@
 }
 
 - (id) initWithData: (NSData*) data;
+- (NSData*) data;
 
 @end

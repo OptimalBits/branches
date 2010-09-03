@@ -15,10 +15,16 @@
 {	
 	if ( self = [super init] )
 	{
+		// Why make a copy here?
 		content = [NSData dataWithData:data];
 	}
 	
 	return self;
+}
+
+- (NSData*) data
+{
+	return content;
 }
 
 @end

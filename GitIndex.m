@@ -1,12 +1,14 @@
 //
 //  GitIndex.m
-//  gitfend
+//  GitLib
 //
 //  Created by Manuel Astudillo on 6/12/10.
 //  Copyright 2010 CodeTonic. All rights reserved.
 //
 
 #import "GitIndex.h"
+#import "GitFile.h"
+#import "GitTreeObject.h"
 
 #include <sys/stat.h>
 
@@ -25,6 +27,11 @@
 -(EntryInfo*) entryInfo
 {
 	return &entryInfo;
+}
+
+-(NSData*) sha1
+{
+	return [NSData dataWithBytes:entryInfo.sha1 length:20];
 }
 
 @end
@@ -76,10 +83,8 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
 	The current set could contain false positives. If the file size
 	is the same, lets compare the files byte for byte to check if they are
 	modified or not. False positives should update the entry data for that file,
-	for performance.
+	for better performance later on.
 	
-	Missing files must be handled somehow...
- 
  */
 -(NSSet*) modifiedFiles:(NSURL*) workDir
 {
@@ -102,18 +107,44 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
 		
 			file = [NSFileHandle fileHandleForReadingFromURL:fileUrl
 												   error:&error];
-		
-			if ( fstat([file fileDescriptor], &fileStat ) == 0 )
+			if ( file )
 			{
-				if ( checkStat( &fileStat, entry ) )
+				if ( fstat([file fileDescriptor], &fileStat ) == 0 )
 				{
-					[fileSet addObject:filename];
+					if ( checkStat( &fileStat, entry ) )
+					{
+						[fileSet addObject:filename];
+					}
 				}
 			}
+			else
+			{
+				// File is missing...
+			}
+
+		}
+		else
+		{
+			// File is staged...
 		}
 	}
 	
 	return fileSet;
+}
+
+-(NSArray*) stagedFiles
+{
+	NSMutableArray *files = [[[NSMutableArray alloc] init] autorelease];
+	
+	for ( GitIndexEntry* entry in entries )
+	{
+		if ( [entry entryInfo]->stat.ctime == 0 )
+		{
+			[files addObject:[entry filename]];
+		}
+	}
+	
+	return files;
 }
 
 -(BOOL) isFileTracked:(NSString*) filename
@@ -128,20 +159,100 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
 	}
 }
 
+-(void) addFile:(NSString*) filename sha1:(NSData*) sha1
+{
+	EntryInfoStat stat = {0};
+	
+	GitIndexEntry *entry = [entries objectForKey:filename];
+	
+	if ( entry )
+	{
+		[entry entryInfo]->stat = stat;
+		
+		[entry setFilename:filename];
+		memcpy( [entry entryInfo]->sha1, [sha1 bytes], 20 );
+	}
+	else
+	{
+		GitIndexEntry *entry = [[[GitIndexEntry alloc] init] autorelease];
+		
+		[entry setFilename:filename];
+		memcpy( [entry entryInfo]->sha1, [sha1 bytes], 20 );
+		[entries setObject:entry forKey:filename];
+	}
+}
+
+-(NSSet*) removedFiles
+{
+	return nil;
+}
+
+
+
+-(NSDictionary*) unflattenStatusTree:(NSArray*) flattenedTree
+{
+	NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+	
+	for ( GitFile *file in flattenedTree )
+	{
+		NSArray *pathComponents = [[file filename] pathComponents];
+		NSInteger index;
+		
+		NSMutableDictionary *dict = result;
+		index = 0;
+		while ( index < [pathComponents count] - 1 )			
+		{
+			NSMutableDictionary *subTree;
+			
+			NSString* key = [pathComponents objectAtIndex:index];
+			
+			if ( [dict objectForKey:key] == nil )
+			{
+				subTree = [[[NSMutableDictionary alloc] init] autorelease];
+			
+				[dict setObject:subTree forKey:key];
+			}
+			else
+			{
+				subTree = [dict objectForKey:key];
+			}
+
+			dict = subTree;
+			
+			index ++;
+		}
+		
+		[dict setObject:file forKey:[pathComponents objectAtIndex:index]];
+	}
+	
+	return result;
+}
+
 /**
-	Infer the status of the staged files:
-		- Added file.
-		- Removed file.
-		- Renamed file.
-		- Modified file.
+ Discussion:
+ 
+ Determining which files have been added, removed or renamed is 
+ quite expensive.
+ 
+ It requires that the HEAD tree is flattened, which will populate a tree
+ with as many entries as files that are actually tracked in the repository.
+ 
+ Flattening the tree is a time consumming operation, if many thousands of
+ files are part of it. After flattening, every entry in the tree must be 
+ checked against the index, to see if the entry is there or not.
+ 
+ The same applies for detecting renames, where all added files, must search
+ in the tree to see if there is another sha1 key that matches their own.
+ 
+ I think, this is how git works internally. If we dont are required to
+ save the index, then we can perform this operations much cheaper,
+ putting some state variables in GitIndexEntry to express if a entry
+ has been renamed, and having a separate NSSet for 
  
  */
--(NSArray*) status:(NSData*) tree objectStore:(GitObjectStore*) objectStore
+
+-(NSDictionary*) status:(NSDictionary*) flattenedTree
 {
-	// Populate tree ( flatten filenames into a path relative to working dir
-	// to match the format of the index entries, and put in a dictionary
-	
-	// Iterate through the entries in the index:
 	// Added Status: If an entry is not in the populated tree
 
 	// Modified status, if the Sha1 key in the index differs from the blob 
@@ -151,8 +262,70 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
 	// Note: We may find appropiate to hold the index entries in a dictionary:
 	// ( filename, GitIndexEntry ).
 	
-	return nil;
+	GitFile *file;
+	
+	NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
+	NSMutableSet *stagedFiles = [[[NSMutableSet alloc] init] autorelease];
+	
+	for ( id key in entries )
+	{
+		GitIndexEntry *entry = [entries objectForKey:key];
+		if ( [entry entryInfo]->stat.ctime == 0 )
+		{
+			[stagedFiles addObject:[entry filename]];
+		}
+	}
+	
+	for ( NSString *filename in stagedFiles )
+	{
+		GitFileStatus status;
+		
+		GitTreeNode *treeNode = [flattenedTree objectForKey:filename];
+		
+		if ( treeNode )
+		{
+			status = kFileStatusUpdated;
+		}
+		else
+		{
+			// we could easily add a BOOL in the entry structure to
+			// represent renames for better performance.
+			
+			NSData *sha1 = [[entries objectForKey:filename] sha1];
+			GitFileStatus status = kFileStatusAdded;
+			
+			for ( GitTreeNode *node in flattenedTree )
+			{
+				if ([[node sha1] isEqualToData:sha1])
+				{	
+					status = kFileStatusRenamed;
+					break;
+				}
+			}
+		}
+		
+		file = [[[GitFile alloc] initWithName:filename 
+									andStatus:status] autorelease];
+		
+		[result addObject:file];
+	}
+	
+	for ( NSString *key in flattenedTree )
+	{
+		if ( [entries objectForKey:key] == nil )
+		{
+			file = [[[GitFile alloc] initWithName:key
+										andStatus:kFileStatusRemoved] autorelease];
+			
+			[result addObject:file];
+		}
+	}
+	
+	// TODO: Investigate how deletes are represented in the index.
+	
+	return [self unflattenStatusTree:result];
 }
+
 
 /*
 -(NSDictionary*) status:(NSData*) tree 
@@ -332,6 +505,10 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry )
 	
 	entryStat = [entry entryInfo]->stat;
 	
+	if ( entryStat.size != fileStat->st_size )
+	{
+		return -1;
+	}
 	
 	time = fileStat->st_ctimespec.tv_sec;
 	time <<= 32;
@@ -373,11 +550,6 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry )
 	{
 		return -1;
 	}
-
-	if ( entryStat.size != fileStat->st_size )
-	{
-		return -1;
-	}	
 	
 	return 0;
 }

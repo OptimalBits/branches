@@ -55,8 +55,7 @@
 		[self setCommitSha1:commit];
 		
 		GitObject *object = [objectStore getTreeFromCommit:commit];
-		NSLog( [commit description] );
-
+	
 		if ( [object isKindOfClass:[GitTreeObject class]] )
 		{
 			GitTreeObject *treeObject =(GitTreeObject*) object;
@@ -93,7 +92,6 @@
 		GitFrontBrowseTree *node = [[[GitFrontBrowseTree alloc] init] autorelease];
 		
 		[node setName:key];
-		
 		
 		NSArray *history = [[self objectStore] fileHistory:key fromCommit:commitSha1 maxItems:1];
 		

@@ -217,7 +217,7 @@
 
 - (NSString*)base16String 
 {
-	static const char hexdigits[] = "0123456789ABCDEF";
+	static const char hexdigits[] = "0123456789abcdef";
 	const size_t numBytes = [self length];
 	const unsigned char* bytes = [self bytes];
 	char *strbuf = (char *)malloc(numBytes * 2 + 1);
@@ -595,7 +595,7 @@ for(i=0; i<method##_DIGEST_LENGTH; i++) {				\
 	digestString[2*i]   = __HEHexDigits[digest[i] >> 4];	\
 	digestString[2*i+1] = __HEHexDigits[digest[i] & 0x0f];\
 }											\
-return [NSString stringWithCString:(char *)digestString length:2*method##_DIGEST_LENGTH];
+return [NSString stringWithUTF8String:(char *)digestString];
 
 #define SHA1_CTX				SHA_CTX
 #define SHA1_DIGEST_LENGTH		SHA_DIGEST_LENGTH

@@ -1,13 +1,13 @@
 //
 //  gitcommitobject.h
-//  gitfend
+//  GitLib
 //
 //  Created by Manuel Astudillo on 5/22/10.
 //  Copyright 2010 CodeTonic. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
-#import "gitobject.h"
+#import "GitObject.h"
 
 
 @interface GitUserInfo : NSObject

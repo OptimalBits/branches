@@ -7,9 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "GitObject.h"
 
 @implementation GitObject
-
+/*
 -(NSData*) data
 {
 	return nil;
@@ -19,6 +20,6 @@
 {
 	return nil;
 }
-
+*/
 @end
 

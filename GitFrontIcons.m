@@ -10,7 +10,7 @@
 
 @implementation GitFrontIcons
 
-+(id) icons
++(NSDictionary*) icons
 {
   static NSDictionary *iconsDict = nil;
 
@@ -47,6 +47,27 @@
 											withExtension:@"png"];
 	  NSImage *blueFolderImage = [[[NSImage alloc] initWithContentsOfURL:blueFolderImageUrl] autorelease];
 	  
+	 
+	  NSURL *addImageUrl  = [bundle URLForResource:@"add" 
+									 withExtension:@"png"];
+	  NSImage *addImage = [[[NSImage alloc] initWithContentsOfURL:addImageUrl] autorelease];
+	  
+	  NSURL *deleteImageUrl  = [bundle URLForResource:@"delete" 
+									 withExtension:@"png"];
+	  NSImage *deleteImage = [[[NSImage alloc] initWithContentsOfURL:deleteImageUrl] autorelease];
+	 
+	  NSURL *tickImageUrl  = [bundle URLForResource:@"tick" 
+									 withExtension:@"png"];
+	  NSImage *tickImage = [[[NSImage alloc] initWithContentsOfURL:tickImageUrl] autorelease];
+	  
+	  NSURL *renameImageUrl  = [bundle URLForResource:@"pencil" 
+									 withExtension:@"png"];
+	  NSImage *renameImage = [[[NSImage alloc] initWithContentsOfURL:renameImageUrl] autorelease];
+	  
+	  NSURL *exclamationImageUrl  = [bundle URLForResource:@"exclamation" 
+										withExtension:@"png"];
+	  NSImage *exclamationImage = [[[NSImage alloc] initWithContentsOfURL:exclamationImageUrl] autorelease];
+	  
 	  iconsDict = [[NSDictionary dictionaryWithObjectsAndKeys:
 							 remoteImage, @"remote",
 							 branchImage, @"branch",
@@ -57,6 +78,11 @@
 							 gitImage, @"git",
 							 headImage, @"head",
 							 blueFolderImage,@"folderStack",
+							 addImage,@"add",
+							 deleteImage,@"delete",
+							 tickImage,@"tick",
+							 renameImage,@"rename",
+							 exclamationImage,@"exclamation",
 							 nil ] retain];
 	  
 	  //remotesIcon = [[[NSWorkspace sharedWorkspace] iconForFileType:NSFileTypeForHFSTypeCode(kGenericFileServerIcon)] retain];

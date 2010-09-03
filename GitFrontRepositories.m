@@ -92,19 +92,19 @@
 
 - (void) addRepo:(GitRepo*) repo 
 {
-	[children addObject:[[GitFrontRepositoriesLeaf alloc] initWithRepo: repo]];
+	[children addObject:[[[GitFrontRepositoriesLeaf alloc] initWithRepo: repo] autorelease]];
 }
 
 - (void) insertRepo:(GitRepo*) repo atIndex:(NSUInteger) index
 {
-	[children insertObject:[[GitFrontRepositoriesLeaf alloc] initWithRepo: repo]
+	[children insertObject:[[[GitFrontRepositoriesLeaf alloc] initWithRepo: repo] autorelease]
 				   atIndex:index];
 }
 
 - (id) addGroup:(NSString*) groupName
 {
 	GitFrontRepositories *node = 
-	[[GitFrontRepositories alloc] initWithName:groupName];
+	[[[GitFrontRepositories alloc] initWithName:groupName] autorelease];
 	
 	[children addObject:node];
 	
@@ -114,7 +114,7 @@
 - (id) insertGroup:(NSString*) groupName atIndex:(NSUInteger) index
 {
 	GitFrontRepositories *node = 
-		[[GitFrontRepositories alloc] initWithName:groupName];
+		[[[GitFrontRepositories alloc] initWithName:groupName] autorelease];
 	
 	[children insertObject:node
 				   atIndex:index];

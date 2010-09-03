@@ -41,6 +41,8 @@ stage already added files, using partial or full file commits.\
 - undo/redo support for adding/removing/moving elements.\
 - Change the add Group and Add repository to the + symbol, ( from the * button ).\
 \
+- Create new repository.\
+\
 Branch Management\
 -----------------\
 \
@@ -137,12 +139,21 @@ are shown. The status for every file is presented. \
 	- Add diff hunks.\
 	- Apply patches.\
 	\
+- FSEvent support.\
+	Detect when the working directory has been changed and update the view.\
+	\
+- Sorting capabilities: \
+	sorting by status.\
+	sorting by name ( always place directories first files after ).\
+	\
+- Compute the stage in an NSOperation, since it can be a time consuming operation.\
+	\
 	\
 Staging and commiting:\
 ---------------------\
 \
-- Support for storing objects in the object store.\
-- Support for creating blob objects.\
+* Support for storing objects in the object store.\
+* Support for creating blob objects.\
 - Support for creating commit objects.\
 - support for creating tree objects.\
 - Create a commit object from current index ( tree + blobs + commit ).\
@@ -152,7 +163,6 @@ Diff View:\
 ----------\
 - Before and After view.\
 - Interface similar to winmerge ( alt left, right for moving changes from one side to the other ).\
-\
 \
 \
 \

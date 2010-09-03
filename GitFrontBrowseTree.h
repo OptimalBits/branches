@@ -34,7 +34,7 @@ NSTextStorage *text;
 @property (readwrite, retain) NSString* author;
 @property (readwrite, retain) NSString* date;
 @property (readwrite, retain) NSString* name;
-@property (readwrite, retain) NSData *sha1;
+@property (readwrite, retain) NSData* sha1;
 
 @end
 
