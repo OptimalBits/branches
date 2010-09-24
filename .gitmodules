@@ -1,3 +1,6 @@
 [submodule "SSHCore"]
 	path = SSHCore
 	url = git@github.com:manast/SSHCore.git
+[submodule "NoodleKit"]
+	path = NoodleKit
+	url = http://github.com/MrNoodle/NoodleKit.git
