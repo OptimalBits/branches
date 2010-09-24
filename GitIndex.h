@@ -124,6 +124,11 @@ typedef struct
 
 
 /**
+	Returns the Sha1 key for the blob associated to the filename.
+ */
+-(NSData*) sha1ForFilename:(NSString*) filename;
+
+/**
 	 
  */
 -(void) updateFilename: (NSURL*) url;

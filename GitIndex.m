@@ -159,6 +159,24 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
 	}
 }
 
+-(NSData*) sha1ForFilename:(NSString*) filename
+{
+	GitIndexEntry* entry;
+	
+	entry = [entries objectForKey:filename];
+	
+	if ( entry )
+	{
+		return [NSData dataWithBytes:[entry entryInfo]->sha1
+							  length:20];
+	}
+	else
+	{
+		return nil;
+	}
+}
+
+
 -(void) addFile:(NSString*) filename sha1:(NSData*) sha1
 {
 	EntryInfoStat stat = {0};
