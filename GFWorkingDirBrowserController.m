@@ -7,6 +7,8 @@
 //
 
 #import "GFWorkingDirBrowserController.h"
+#import "CCDiffViewController.h"
+
 #import "GitRepo.h"
 #import "GitReference.h"
 #import "GitIndex.h"
@@ -154,6 +156,12 @@
 		
 		[stageAreaBrowseView reloadData];
 	}
+}
+
+
+- (void) setDiffView:(CCDiffViewController*) _diffView
+{
+	diffView = _diffView;
 }
 
 
@@ -423,6 +431,43 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	// pass
 }
 
+- (void)outlineViewSelectionDidChange:(NSNotification *)notification
+{
+	id item = [workingDirBrowseView itemAtRow:[workingDirBrowseView selectedRow]];
+	
+	NSLog(@"Selection did change");
+	NSLog(@"Selected: %@", item);
+	
+	BOOL isDirectory;
+	
+	[fileManager fileExistsAtPath:[item path] isDirectory:&isDirectory];
+	
+	if (isDirectory == NO)
+	{
+		NSError *error;
+		NSString *contents = [NSString stringWithContentsOfFile:[item path]
+													   encoding:NSUTF8StringEncoding
+														  error:&error];
+		NSString *filename = 
+			[[item path] substringFromIndex:[[[repo workingDir] path] length]+1];
+		
+		GitIndex *index = [repo index];
+		if ( [index isFileTracked:filename] &&
+			 [modifiedFiles containsObject:filename] )
+		{
+			GitBlobObject *obj = 
+				[repo getObject:[index sha1ForFilename:filename]];
 
+			NSString *before = [[NSString alloc ] initWithBytes:[[obj data] bytes]
+														 length:[[obj data] length]
+													   encoding:NSUTF8StringEncoding];
+			
+			[diffView setStringsBefore:before andAfter:contents];
+			NSLog(@"niaaadasd",nil);
+		}
+	}
+}
 
 @end
+
+

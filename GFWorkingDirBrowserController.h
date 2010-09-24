@@ -10,11 +10,14 @@
 
 @class GitRepo;
 @class GitFrontIcons;
+@class CCDiffViewController;
 
 @interface GFWorkingDirBrowserController : NSViewController <NSOutlineViewDataSource> 
 {
 	IBOutlet NSOutlineView *workingDirBrowseView;
 	IBOutlet NSOutlineView *stageAreaBrowseView;
+	
+	CCDiffViewController *diffView;
 	
 	GitRepo *repo;
 	NSFileManager *fileManager;
@@ -38,6 +41,7 @@
 - (void) dealloc;
 
 - (void) setRepo:(GitRepo*) _repo;
+- (void) setDiffView:(CCDiffViewController*) diffView;
 
 
 @end
