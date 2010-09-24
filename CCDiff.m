@@ -29,6 +29,15 @@
 	return self;
 }
 
+
++(id) emptyLine:(NSUInteger) _number
+{
+	return 
+		[[CCDiffLine alloc] initWithLine:nil 
+								  status:kLineEmpty 
+							   andNumber:_number];
+}
+
 @end
 
 
@@ -41,14 +50,16 @@ typedef struct
 
 #define TABLE( table, x, y ) table.cells[(y)*(table.width) + (x)]
 
+static NSArray *getLines( NSString *s );
+
 @implementation CCDiff
 
 -(id) initWithBefore:(NSString*) before andAfter:(NSString*) after
 {
 	if ( self = [super init] )
-	{
-		beforeLines = [[before componentsSeparatedByString:@"\n"] retain];
-		afterLines = [[after componentsSeparatedByString:@"\n"] retain];
+	{		
+		beforeLines = getLines( before );
+		afterLines = getLines( after );
 	}
 	return self;
 }
@@ -202,4 +213,12 @@ typedef struct
 @end
 
 
+static NSArray *getLines( NSString *s )
+{
+	NSMutableArray *lines = [[[NSMutableArray alloc] init] autorelease];
+	[s enumerateLinesUsingBlock:
+		 ^(NSString *line, BOOL *stop){[lines addObject:line];}];
+	
+	return lines;
+}
 

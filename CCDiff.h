@@ -19,7 +19,8 @@ typedef enum
 {
 	kLineOriginal,
 	kLineAdded,
-	kLineRemoved
+	kLineRemoved,
+	kLineEmpty
 } LineDiffStatus;
 
 @interface CCDiffLine : NSObject
@@ -34,12 +35,13 @@ typedef enum
 @property (readonly) NSUInteger number;
 
 
++(id) emptyLine:(NSUInteger) number;
+
 -(id) initWithLine:(NSString*) line 
 			status:(LineDiffStatus) status 
 		 andNumber:(NSUInteger) number;
 
 @end
-
 
 
 @interface CCDiff : NSObject {
@@ -66,7 +68,3 @@ typedef enum
 
 @end
 
-
-// Sample python implementation:
-
-// http://github.com/paulgb/simplediff/raw/master/simplediff.py
