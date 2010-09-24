@@ -8,10 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "gitfrontHistoryController.h"
-#import "GitFrontBrowseController.h"
 
 @class GitFrontRepositories;
+@class GitFrontBrowseController;
 @class GFWorkingDirBrowserController;
+@class CCDiffViewController;
 
 @interface gitfendRepositoryController : NSObject <NSOutlineViewDelegate, 
 												   NSOutlineViewDataSource> {
@@ -19,9 +20,12 @@
 	
 	IBOutlet NSOutlineView *_outlineView;	// Repo view
 	
-	
 	IBOutlet NSMenu *repositoryMgmtMenu;
 	IBOutlet NSMenuItem *removeRepoMenuItem;
+													   
+	IBOutlet NSView *bottomView;
+	IBOutlet NSBox *bottomBox;
+
 	
 	gitfrontHistoryController *historyController;
 	GitFrontBrowseController *browseController;
@@ -33,7 +37,8 @@
 	
 	NSMutableArray *viewControllers; // TODO: Change to Dictionary.
 	NSViewController *currentView;
-
+													   
+	CCDiffViewController *diffViewController;
 }
 
 - (void) dealloc;

@@ -14,14 +14,13 @@
 
 #import "GitFrontBrowseController.h"
 #import "GFWorkingDirBrowserController.h"
+#import "CCDiffViewController.h"
 
 #import "GitFrontRepositories.h"
 #import "GitFrontIcons.h"
 
 #define MAIN_COLUMN_ID	@"Main"
-
 #define NEW_GROUP_NAME @"New Group"
-
 #define GITFRONT_BPOARD_TYPE  @"GitFrontPboardType"
 
 @implementation gitfendRepositoryController
@@ -82,7 +81,8 @@
 	// apply our custom ImageAndTextCell for rendering the first column's cells
 	NSTableColumn *tableColumn = [_outlineView tableColumnWithIdentifier:@"Main"];
 	
-	ImageAndTextCell *imageAndTextCell = [[[ImageAndTextCell alloc] init] autorelease];
+	ImageAndTextCell *imageAndTextCell = 
+								[[[ImageAndTextCell alloc] init] autorelease];
 	[imageAndTextCell setEditable:YES];
 	[tableColumn setDataCell:imageAndTextCell];
 	
@@ -106,6 +106,17 @@
 	
 	[_outlineView setDraggingSourceOperationMask:NSDragOperationEvery 
 										forLocal:YES];
+	
+	// Diff View
+	diffViewController = [[CCDiffViewController alloc] init];
+	//[bottomView addSubview:[vc view]];
+	//[bottomView setNeedsDisplay:YES];
+	
+	NSView *v = [diffViewController view];
+	[bottomBox setContentView:v];
+	[bottomBox setNeedsDisplay:YES];
+	
+	[workingDirBrowseController setDiffView:diffViewController];
 }
 
 
@@ -487,9 +498,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	//if ( currentView == historyController )
 	{
-		//[historyCont roller setHistory:[[item repo] revisionHistoryFor:[item sha1]]];
+		//[historyController setHistory:[[item repo] revisionHistoryFor:[item sha1]]];
 	}
-	
 	
 	// Branch Browse
 	/*
@@ -510,7 +520,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		[workingDirBrowseController setRepo:repo];
 	}
-	
 }
 
 
