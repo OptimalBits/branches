@@ -51,7 +51,7 @@ NSString *regExpCommitter = @"committer\\s(.*)\\s(<(.*)>)\\s([0-9]+)\\s(((\\+)|(
 
 -(NSString*) encode:(NSString*) user
 {
-	return [NSString stringWithFormat:@"\"%@\" %@ <%@> %d -0000\n",
+	return [NSString stringWithFormat:@"%@ %@ <%@> %d -0000\n",
 									  user,
 									  name,
 									  email,
@@ -73,19 +73,22 @@ static NSString* encodeParents( NSArray *parents );
 @synthesize message;
 @synthesize sha1;
 
-- (id) initWithTree:(NSData*) tree 
-			parents:(NSArray*) parents
-			message:(NSString*) message
-			 author:(GitAuthor*) author
-		   commiter:(GitAuthor*) commiter
+- (id) initWithTree:(NSData*) _tree 
+			parents:(NSArray*) _parents
+			message:(NSString*) _message
+			 author:(GitAuthor*) _author
+		   commiter:(GitAuthor*) _commiter
 {
-	if ( self = [super init] )
+	if ( self = [super initWithType:@"commit"] )
 	{
-		
+		[self setTree:_tree];
+		[self setParents:_parents]; 
+		[self setMessage:_message];
+		[self setAuthor:_author];
+		[self setCommitter:_author];
 	}
 	return self;
 }
-
 
 
 - (id) initWithData: (NSData*) data sha1: (NSData*) key
@@ -93,7 +96,7 @@ static NSString* encodeParents( NSArray *parents );
 	NSArray *matches;
 	int count;
 
-	if ( self = [super init] )
+	if ( self = [super initWithType:@"commit"] )
     {
 		const char *_sha1;
 				
@@ -102,7 +105,7 @@ static NSString* encodeParents( NSArray *parents );
 		NSString *commitString = 
 			[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
 		if ( commitString == nil ) 
-		// we need a more robust algorythm to parse commit messages...
+		// we need a more robust algorithm to parse commit messages...
 		// since Cocoa just return nil if the string is not 100% UTF8 compliant.
 		{
 			[self dealloc];
@@ -112,16 +115,26 @@ static NSString* encodeParents( NSArray *parents );
 		[self setSha1:key];
 		
 		_sha1 = [[commitString stringByMatching:regExpTree capture:1L] cStringUsingEncoding:NSUTF8StringEncoding];
-		tree = [NSData dataWithHexCString:_sha1];
+		if ( _sha1 )
+		{
+			tree = [NSData dataWithHexCString:_sha1];
+		}
+		else
+		{
+			return nil;
+		}
+
 		
 		matches = [commitString arrayOfCaptureComponentsMatchedByRegex:regExpParent];
 		
-		parents = [[NSMutableArray alloc] init];
+		NSMutableArray *mutableParents = 
+			[[[NSMutableArray alloc] init] autorelease];
 		for( NSArray *parentMatch in matches )
 		{
 			_sha1 = [[parentMatch objectAtIndex:1] cStringUsingEncoding:NSUTF8StringEncoding];
-			[parents addObject:[NSData dataWithHexCString:_sha1]];
+			[mutableParents addObject:[NSData dataWithHexCString:_sha1]];
 		}
+		[self setParents:mutableParents];
 		
 		matches = [commitString arrayOfCaptureComponentsMatchedByRegex:regExpAuthor];
 		count = [matches count];
@@ -158,9 +171,20 @@ static NSString* encodeParents( NSArray *parents );
 	return self;
 }
 
+-(void) dealloc
+{
+	[parents release];
+	[tree release];
+	[message release];
+	[author release];
+	[committer release];
+	
+	[super dealloc];
+}
+
 -(NSData*) data
 {
-	NSString *format = @"\"tree\" %@\n%@%@%@\n%@";
+	NSString *format = @"tree %@\n%@%@%@\n%@";
 	
 	NSString *commit = [NSString stringWithFormat:format, 
 												  [tree base16String],
@@ -191,11 +215,11 @@ static NSString* encodeParents( NSArray *parents );
 
 static NSString* encodeParents( NSArray *parents )
 {
-	NSMutableString *string = [[[NSString alloc] init] autorelease];
+	NSMutableString *string = [[[NSMutableString alloc] init] autorelease];
 	
 	for ( NSData *parent in parents )
 	{
-		[string appendFormat:@" %@\n", [parent base16String]];
+		[string appendFormat:@"parent %@\n", [parent base16String]];
 	}
 	
 	return string;

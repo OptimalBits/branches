@@ -54,8 +54,7 @@
 
 @interface GitCommitObject : GitObject 
 {
-	NSData *sha1;
-	NSMutableArray *parents;
+	NSArray *parents;
 	NSData *tree;
 	
 	NSString *message;
@@ -65,7 +64,7 @@
 }
 
 @property (readwrite, retain) NSData *sha1;
-@property (readwrite, retain) NSMutableArray *parents;
+@property (readwrite, retain) NSArray *parents;
 @property (readwrite, retain) NSData *tree;
 
 @property (readwrite, retain) NSString *message;

@@ -57,13 +57,17 @@ typedef enum
 
 @property (readonly) NSMutableDictionary *tree;
 
--(id) init;
-
 -(id) initWithData: (NSData*) data;
 
--(void) appendObject:(GitObject*) object 
-			filename:(NSString*) filename
-				mode:(NSString*) mode;
+-(void) setEntry:(NSString*) filename
+			mode:(uint32) mode
+			sha1:(NSData*) sha1;
+
+-(void) removeEntry:(NSString*) filename;
+
+-(void) addTree:(uint32) mode sha1:(NSData*) sha1;
+
+-(NSData*) data;
 
 
 /**

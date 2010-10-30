@@ -1,6 +1,6 @@
 //
 //  gittreeobject.m
-//  gitfend
+//  GitLib
 //
 //  Created by Manuel Astudillo on 5/25/10.
 //  Copyright 2010 CodeTonic. All rights reserved.
@@ -24,9 +24,6 @@
 @end
 
 
-
-
-
 static uint32 modeToInt( NSString* str );
 
 
@@ -34,47 +31,116 @@ static uint32 modeToInt( NSString* str );
 
 @synthesize tree;
 
+- (id) init
+{
+	return [self initWithData:nil];	
+}
+
 - (id) initWithData: (NSData*) data
 {
 	int i, start, len;
 	const uint8_t *bytes;
 	
-	if ( self = [super init] )
+	if ( self = [super initWithType:@"tree"] )
     {
 		tree = [[NSMutableDictionary alloc] init];
 		
-		bytes = [data bytes];
-		
-		i = 0;
-		while( i < [data length] )
+		if ( data )
 		{
-			NSString *modeAndName;
-			NSData *sha1;
+			bytes = [data bytes];
 			
-			start = i;
-			len = 0;
-			while( ( i < [data length] ) && ( bytes[i] != 0 ) )
+			i = 0;
+			while( i < [data length] )
 			{
-				len++;
-				i++;
+				NSString *modeAndName;
+				NSData *sha1;
+				
+				start = i;
+				len = 0;
+				while( ( i < [data length] ) && ( bytes[i] != 0 ) )
+				{
+					len++;
+					i++;
+				}
+				
+				modeAndName = [[[NSString alloc] initWithData:
+								[data subdataWithRange:NSMakeRange(start,len)] 
+													 encoding:NSUTF8StringEncoding] 
+							   autorelease];
+				
+				sha1 = [data subdataWithRange:NSMakeRange(start+len+1, 20)];
+				i +=21;
+				
+				NSArray *modeAndNameArray = [modeAndName componentsSeparatedByString:@" "];
+				
+				GitTreeNode *node = [[[GitTreeNode alloc] init] autorelease];
+				[node setMode:modeToInt([modeAndNameArray objectAtIndex:0])];
+				[node setSha1:sha1];
+				
+				[tree setObject:node forKey:[modeAndNameArray objectAtIndex:1]];
 			}
-			
-			modeAndName = [[[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(start,len)] encoding:NSUTF8StringEncoding] autorelease];
-
-			sha1 = [data subdataWithRange:NSMakeRange(start+len+1, 20)];
-			i +=21;
-			
-			NSArray *modeAndNameArray = [modeAndName componentsSeparatedByString:@" "];
-			
-			GitTreeNode *node = [[[GitTreeNode alloc] init] autorelease];
-			[node setMode:modeToInt([modeAndNameArray objectAtIndex:0])];
-			[node setSha1:sha1];
-			
-			[tree setObject:node forKey:[modeAndNameArray objectAtIndex:1]];
 		}
 	}
 	
 	return self;
+}
+
+
+-(void) dealloc
+{
+	[tree release];
+	[super dealloc];
+}
+
+-(void) setEntry:(NSString*) filename
+			mode:(uint32) mode
+			sha1:(NSData*) sha1
+{
+	GitTreeNode *node = [[[GitTreeNode alloc] init] autorelease];
+	
+	[node setMode:mode];
+	[node setSha1:sha1];
+	
+	[tree setObject:node forKey:filename];
+}
+
+-(void) removeEntry:(NSString*) filename
+{
+	[tree removeObjectForKey:filename];
+}
+
+-(void) addTree:(uint32) mode sha1:(NSData*) sha1
+{
+	
+}
+
+
+-(NSData*) data
+{
+	NSMutableData *result = [[NSMutableData alloc] init];
+	
+	NSArray* sortedKeys = 
+		[[tree allKeys] sortedArrayUsingSelector:@selector(compare:)];
+
+	for ( NSString *key in sortedKeys )
+	{
+		NSString *treeEntry;
+		GitTreeNode *node;
+		
+		node = [tree objectForKey:key];
+		treeEntry = [NSString stringWithFormat:@"%06o %@", [node mode], key];
+
+		const char* cString = [treeEntry UTF8String];
+		
+		// note, the length is not in bytes, so it is wrong!. 
+		// you have to use the length of the UTF8string by searching the
+		// trailing zero.
+		[result appendData:[NSData dataWithBytes:cString
+										  length:[treeEntry length] + 1]];
+		[result appendData:[node sha1]];
+	}
+	
+	return result;
 }
 
 - (GitTreeObject*) treeDiff: (GitTreeObject*) prevTree
@@ -122,19 +188,15 @@ static uint32 modeToInt( NSString* str );
 
 static uint32 modeToInt( NSString* str )
 {
-//	NSAssert( [str length] == 4, @"Mode must be 4 octals", nil );
-	
 	const char *cstring = [str UTF8String];
 	
-	u_int32_t mode;
+	u_int32_t mode = 0;
 	
-	mode = cstring[0] - '0';
-	mode = (mode<<3) | cstring[1] - '0';
-	mode = (mode<<3) | cstring[2] - '0';
-	mode = (mode<<3) | cstring[3] - '0';
-	mode = (mode<<3) | cstring[4] - '0';
-	mode = (mode<<3) | cstring[5] - '0';
-	
+	for ( int i = 0; i < strlen( cstring ); i++ )
+	{
+		mode = (mode<<3) | (cstring[i] - '0');
+	}
+
 	return mode;
 }
 

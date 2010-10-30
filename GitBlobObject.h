@@ -7,7 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "gitobject.h"
+
+@class GitObject;
 
 @interface GitBlobObject : GitObject {
 	NSData *content;
