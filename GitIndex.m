@@ -9,6 +9,11 @@
 #import "GitIndex.h"
 #import "GitFile.h"
 #import "GitTreeObject.h"
+#import "GitBlobObject.h"
+#import "GitCommitObject.h"
+#import "GitObjectStore.h"
+
+#import "NSDataExtension.h"
 
 #include <sys/stat.h>
 
@@ -19,9 +24,20 @@
 
 @synthesize filename;
 
+-(id) init
+{
+	if ( self = [super init] )
+	{
+		filename = nil;
+		blob = nil;
+	}
+	return self;
+}
+
 - (void) dealloc
 {
 	[filename release];
+	[super dealloc];
 }
 
 -(EntryInfo*) entryInfo
@@ -31,60 +47,124 @@
 
 -(NSData*) sha1
 {
-	return [NSData dataWithBytes:entryInfo.sha1 length:20];
+	if ( blob )
+	{
+		return [blob sha1];
+	}
+	else
+	{
+		return [NSData dataWithBytes:entryInfo.sha1 length:20];
+	}
+}
+
+-(void) setBlob:(GitBlobObject*) _blob
+{
+	[_blob retain];
+	[blob release];
+	blob = _blob;
+}
+
+-(GitBlobObject*) blob
+{
+	return blob;
 }
 
 @end
 
 
+
+#define INDEX_HEADER_SIZE		12
+#define INDEX_MEAN_ENTRY_SIZE	(sizeof(EntryInfo) + 16)
+
 static uint32_t parseHeader( GitIndex *index, NSFileHandle *file );
 static void readStatInfo( EntryInfo *entryInfo, NSFileHandle *file );
-static void readEntry( NSMutableDictionary *entries, NSFileHandle *file );
+static void readEntry( NSMutableDictionary *entries, 
+					   NSFileHandle *file );
+
+static void setStat( struct stat *fileStat, GitIndexEntry* entry );
 static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
+static BOOL isEntryStaged( GitIndexEntry *entry );
+
+static void writeHeader( uint32_t numEntries, NSMutableData *output );
+static void writeEntry( GitIndexEntry *entry, NSMutableData *outputData );
+
+static void writeStatInfo( EntryInfo *entryInfo, NSMutableData *outputData );
+
+@interface GitIndex (Private)
+
+-(GitTreeObject*) writeTreeRecur:(GitObjectStore*) objectStore
+						  status:(NSDictionary*) status
+						treeSha1:(NSData*) treeSha1;
+
+@end
+
 
 @implementation GitIndex
 
--(id) initWithUrl:(NSURL*) url
+-(id) initWithUrl:(NSURL*) _url
 {
 	if ( self = [super init] )
     {
 		NSError *error;
 		uint32_t numEntries;
 		uint32_t i;
+	
+		url = _url;
+		[url retain];
 		
-		entries = [[NSMutableDictionary alloc] init];
-		
-		NSFileHandle *file = [NSFileHandle fileHandleForReadingFromURL: url 
+		NSFileHandle *file = [NSFileHandle fileHandleForReadingFromURL: _url 
 																 error:&error];
-		
 		numEntries = parseHeader(self, file);
+		
+		entries = [[NSMutableDictionary alloc] initWithCapacity:numEntries];
 		
 		for ( i = 0; i < numEntries; i++ )
 		{
 			readEntry( entries, file );
 		}
 		
-		// Close file.
+		[file closeFile];
+		
+		isDirty = FALSE;
 	}
 	return self;
 }
 
 -(void) dealloc
 {
+	if ( isDirty )
+	{
+		[self write];
+	}
+	
+	[url release];
 	[entries release];
 	[super dealloc];
+}
+
+-(void) write
+{
+	NSMutableData *outputData;
+	
+	outputData = [NSMutableData dataWithCapacity:INDEX_HEADER_SIZE +
+												 INDEX_MEAN_ENTRY_SIZE *
+												 [entries count]];	
+	writeHeader( [entries count], outputData );
+	
+	NSArray *sortedKeys = [[entries allKeys] 
+						   sortedArrayUsingSelector:@selector(compare:)];
+	
+	for ( NSString *key in sortedKeys )
+	{
+		writeEntry( [entries objectForKey:key], outputData );
+	}
+	
+	[outputData writeToURL:url atomically:YES];
 }
 
 /**
 	Returns a set with all the files in the working directory that have been
 	modified.
- 
-    TODO: 
-	The current set could contain false positives. If the file size
-	is the same, lets compare the files byte for byte to check if they are
-	modified or not. False positives should update the entry data for that file,
-	for better performance later on.
-	
  */
 -(NSSet*) modifiedFiles:(NSURL*) workDir
 {
@@ -99,52 +179,40 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
 		NSFileHandle *file;
 		GitIndexEntry *entry;
 		struct stat fileStat;
-
-		entry = [entries objectForKey:filename];
-		if ( [entry entryInfo]->stat.ctime != 0 ) // Check if file is staged.
-		{
-			fileUrl = [NSURL URLWithString:filename relativeToURL:workDir];
 		
-			file = [NSFileHandle fileHandleForReadingFromURL:fileUrl
+		entry = [entries objectForKey:filename];
+		
+		fileUrl = [NSURL URLWithString:filename relativeToURL:workDir];
+		
+		file = [NSFileHandle fileHandleForReadingFromURL:fileUrl
 												   error:&error];
-			if ( file )
+		if ( file )
+		{
+			if ( fstat([file fileDescriptor], &fileStat ) == 0 )
 			{
-				if ( fstat([file fileDescriptor], &fileStat ) == 0 )
+				if ( checkStat( &fileStat, entry ) )
 				{
-					if ( checkStat( &fileStat, entry ) )
+					GitBlobObject *blob = [[[GitBlobObject alloc] initWithData:
+											[NSData dataWithContentsOfURL:fileUrl]] autorelease];
+						
+					if ( [[blob sha1] isEqualToData:[entry sha1]] )
+					{
+						setStat( &fileStat, entry );
+					}
+					else
 					{
 						[fileSet addObject:filename];
 					}
 				}
 			}
-			else
-			{
-				// File is missing...
-			}
-
 		}
 		else
 		{
-			// File is staged...
+			// File is missing...
 		}
 	}
 	
 	return fileSet;
-}
-
--(NSArray*) stagedFiles
-{
-	NSMutableArray *files = [[[NSMutableArray alloc] init] autorelease];
-	
-	for ( GitIndexEntry* entry in entries )
-	{
-		if ( [entry entryInfo]->stat.ctime == 0 )
-		{
-			[files addObject:[entry filename]];
-		}
-	}
-	
-	return files;
 }
 
 -(BOOL) isFileTracked:(NSString*) filename
@@ -176,28 +244,23 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
 	}
 }
 
-
--(void) addFile:(NSString*) filename sha1:(NSData*) sha1
-{
-	EntryInfoStat stat = {0};
-	
+// TODO: We need to update the stat for this file, but only if
+// the content of the blob is equal to the content of the file.
+-(void) addFile:(NSString*) filename blob:(GitBlobObject*) blobObject
+{	
 	GitIndexEntry *entry = [entries objectForKey:filename];
 	
-	if ( entry )
+	if ( entry == nil )
 	{
-		[entry entryInfo]->stat = stat;
-		
+		entry = [[[GitIndexEntry alloc] init] autorelease];
 		[entry setFilename:filename];
-		memcpy( [entry entryInfo]->sha1, [sha1 bytes], 20 );
-	}
-	else
-	{
-		GitIndexEntry *entry = [[[GitIndexEntry alloc] init] autorelease];
 		
-		[entry setFilename:filename];
-		memcpy( [entry entryInfo]->sha1, [sha1 bytes], 20 );
 		[entries setObject:entry forKey:filename];
 	}
+	
+	[entry setBlob:blobObject];
+	
+	isDirty = TRUE;
 }
 
 -(NSSet*) removedFiles
@@ -205,13 +268,12 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
 	return nil;
 }
 
-
-
 -(NSDictionary*) unflattenStatusTree:(NSArray*) flattenedTree
 {
-	NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+	NSMutableDictionary *result = 
+		[[[NSMutableDictionary alloc] init] autorelease];
 	
-	for ( GitFile *file in flattenedTree )
+	for ( id file in flattenedTree )
 	{
 		NSArray *pathComponents = [[file filename] pathComponents];
 		NSInteger index;
@@ -265,101 +327,206 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
  I think, this is how git works internally. If we dont are required to
  save the index, then we can perform this operations much cheaper,
  putting some state variables in GitIndexEntry to express if a entry
- has been renamed, and having a separate NSSet for 
+ has been renamed, and having a separate NSSet for checking adds and deletes.
  
  */
-
 -(NSDictionary*) status:(NSDictionary*) flattenedTree
-{
-	// Added Status: If an entry is not in the populated tree
-
-	// Modified status, if the Sha1 key in the index differs from the blob 
-	// associated to the same file in the tree.
-	
-	// Removed: a populated tree entry is not in the index.
-	// Note: We may find appropiate to hold the index entries in a dictionary:
-	// ( filename, GitIndexEntry ).
-	
+{	
 	GitFile *file;
 	
-	NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
-	NSMutableSet *stagedFiles = [[[NSMutableSet alloc] init] autorelease];
-	
-	for ( id key in entries )
+	NSSet *keysUnion = [[NSSet setWithArray:[flattenedTree allKeys]]
+						setByAddingObjectsFromArray:[entries allKeys]];
+
+	NSMutableSet *updatedFiles = [[[NSMutableSet alloc] init] autorelease];
+	NSMutableSet *addedFiles =   [[[NSMutableSet alloc] init] autorelease];
+	NSMutableSet *removedFiles = [[[NSMutableSet alloc] init] autorelease];
+	NSMutableSet *renamedFiles = [[[NSMutableSet alloc] init] autorelease];
+					   	
+	for ( NSString *filename in keysUnion )
 	{
-		GitIndexEntry *entry = [entries objectForKey:key];
-		if ( [entry entryInfo]->stat.ctime == 0 )
+		GitIndexEntry *entry;
+		GitTreeNode *node;
+		
+		entry = [entries objectForKey:filename];
+		node = [flattenedTree objectForKey:filename];
+		
+		if ( ( entry != nil ) && ( node != nil ) )
 		{
-			[stagedFiles addObject:[entry filename]];
+			if ( ![[node sha1] isEqualToData:[entry sha1]] )
+			{
+				[updatedFiles addObject:filename];
+			}
+		} 
+		else if ( entry )
+		{
+			[addedFiles addObject:filename]; 
+		}
+		else if ( node )
+		{
+			[removedFiles addObject:filename];
 		}
 	}
 	
-	for ( NSString *filename in stagedFiles )
+	for ( NSString *removedFilename in removedFiles )
 	{
-		GitFileStatus status;
-		
-		GitTreeNode *treeNode = [flattenedTree objectForKey:filename];
-		
-		if ( treeNode )
+		for ( NSString *addedFilename in addedFiles )
 		{
-			status = kFileStatusUpdated;
-		}
-		else
-		{
-			// we could easily add a BOOL in the entry structure to
-			// represent renames for better performance.
-			
-			NSData *sha1 = [[entries objectForKey:filename] sha1];
-			GitFileStatus status = kFileStatusAdded;
-			
-			for ( GitTreeNode *node in flattenedTree )
+			if ( ![renamedFiles containsObject:addedFilename] )
 			{
-				if ([[node sha1] isEqualToData:sha1])
-				{	
-					status = kFileStatusRenamed;
+				GitIndexEntry *entry;
+				GitTreeNode *node;
+				
+				entry = [entries objectForKey:addedFilename];
+				node = [flattenedTree objectForKey:removedFilename];
+				
+				if ( [[node sha1] isEqualToData:[entry sha1]] )
+				{
+					[renamedFiles addObject:addedFilename];
+					//	[addedFiles removeObject:addedFilename];
+					//	[removedFiles removeObject:removedFilename];
 					break;
 				}
 			}
 		}
-		
+	}
+	
+	NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
+	GitFileStatus status;
+	
+	status = kFileStatusUpdated;
+	for ( NSString *filename in updatedFiles )
+	{
 		file = [[[GitFile alloc] initWithName:filename 
 									andStatus:status] autorelease];
 		
 		[result addObject:file];
 	}
 	
-	for ( NSString *key in flattenedTree )
+	status = kFileStatusAdded;
+	for ( NSString *filename in addedFiles )
 	{
-		if ( [entries objectForKey:key] == nil )
-		{
-			file = [[[GitFile alloc] initWithName:key
-										andStatus:kFileStatusRemoved] autorelease];
-			
-			[result addObject:file];
-		}
+		file = [[[GitFile alloc] initWithName:filename 
+									andStatus:status] autorelease];
+		
+		[result addObject:file];
 	}
 	
-	// TODO: Investigate how deletes are represented in the index.
+	status = kFileStatusRemoved;
+	for ( NSString *filename in removedFiles )
+	{
+		file = [[[GitFile alloc] initWithName:filename 
+									andStatus:status] autorelease];
+		
+		[result addObject:file];
+	}
+	
+	status = kFileStatusRenamed;
+	for ( NSString *filename in renamedFiles )
+	{
+		file = [[[GitFile alloc] initWithName:filename 
+									andStatus:status] autorelease];
+		
+		[result addObject:file];
+	}
 	
 	return [self unflattenStatusTree:result];
 }
 
 
-/*
--(NSDictionary*) status:(NSData*) tree 
-			 workingDir:(NSURL*) workingDir
-				 ignore:(GitIgnore*) ignore
-{
-	NSMutableDictionary *dict;
-	NSMutableSet *processedFiles;
-	
-	dict = [[NSMutableDictionary alloc] init];
-		
-}
-*/
+/**
+	TODO: complete Mode handling.
  
+ */
+-(GitTreeObject*) writeTreeRecur:(GitObjectStore*) objectStore
+						  status:(NSDictionary*) status
+						treeSha1:(NSData*) treeSha1
+{
+	GitTreeObject* tree = [objectStore getObject:treeSha1];
+	
+	if ( tree == nil )
+	{
+		tree = [[[GitTreeObject alloc] init] autorelease];
+	}
+	
+	for ( NSString *key in status )
+	{
+		id statusEntry = [status objectForKey:key];
+		
+		if ( [statusEntry isKindOfClass:[GitFile class]] )
+		{
+			GitFile *file = statusEntry;
+			
+			if ( [file status] != kFileStatusRemoved )
+			{
+				GitIndexEntry *entry = 
+					[entries objectForKey:[file filename]];
+				
+				[tree setEntry:key
+						  mode:[entry entryInfo]->stat.mode
+						  sha1:[entry sha1]];
+				
+				if ( [entry blob] )
+				{
+					[objectStore addObject:[entry blob]];
+					
+					memcpy( [entry entryInfo]->sha1, [[entry sha1] bytes], 20 );
+					[entry setBlob:nil];
+				}
+			}
+			else
+			{
+				[tree removeEntry:key];
+				[entries removeObjectForKey:key];
+			}
+		}
+		else
+		{
+			NSData *subTreeSha1 = [[tree tree] objectForKey:key];
+			
+			GitTreeObject *result = [self writeTreeRecur:objectStore 
+												  status:statusEntry 
+												treeSha1:subTreeSha1];
+			
+			[tree setEntry:key 
+					  mode:kDirectory 
+					  sha1:[result sha1]];
+		}
+	}
+	
+	[objectStore addObject:tree];
+	
+	return tree;
+}
 
+/**
+	This function writes the staged objects in the index into the object
+	database.
+ 
+ */
+-(NSData*) writeTree:(GitObjectStore*) objectStore 
+		headTreeSha1:(NSData*) treeSha1
+{										
+	GitTreeObject *tree = [objectStore getObject:treeSha1];
+	
+	NSDictionary *flattenedTree = [objectStore flattenTree:tree];
+	NSDictionary *status = [self status:flattenedTree];
+	
+	if ( [status count] > 0 )
+	{
+		GitTreeObject *result = [self writeTreeRecur:objectStore 
+											  status:status
+											treeSha1:treeSha1];
+		
+		return [result sha1];
+	}
+	
+	return nil;
+}
+								
 @end
+
+
+
 
 static uint32_t parseHeader( GitIndex *index, NSFileHandle *file )
 {
@@ -394,6 +561,22 @@ static uint32_t parseHeader( GitIndex *index, NSFileHandle *file )
 	return 0;
 }
 
+static void writeHeader( uint32_t numEntries, NSMutableData *output )
+{
+	char header[4] = "DIRC";
+	
+	uint32_t version = CFSwapInt32HostToBig( 2 );
+	
+	[output appendBytes:header length:sizeof(header)];
+	[output appendBytes:&version length:sizeof(version)];
+	
+	numEntries = CFSwapInt32HostToBig( numEntries );
+	[output appendBytes:&numEntries length:sizeof(numEntries)];
+}
+
+
+
+
 /*
 <INDEX_ENTRY>:	
 	<INDEX_ENTRY_STAT_INFO>
@@ -420,11 +603,29 @@ static uint32_t parseHeader( GitIndex *index, NSFileHandle *file )
  ;
  
 */
-static void readEntry( NSMutableDictionary *entries, NSFileHandle *file )
+
+
+static uint32_t numSkipBytes( uint32_t nameLength )
+{
+	uint32_t skipBytes;
+	uint32_t entryLength = ENTRY_INFO_SIZE + nameLength + ENTRY_NUL_SIZE;
+	
+	if (entryLength & 0x07)
+	{
+		skipBytes = 8 - ( entryLength & 0x07 ) + ENTRY_NUL_SIZE;
+	}
+	else
+	{
+		skipBytes = 1;
+	}
+	
+	return skipBytes;
+}
+
+static void readEntry( NSMutableDictionary *entries,
+					   NSFileHandle *file )
 {
 	uint32_t nameSize;
-	uint32_t entryLength;
-	uint32_t skipBytes;
 	
 	GitIndexEntry *entry = [[[GitIndexEntry alloc] init] autorelease];
 	
@@ -436,63 +637,28 @@ static void readEntry( NSMutableDictionary *entries, NSFileHandle *file )
 	NSString *filename = [[[NSString alloc]
 						   initWithData:[file readDataOfLength:nameSize] 
 						   encoding: NSUTF8StringEncoding] autorelease];
-
+	
 	if ( filename )
 	{
-		/*
-		NSArray *pathComponents = [filename pathComponents];
-
-		NSMutableDictionary *currentDict = entries;
-		NSUInteger index = [pathComponents count];
-		for ( NSString* component in pathComponents )
-		{
-			index --;
-			
-			id obj = [currentDict objectForKey:component];
-			if ( obj )
-			{
-				currentDict = obj;
-			}
-			else if ( index )
-			{
-				NSMutableDictionary *newDict = 
-					[[[NSMutableDictionary alloc] init] autorelease];
-				
-				[currentDict setObject:newDict forKey:component];
-			}
-			else
-			{
-				[entry setFilename: component];
-				
-				[currentDict setObject:entry forKey:component];
-			}
-		}
-		 */
-		
 		[entry setFilename: filename];
 		
 		[entries setObject:entry forKey:filename];
 		
-		NSLog(@"Index Entry: %@", filename);
-		{
-			NSData *sha1 = [NSData dataWithBytes:[entry entryInfo]->sha1 length:20];
-			NSLog(@"SHA1: %@", [sha1 description]);
-		}
-		
-		// skip zero padding.
-		entryLength = ENTRY_INFO_SIZE + nameSize + ENTRY_NUL_SIZE;
-		
-		if (entryLength & 0x07)
-		{
-			skipBytes = 8 - ( entryLength & 0x07 ) + ENTRY_NUL_SIZE;
-		}
-		else
-		{
-			skipBytes = 1;
-		}
-		
-		[file seekToFileOffset:[file offsetInFile] + skipBytes];
+		[file seekToFileOffset:[file offsetInFile] + numSkipBytes( nameSize )];
 	}
+}
+
+static void writeEntry( GitIndexEntry *entry, NSMutableData *outputData )
+{
+	uint32_t length = strlen( [[entry filename] UTF8String] );
+	
+	[entry entryInfo]->flags &= 0xf000;
+	[entry entryInfo]->flags |= length;
+	
+ 	writeStatInfo( [entry entryInfo], outputData );
+	
+	[outputData appendBytes:[[entry filename] UTF8String] length:length + 1];
+	[outputData increaseLengthBy:numSkipBytes( length )];
 }
 
 static void readStatInfo( EntryInfo *entryInfo, NSFileHandle *file )
@@ -505,22 +671,71 @@ static void readStatInfo( EntryInfo *entryInfo, NSFileHandle *file )
 	entryInfo->stat.ctime = NSSwapBigLongLongToHost( entryInfo->stat.ctime );
 	entryInfo->stat.mtime = NSSwapBigLongLongToHost( entryInfo->stat.mtime );
 	
-	entryInfo->stat.dev	  = NSSwapBigLongToHost( entryInfo->stat.dev );
-	entryInfo->stat.inode = NSSwapBigLongToHost( entryInfo->stat.inode );
-	entryInfo->stat.mode  = NSSwapBigLongToHost( entryInfo->stat.mode );
-	entryInfo->stat.uid	  = NSSwapBigLongToHost( entryInfo->stat.uid );
-	entryInfo->stat.gid	  = NSSwapBigLongToHost( entryInfo->stat.gid );
-	entryInfo->stat.size  = NSSwapBigLongToHost( entryInfo->stat.size );
+	entryInfo->stat.dev	  = NSSwapBigIntToHost( entryInfo->stat.dev );
+	entryInfo->stat.inode = NSSwapBigIntToHost( entryInfo->stat.inode );
+	entryInfo->stat.mode  = NSSwapBigIntToHost( entryInfo->stat.mode );
+	entryInfo->stat.uid	  = NSSwapBigIntToHost( entryInfo->stat.uid );
+	entryInfo->stat.gid	  = NSSwapBigIntToHost( entryInfo->stat.gid );
+	entryInfo->stat.size  = NSSwapBigIntToHost( entryInfo->stat.size );
 	
 	entryInfo->flags = NSSwapBigShortToHost( entryInfo->flags );
 }
 
+static void writeStatInfo( EntryInfo *entryInfo, NSMutableData *outputData )
+{
+	EntryInfo info;
+	
+	info.stat.ctime = NSSwapHostLongLongToBig( entryInfo->stat.ctime );
+	info.stat.mtime = NSSwapHostLongLongToBig( entryInfo->stat.mtime );
+	
+	info.stat.dev	= NSSwapHostIntToBig( entryInfo->stat.dev );
+	info.stat.inode	= NSSwapHostIntToBig( entryInfo->stat.inode );
+	info.stat.mode	= NSSwapHostIntToBig( entryInfo->stat.mode );
+	info.stat.uid	= NSSwapHostIntToBig( entryInfo->stat.uid );
+	info.stat.gid	= NSSwapHostIntToBig( entryInfo->stat.gid );
+	info.stat.size	= NSSwapHostIntToBig( entryInfo->stat.size );
+
+	info.flags = NSSwapHostShortToBig( entryInfo->flags );
+	memcpy( info.sha1, entryInfo->sha1, sizeof( info.sha1 ) ); 
+
+	[outputData appendBytes:&info length:ENTRY_INFO_SIZE];
+}
+
+static u_int64_t time64( u_int32_t tv_sec, u_int32_t tv_nsec )
+{
+	u_int64_t time;
+	
+	time = tv_sec;
+	time <<= 32;
+	time |= tv_nsec;
+	
+	return time;
+}
+
+static void setStat( struct stat *fileStat, GitIndexEntry* entry )
+{
+	EntryInfoStat entryStat;
+	
+	entryStat = [entry entryInfo]->stat;
+	
+	entryStat.size = fileStat->st_size;
+	entryStat.ctime = time64( fileStat->st_ctimespec.tv_sec,
+							  fileStat->st_ctimespec.tv_nsec);
+	entryStat.mtime = time64( fileStat->st_mtimespec.tv_sec,
+							  fileStat->st_mtimespec.tv_nsec);
+	
+	entryStat.dev = fileStat->st_dev;
+	entryStat.gid = fileStat->st_gid;
+	entryStat.uid = fileStat->st_uid;
+	entryStat.inode = fileStat->st_ino;
+	entryStat.mode = fileStat->st_mode;
+}
+
+
 static int checkStat( struct stat *fileStat, GitIndexEntry* entry )
 {	
 	EntryInfoStat entryStat;
-	
-	u_int64_t time;
-	
+		
 	entryStat = [entry entryInfo]->stat;
 	
 	if ( entryStat.size != fileStat->st_size )
@@ -528,18 +743,14 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry )
 		return -1;
 	}
 	
-	time = fileStat->st_ctimespec.tv_sec;
-	time <<= 32;
-	time |= fileStat->st_ctimespec.tv_nsec;
-	if ( entryStat.ctime != time )
+	if ( entryStat.ctime != time64( fileStat->st_ctimespec.tv_sec,
+									fileStat->st_ctimespec.tv_nsec) )
 	{
 		return -1;
 	}
 
-	time = fileStat->st_mtimespec.tv_sec;
-	time <<= 32;
-	time |= fileStat->st_mtimespec.tv_nsec;
-	if ( entryStat.mtime != time )
+	if ( entryStat.mtime != time64( fileStat->st_mtimespec.tv_sec,
+								    fileStat->st_mtimespec.tv_nsec) )
 	{
 		return -1;
 	}
@@ -572,8 +783,7 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry )
 	return 0;
 }
 
-
-
-
-
-
+static BOOL isEntryStaged( GitIndexEntry *entry )
+{
+	return [entry entryInfo]->stat.ctime == 0;
+}

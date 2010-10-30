@@ -11,6 +11,7 @@
 @class GitObjectStore;
 @class GitBlobObject;
 @class GitIgnore;
+@class GitTreeObject;
 
 typedef struct
 {
@@ -31,22 +32,46 @@ typedef struct
 	uint16_t flags;
 } EntryInfo;
 
+
+/**
+	GitIndexEntry - Represents one entry in the index file.
+ 
+	Besides the standard fields present in a git index entry, there is also
+	a field for a blob object. This field may be nil, that means that the
+	sha1 key is pointing to an object in the object store.
+ 
+	If the blob field is not nil, it means that the object has been staged
+	but it is not yet in the object store. This field is used to allow adding
+	objects to the index without poluting the database. When making a commit,
+	all the objects left in the blob will be stored in the database.
+ 
+ */
+
 @interface GitIndexEntry : NSObject
 {
 	EntryInfo entryInfo;
 	NSString *filename;
+	GitBlobObject *blob;
 }
 
 @property (readwrite, copy) NSString *filename;
 
 -(EntryInfo*) entryInfo;
 -(NSData*) sha1;
+-(void) setBlob:(GitBlobObject*) blob;
+-(GitBlobObject*) blob;
 
 @end
 
 
 @interface GitIndex : NSObject {
-	NSMutableDictionary *entries;
+	NSMutableDictionary *entries;		// Flattened dictionary of entries
+	
+	NSMutableDictionary *commitTree;  // Latest commited tree.
+	NSMutableDictionary *stagedFiles; // Dictionary of blob objects.
+									  // Filename is the full path.
+	NSURL *url;
+	BOOL isDirty;
 }
 
 -(id) initWithUrl:(NSURL*) url;
@@ -65,22 +90,28 @@ typedef struct
 
 
 /**
-	Writes the index to the specified url.
+	Overwrites the index with the current one.
  
  */
--(void) write:(NSURL*) url;
+-(void) write;
 
 
 /**
-	Writes the index as as a tree object into the object storage.
+	Writes the index as as a tree object into the object storage,
+	as well as all the blob objects that have been added.
 	
-	Returns the Sha1 key of the resulting tree.
+	Returns the Sha1 key of the resulting tree. 
+	If the index has no staged objects, the function will return nil.
  */
--(NSData*) writeTree: (GitObjectStore*) objectStore;
+-(NSData*) writeTree:(GitObjectStore*) objectStore 
+		headTreeSha1:(NSData*) treeSha1;
 
 
 /**
-	Returns a dictionary of (name, GitFileStatus) objects.
+	Returns a dictionary of (name, GitFileStatus) *staged* objects.
+ 
+	Note: this function is not exactly the same as git status, which also 
+	returns the status of the working directory files.
  
  */
 -(NSDictionary*) status:(NSDictionary*) flattenedTree;
@@ -135,8 +166,12 @@ typedef struct
 
 /**
 	Adds a file to the index.
+ 
+    @param filename a filename with the relative path to the root 
+	of the repository prepended.
+ 
  */
--(void) addFile:(NSString*) filename sha1:(NSData*) sha1;
+-(void) addFile:(NSString*) filename blob:(GitBlobObject*) blobObject;
 
 
 
@@ -146,8 +181,6 @@ typedef struct
 -(void) checkoutFilename: (NSURL*) url;
 -(void) checkout;
 
-///
--(void) commitTree:(NSData*) tree withParents:(NSArray*) parents;
 
 @end
 
