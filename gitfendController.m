@@ -23,6 +23,8 @@
 #define NEW_GROUP_NAME @"New Group"
 #define GITFRONT_BPOARD_TYPE  @"GitFrontPboardType"
 
+#define COMMIT_TAG 1
+
 @implementation gitfendRepositoryController
 
 - (id) init
@@ -156,7 +158,7 @@
 	NSOpenPanel* openDlg = [NSOpenPanel openPanel];
 	
 	[openDlg setCanChooseFiles:NO];
-	[openDlg setCanChooseDirectories:YES];	
+	[openDlg setCanChooseDirectories:YES];
 	[openDlg setAllowsMultipleSelection:NO];
 	
 	// Display the dialog.  If the OK button was pressed, process the files.
@@ -172,7 +174,7 @@
 			NSURL *repoDir = [workingDir URLByAppendingPathComponent:@".git"];
 			
 			if ([repoDir checkResourceIsReachableAndReturnError:&error] == YES)
-			{
+			{				
 				[self addRepoFromUrl:workingDir];
 			
 				[self saveDataToDisk];
@@ -191,6 +193,53 @@
 		}
 	}
 }
+
+
+- (IBAction) newRepo:(id) sender
+{
+	NSOpenPanel* panel = [NSOpenPanel openPanel];;
+	
+	[panel setCanChooseFiles:NO];
+	[panel setCanCreateDirectories:YES];
+	[panel setCanChooseDirectories:YES];
+	[panel setAllowsMultipleSelection:NO];
+	
+	// Display the dialog.  If the OK button was pressed, process the files.
+	if ( [panel runModal] == NSFileHandlingPanelOKButton )
+	{
+		NSURL* workingDir = [[panel URLs] objectAtIndex:0];
+		
+		if ( workingDir )
+		{
+			NSError *error;
+			
+			NSURL *repoDir = [workingDir URLByAppendingPathComponent:@".git"];
+			
+			if ([repoDir checkResourceIsReachableAndReturnError:&error] == YES)
+			{
+				(void) NSRunAlertPanel(@"Invalid Directory",
+									   @"%@ already contains a Git repository", 
+									   @"Ok", 
+									   nil, 
+									   nil,
+									   [workingDir description] );
+			}
+			else
+			{
+				[GitRepo makeRepo:(NSURL*) workingDir
+					  description:(NSString*) description
+							error:(NSError**) error];
+				
+				[self addRepoFromUrl:workingDir];
+				
+				[self saveDataToDisk];
+				
+				[_outlineView reloadData];
+			}
+		}
+	}
+}
+
 
 - (IBAction) removeRepo: sender
 {
@@ -266,6 +315,49 @@
 	[self saveDataToDisk];
 }
 
+- (IBAction) showCommitSheet:(id) sender
+{
+	NSWindow *window = [NSApp mainWindow];
+	
+	[NSApp beginSheet:commitSheet 
+	   modalForWindow:window
+		modalDelegate:nil
+	   didEndSelector:NULL
+		  contextInfo:NULL];
+	
+}
+
+- (IBAction) endCommitSheet:(id) sender
+{
+	if ( [sender tag] == COMMIT_TAG )
+	{
+		GitAuthor *author;
+		
+		author = [[GitAuthor alloc] initWithName:@"pepe" 
+										   email:@"mymail@casa.se"
+										 andTime:@"1234"];
+		
+		NSString *commitMessage = [[commitMessageView textStorage] string];
+		
+		if ( [commitMessage length] == 0 )
+		{
+			// Show Alarm
+		}
+		
+		[[workingDirBrowseController repo] makeCommit:commitMessage
+											   author:author
+											 commiter:author];
+		
+		[workingDirBrowseController updateView];
+		
+		// update the commit window (window showing the commits not yet pushed)
+		// and also increase the number in the repo browser.
+	}
+	
+	[NSApp endSheet:commitSheet];
+	[commitSheet orderOut:sender];
+}
+
 -(void) displayViewController:(NSViewController*) vc
 {
 	NSWindow *w = [box window];
@@ -288,6 +380,11 @@
 	while( ![item isKindOfClass:[GitFrontRepositories class]] && item != nil )
 	{
 		item = [_outlineView parentForItem:item];
+	}
+	
+	if ( item == nil )
+	{
+		item = repos;
 	}
 		
 	if ( item )

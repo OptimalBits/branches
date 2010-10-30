@@ -15,7 +15,8 @@
 @class CCDiffViewController;
 
 @interface gitfendRepositoryController : NSObject <NSOutlineViewDelegate, 
-												   NSOutlineViewDataSource> {
+												   NSOutlineViewDataSource> 
+{
 	IBOutlet NSBox *box;
 	
 	IBOutlet NSOutlineView *_outlineView;	// Repo view
@@ -25,8 +26,10 @@
 													   
 	IBOutlet NSView *bottomView;
 	IBOutlet NSBox *bottomBox;
-
-	
+													   
+	IBOutlet NSWindow *commitSheet;
+	IBOutlet NSTextView *commitMessageView;
+													   
 	gitfrontHistoryController *historyController;
 	GitFrontBrowseController *browseController;
 	GFWorkingDirBrowserController *workingDirBrowseController;
@@ -48,8 +51,12 @@
 
 - (IBAction) changeMainView:(id) sender;
 - (IBAction) addRepo:(id) sender;
+- (IBAction) newRepo:(id) sender;
 - (IBAction) removeRepo:(id) sender;
 - (IBAction) addGroup:(id) sender;
+
+- (IBAction) showCommitSheet:(id) sender;
+- (IBAction) endCommitSheet:(id) sender;
 
 
 - (void) addRepoFromUrl:(NSURL*) repoUrl;
