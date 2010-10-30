@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+#include "CCDiff.h"
 
 typedef enum CCDiffViewLineMask
 {
@@ -17,11 +18,30 @@ typedef enum CCDiffViewLineMask
 }CCDiffViewLineMask;
 
 
+typedef struct CCDiffHunk
+{
+	NSUInteger startLine;
+	NSUInteger endLine;
+	NSUInteger startCharIndex;
+	NSUInteger endCharIndex;
+	
+	LineDiffStatus	status;
+} CCDiffHunk;
+
+
 @interface CCDiffView : NSTextView {
 	NSMutableArray *lines;
+	NSMutableArray *hunks;
+	
+	NSUInteger selectedHunk;
+	
 	NSFont *font;
 	NSRect fontBoundingRect;
+	
+	NSScrollView *scrollView;
 }
+
+@property (readwrite, nonatomic) NSUInteger selectedHunk;
 
 //- (id) initWithScrollView:(NSScrollView*) view;
 
@@ -30,4 +50,8 @@ typedef enum CCDiffViewLineMask
 					lines:(NSArray*) lines
 					 mask:(CCDiffViewLineMask) mask;
 
+- (void) moveToNextDiff;
+- (void) moveToPreviousDiff;
+
 @end
+
