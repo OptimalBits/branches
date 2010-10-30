@@ -10,6 +10,7 @@
 #import "gitobject.h"
 #import "gitcommitobject.h"
 #import "GitReference.h"
+#import "GitReferenceStorage.h"
 #import "GitIndex.h"
 #import "NSDataExtension.h"
 
@@ -44,10 +45,12 @@
 @end
 
 
-@interface GitRepo ()
+static BOOL createPath( NSString *basePath, NSString *dir, NSError **error );
 
-- (void) parseRefs;
-- (void) parseHead:(NSURL*) path;
+@interface GitRepo (Private)
+
+-(void) updateHead:(NSData*) sha1;
++(NSArray *)skeletonDirectories;
 
 @end
 
@@ -57,7 +60,7 @@
 @synthesize name;
 @synthesize url;
 @synthesize workingDir;
-@synthesize head;
+
 @synthesize refs;
 @synthesize objectStore;
 @synthesize index;
@@ -80,6 +83,67 @@
 	}
 }
 
++ (NSArray *)skeletonDirectories 
+{
+    return [NSArray arrayWithObjects:@"branches", 
+									 @"hooks", 
+									 @"info", 
+									 @"objects/info", 
+									 @"objects/pack", 
+									 @"refs/heads", 
+									 @"refs/tags", 
+									 nil];
+}
+
++ (BOOL) makeRepo:(NSURL*) _workingDir
+	  description:(NSString*) description
+			error:(NSError**) error
+{	
+	NSString *baseDir = [_workingDir path];
+	
+	createPath( baseDir, @".git", error );
+	
+	NSString *repoDir = [baseDir stringByAppendingPathComponent:@".git"];
+	
+	for ( NSString *dir in [GitRepo skeletonDirectories])
+	{
+		createPath( repoDir, dir, error );
+	}
+	
+	// create HEAD pointing to ref: /refs/heads/master
+	NSString *HEADFile = [repoDir stringByAppendingPathComponent:@"HEAD"];
+	[[NSString stringWithString:@"ref: refs/heads/master\n"] 
+										writeToFile:HEADFile
+										 atomically:TRUE
+										   encoding:NSUTF8StringEncoding
+											  error:error];
+	
+	// create description
+	NSString *descriptionFile = [repoDir stringByAppendingPathComponent:@"description"];
+	if ( description == nil )
+	{
+		description = [NSString stringWithString:
+					   @"Unnamed repository; edit this file 'description' to name the repository.\n"];
+	}
+	[description writeToFile:descriptionFile
+				  atomically:TRUE
+					encoding:NSUTF8StringEncoding
+					   error:error];
+
+	// create config
+	NSString *config = 
+		@"[core]\n\trepositoryformatversion = 0\nfilemode = true\nbare = true\nignorecase = true\n";
+	
+	NSString *configFile = [repoDir stringByAppendingPathComponent:@"config"];
+	[config writeToFile:configFile
+				  atomically:TRUE
+					encoding:NSUTF8StringEncoding
+					   error:error];
+	
+	return YES;
+}
+
+
 - (id) initWithUrl: (NSURL*) _workingDir name:(NSString*) _name
 {	
     if ( self = [super init] )
@@ -101,13 +165,9 @@
 			 [urlComponents objectAtIndex:[urlComponents count]-2]];
 		}
 		
-		refs = [[NSMutableDictionary alloc] init];
+		objectStore = [[GitObjectStore alloc] initWithUrl:url];
 		
-		objectStore = [[GitObjectStore alloc] initWithUrl: url];
-		
-		[self parseRefs];
-		
-		[self parseHead:url];
+		refs = [[GitReferenceStorage alloc] initWithUrl:url];
 		
 		index = [[GitIndex alloc] initWithUrl: 
 				 [url URLByAppendingPathComponent:@"index"]];
@@ -117,7 +177,9 @@
 
 -(void) dealloc
 {	
+	[index release];
 	[refs release];
+	[objectStore release];
 	[url release];
 	[super dealloc];
 }
@@ -139,216 +201,12 @@
 	return [objectStore getObject:sha1];
 }
 
-
--(NSData*) resolveReference:(NSString*) refName
+-(NSDictionary*) headTree
 {
-	NSUInteger componentCount;
-	NSURL *uRefName = [NSURL URLWithString:refName];
-	NSArray *pathComponents = [uRefName pathComponents];
+	NSData *headSha1 = [[refs head] resolve:refs];
+	GitTreeObject *tree = [objectStore getTreeFromCommit:headSha1];
 	
-	componentCount = [pathComponents count];
-	
-	if ( componentCount >= 3 )
-	{
-		if ( [[pathComponents objectAtIndex:0] isEqualToString: @"refs"] )
-		{
-			NSDictionary *dict = refs;
-			NSUInteger componentIndex = 1;
-			
-			while ( componentIndex < componentCount )
-			{
-				id obj = [dict objectForKey:
-							[pathComponents objectAtIndex:componentIndex]];
-				if ( [obj isKindOfClass:[GitReference class]] )
-				{
-					GitReference *ref = obj;
-					return [ref resolve:self];
-				}
-				else if ( [obj isKindOfClass:[NSMutableDictionary class]] )
-				{
-					dict = obj;
-				}
-				else
-				{
-					NSLog(@"Error resolving reference %@", refName);
-				
-					for ( id o in dict )
-					{
-						NSLog(@"Object: %@ ", [o description] );
-					}
-				}
-				
-				componentIndex++;
-			}
-		}
-	}
-	
-	return nil;
-}
-
-
-// Private methods.
-
--(void) parsePackedRefs
-{
-	NSError *error;
-	NSURL *packedRefsPath;
-	
-	packedRefsPath = [url URLByAppendingPathComponent:@"packed-refs"];
-	if ([packedRefsPath checkResourceIsReachableAndReturnError:&error] == YES)
-	{
-		NSString *packedRefs;
-		NSStringEncoding encoding;
-		
-		packedRefs = [NSString stringWithContentsOfURL:packedRefsPath 
-										  usedEncoding:&encoding 
-												 error:&error];
-		
-		NSArray *lines = [packedRefs componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-		
-		for(NSString *line in lines)
-		{
-			NSArray *lineElements = [line componentsSeparatedByString:@" "];
-			
-			if ( [lineElements count] >= 2 )
-			{
-				NSString *sha1 = [lineElements objectAtIndex:0];
-				
-				if ( [sha1 length] == 40 )
-				{
-					GitReference *ref;
-					NSArray *refComponents = 
-						[[lineElements objectAtIndex:1] 
-							componentsSeparatedByString:@"/"];
-					
-					NSUInteger componentsCount;
-					NSUInteger componentsIndex;
-					
-					NSMutableDictionary *dict = refs;
-					
-					componentsCount = [refComponents count];
-					componentsIndex = 1;
-					
-					while ( componentsIndex < ( componentsCount - 1 ) )
-					{
-						NSMutableDictionary *nextDict;
-						
-						NSString *component = 
-						[refComponents objectAtIndex:componentsIndex];
-						
-						nextDict = [dict objectForKey:component];
-						if ( nextDict == nil )
-						{
-							nextDict = [[[NSMutableDictionary alloc] init] autorelease];
-							[dict setObject:nextDict forKey:component];
-						}
-						
-						dict = nextDict;
-						componentsIndex ++;
-					}
-					
-					NSString *refName = 
-					[refComponents objectAtIndex:componentsIndex];
-					ref = [[[GitReference alloc] initWithName:refName
-													  content:sha1] autorelease];
-					
-					[dict setObject:ref forKey:refName];
-				}
-			}
-		}
-	}
-}
-
--(void) parseLooseRefsInDir:(NSURL*) dir 
-					   dict:(NSMutableDictionary*) dict
-				fileManager:(NSFileManager*) fileManager
-					  error:(NSError**) error
-{
-	
-	NSStringEncoding encoding;
-	
-	NSArray *urls = 
-	[fileManager contentsOfDirectoryAtURL:dir 
-			   includingPropertiesForKeys:nil 
-								  options:NSDirectoryEnumerationSkipsHiddenFiles 
-									error:error];
-	for(NSURL *u in urls)
-	{
-		GitReference *ref;
-		NSString *component;
-		
-		NSMutableDictionary *nextDict;
-		
-		component = [u lastPathComponent];
-		
-		NSString *sha1 = [NSString stringWithContentsOfURL:u 
-											  usedEncoding:&encoding 
-													 error:error];
-		
-		if ( sha1 != nil ) // Otherwise we hare handling a directory.
-		{			
-			ref = [[[GitReference alloc] initWithName:component 
-											  content:sha1] autorelease];
-			
-			
-			[dict setObject:ref forKey:component];
-		}
-		
-		nextDict = [dict objectForKey:component];
-		if ( nextDict == nil )
-		{
-			nextDict = [[[NSMutableDictionary alloc] init] autorelease];
-			[dict setObject:nextDict forKey:component];
-		}
-		
-		[self parseLooseRefsInDir:u 
-							 dict:nextDict 
-					  fileManager:fileManager
-							error:error];
-	}
-}
-
--(void) parseLooseRefs
-{
-	NSError *error;
-	NSFileManager *fileManager;
-	NSURL *refsPath;
-	
-	fileManager = [NSFileManager defaultManager];
-	
-	refsPath = [url URLByAppendingPathComponent:@"refs"];
-	if ([refsPath checkResourceIsReachableAndReturnError:&error] == YES)
-	{
-		[self parseLooseRefsInDir:refsPath
-							 dict:refs
-					  fileManager:fileManager
-							error:&error];
-	}
-}
-
-- (void) parseRefs
-{
-	[self parsePackedRefs];
-	[self parseLooseRefs];
-}
-
-- (void) parseHead:(NSURL*) path
-{
-	NSStringEncoding encoding;
-	NSError *error;
-	
-	NSURL *headPath = [path URLByAppendingPathComponent:@"HEAD"];
-	
-	NSString *headRef = [NSString stringWithContentsOfURL:headPath 
-											 usedEncoding:&encoding 
-													error:&error];
-	if ( headRef )
-	{
-		head = [[GitReference alloc] initWithName:@"HEAD"
- 										  content:headRef];
-		NSLog(@"HEAD: %@", [head resolve:self]);
-		NSLog(@"HEAD -> %@", [head symbolicReference]);
-	}
+	return [objectStore flattenTree:tree];
 }
 
 - (NSArray*) revisionHistoryFor:(NSData*) sha1
@@ -361,10 +219,79 @@
 	return [historyVisitor history];
 }
 
+- (BOOL) makeCommit:(NSString*) message 
+			 author:(GitAuthor*) author
+		   commiter:(GitAuthor*) commiter
+{	
+	NSData* headCommit = [[refs head] resolve:refs];
+		
+	GitCommitObject *headCommitObject = [objectStore getObject:headCommit];
+	
+	
+	NSData *treeSha1 = [index writeTree:objectStore 
+						headTreeSha1:[headCommitObject tree]];
+	
+	if ( treeSha1 )
+	{
+		NSArray *parents = nil;
+		
+		if ( headCommit )
+		{
+			parents = [NSArray arrayWithObject:headCommit];
+		}
+		
+		GitCommitObject *commitObject = [[GitCommitObject alloc] 
+										 initWithTree:treeSha1
+										 parents:parents
+										 message:message
+										 author:author
+										 commiter:commiter];
+		
+		NSData *sha1 = [objectStore addObject:commitObject];
+		
+		[self updateHead:sha1];
+		
+		[commitObject release];
+		
+		[index write];
+		
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
+-(void) updateHead:(NSData*) sha1
+{
+	[refs setReference:[refs head] sha1: sha1];
+	
+	[refs updateReference:[refs head]];
+}
+
+
+-(NSData*) resolveReference:(NSString*) refName
+{
+	return [refs resolveReference:refName];
+}
 
 @end
 
-
-
-
+static BOOL createPath( NSString *basePath, NSString *dir, NSError **error )
+{
+	NSFileManager *mgr = [NSFileManager defaultManager];
+	
+	NSString *path = [basePath stringByAppendingPathComponent:dir];
+	
+	if ([mgr fileExistsAtPath:path] == NO)
+	{
+		return [mgr createDirectoryAtPath:path 
+			  withIntermediateDirectories:YES 
+							   attributes:nil
+									error:error];
+	}
+	
+	return YES;
+}
 

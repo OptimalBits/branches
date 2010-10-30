@@ -7,7 +7,7 @@
 //
 
 #import "GitReference.h"
-#import "gitrepo.h"
+#import "GitReferenceStorage.h"
 #import "RegexKitLite.h"
 #import "NSDataExtension.h"
 
@@ -17,21 +17,47 @@ NSString *regExpSha1 = @"([0-9a-f]{40})";
 @implementation GitReference
 
 @synthesize name;
+@synthesize path;
+@synthesize sha1;
+@synthesize symbolicReference;
 
 -(id) initWithName:(NSString *) refName
 {
 	return [self initWithName:refName content:nil];
 }
 
--(id) initWithName:(NSString *)refName content:(NSString *) refContent
+-(id) initWithName:(NSString *)refName 
+		   content:(NSString *)refContent
+{
+	return [self initWithName:refName content:refContent path:nil];
+}
+
+-(id) initWithName:(NSString *) refName 
+		   content:(NSString *) content 
+			  path:(NSString*) _path
 {
 	if (self = [super init] )
-	{
-		[refName retain];
-		[refContent retain];
+	{		
+		NSString *sha1String = [content stringByMatching:regExpSha1 capture:1L];
+		
+		if ( sha1String )
+		{
+			sha1 =  [NSData dataWithHexString:sha1String];
+		}
+		else
+		{
+			sha1 = nil;
+		}
+
+		symbolicReference = [content stringByMatching:regExpSym capture:1L];
 		
 		name = refName;
-		content = refContent;
+		path = _path;
+		
+		[name retain];
+		[path retain];
+		[sha1 retain];
+		[symbolicReference retain];
 	}
 	return self;
 }
@@ -39,14 +65,23 @@ NSString *regExpSha1 = @"([0-9a-f]{40})";
 -(void) dealloc
 {
 	[name release];
-	[content release];
+	[path release];
+	[sha1 release];
+	[symbolicReference release];
 	[super dealloc];
 }
 
+/*
+-(void) writeSymbolicReference:(GitReference*) reference
+{
+	[[NSString stringWithFormat:@"ref: %@", [reference name]] retain];
+}
+*/
+
+
 -(void) setSymbolicReference:(GitReference*) reference
 {
-	[content release];
-	content = [[NSString stringWithFormat:@"ref: %@", [reference name]] retain];
+	
 }
 
 /**
@@ -56,37 +91,21 @@ NSString *regExpSha1 = @"([0-9a-f]{40})";
  be necessary.
  
  */	
--(NSData*) resolve:(GitRepo*) repo
-{
-	NSString *symbolicReference;
-	NSString *sha1;
-	
-	symbolicReference = [self symbolicReference];
-	
+-(NSData*) resolve:(GitReferenceStorage*) refStorage
+{	
 	if ( symbolicReference )
 	{
-		return 	[repo resolveReference: symbolicReference];
+		return 	[refStorage resolveReference: symbolicReference];
 	}
 	
-	sha1 = [content stringByMatching:regExpSha1 capture:1L];
-	
-	if ( sha1 )
-	{
-		return [NSData dataWithHexString:sha1];
-	}
-	
-	return nil;
+	return [self sha1];
 }
 
--(NSString*) symbolicReference
-{
-	return  [content stringByMatching:regExpSym capture:1L];
-}
 
 -(NSString*) branch
 {
 	NSUInteger count;
-	NSArray *pathComponents = [[self symbolicReference] pathComponents];
+	NSArray *pathComponents = [symbolicReference pathComponents];
 	
 	count = [pathComponents count];
 	

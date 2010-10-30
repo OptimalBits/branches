@@ -10,7 +10,10 @@
 #import "GitObjectStore.h"
 
 @class GitReference;
+@class GitReferenceStorage;
+@class GitRefLog;
 @class GitIndex;
+@class GitAuthor;
 
 
 @interface GitHistoryVisitor: NSObject <GitNodeVisitor>
@@ -25,14 +28,13 @@
 @end
 
 
-
 @interface GitRepo : NSObject <NSCoding> {
 	NSString *name;
 	NSURL* url;
 	NSURL* workingDir;
 	
-	GitReference *head;
-	NSMutableDictionary *refs;	// ( name, GitReference )
+	GitReferenceStorage *refs;
+	GitRefLog *refLog;
 
 	GitObjectStore *objectStore;
 		
@@ -42,20 +44,30 @@
 @property (readwrite,retain) NSString *name;
 @property (readonly) NSURL* url;
 @property (readonly) NSURL* workingDir;
-@property (readonly) GitReference *head;
-@property (readonly) NSMutableDictionary *refs;
+
+@property (readonly) GitReferenceStorage *refs;
+
 @property (readonly) GitObjectStore *objectStore;
 @property (readonly) GitIndex *index;
 
-//@property (readonly) NSString *description;
-//@property (readonly) GitObject *head;
-//@property (readonly) GitConfig *config;
 
+//@property (readonly) NSString *description;
+//@property (readonly) GitConfig *config;
 
 /**
 	Fast check to see if it is seemingly a valid repo.
  */
 + (BOOL) isValidRepo:(NSURL*) workingDir;
+
+/**
+	Creates a new repo on the given working directory.
+	The directory maybe empty, or not. If the directory already
+	contains a repo, missing default directories and templates will
+	be added.
+ */
++ (BOOL) makeRepo:(NSURL*) workingDir
+	  description:(NSString*) description
+			error:(NSError**) error;
 
 - (id) initWithUrl: (NSURL*) path name:(NSString*) name;
 - (void) dealloc;
@@ -80,12 +92,36 @@
 
 -(NSData*) resolveReference:(NSString*) refName;
 
+
+/**
+	Returns a Flattened dictionary with the tree pointed by the
+	commit in the HEAD.
+ 
+ */
+-(NSDictionary*) headTree;
+
+
 /**
 	Returns the history for a given sha. 
  
 	TODO: Move to a dedicated class: GitHistory
  */
 - (NSArray*) revisionHistoryFor:(NSData*) sha1;
+
+
+/**
+	Makes a commit and stores in the object store.
+ 
+	Notes:
+	The commit will be created as a child of the last commit in the head
+	branch. If the index does not have any data staged, the function will 
+	just return false and do nothing.
+ 
+ 
+ */
+- (BOOL) makeCommit:(NSString*) message 
+			 author:(GitAuthor*) author
+		   commiter:(GitAuthor*) commiter;
 
 
 @end
