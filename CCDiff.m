@@ -33,9 +33,9 @@
 +(id) emptyLine:(NSUInteger) _number
 {
 	return 
-		[[CCDiffLine alloc] initWithLine:nil 
-								  status:kLineEmpty 
-							   andNumber:_number];
+		[[[CCDiffLine alloc] initWithLine:nil 
+								   status:kLineEmpty 
+								andNumber:_number] autorelease];
 }
 
 @end
@@ -60,6 +60,9 @@ static NSArray *getLines( NSString *s );
 	{		
 		beforeLines = getLines( before );
 		afterLines = getLines( after );
+		
+		[beforeLines retain];
+		[afterLines retain];
 	}
 	return self;
 }
@@ -156,6 +159,9 @@ static NSArray *getLines( NSString *s );
 	u_int32_t bIndex = 0;
 	u_int32_t aIndex = 0;
 	
+	u_int32_t bLineNumber = 1;
+	u_int32_t aLineNumber = 1;
+	
 	for( NSString *s in lcs )
 	{
 		while(1)
@@ -173,8 +179,12 @@ static NSArray *getLines( NSString *s );
 				{
 					diffLine = [[[CCDiffLine alloc] initWithLine:b 
 														 status:kLineRemoved
-													  andNumber:0] autorelease];
+													  andNumber:bLineNumber] 
+								autorelease];
+					
 					[result addObject:diffLine];
+					
+					bLineNumber++;
 				}
 			}
 		}
@@ -194,8 +204,11 @@ static NSArray *getLines( NSString *s );
 				{
 					diffLine = [[[CCDiffLine alloc] initWithLine:a
 														 status:kLineAdded
-													  andNumber:0] autorelease];
+													  andNumber:aLineNumber]
+								autorelease];
 					[result addObject:diffLine];
+					
+					aLineNumber++;
 				}
 			}
 		}
@@ -204,6 +217,30 @@ static NSArray *getLines( NSString *s );
 											 status:kLineOriginal
 										  andNumber:0] autorelease];
 		[result addObject:diffLine];
+		bLineNumber++;
+		aLineNumber++;
+	}
+	
+	while( bIndex < bCount )
+	{
+		diffLine = [[[CCDiffLine alloc] initWithLine:[beforeLines objectAtIndex:bIndex]
+											  status:kLineRemoved
+										   andNumber:bLineNumber] autorelease];
+		[result addObject:diffLine];
+		
+		bIndex++;
+		bLineNumber++;
+	}
+
+	while( aIndex < aCount )
+	{		
+		diffLine = [[[CCDiffLine alloc] initWithLine:[afterLines objectAtIndex:aIndex]
+											  status:kLineAdded
+										   andNumber:aLineNumber] autorelease];
+		[result addObject:diffLine];
+		
+		aIndex++;
+		aLineNumber++;
 	}
 	
 	return result;
@@ -218,6 +255,8 @@ static NSArray *getLines( NSString *s )
 	NSMutableArray *lines = [[[NSMutableArray alloc] init] autorelease];
 	[s enumerateLinesUsingBlock:
 		 ^(NSString *line, BOOL *stop){[lines addObject:line];}];
+
+	//	return [s componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 	
 	return lines;
 }

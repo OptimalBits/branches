@@ -20,7 +20,8 @@ typedef enum
 	kLineOriginal,
 	kLineAdded,
 	kLineRemoved,
-	kLineEmpty
+	kLineEmpty,
+	kLineUndefined
 } LineDiffStatus;
 
 @interface CCDiffLine : NSObject
