@@ -86,6 +86,14 @@ NSData *patch_delta( NSData *src, NSData *delta );
 	return self;
 }
 
+-(void) dealloc
+{
+	free( keys );
+    free( offsets );
+	free( crcs );
+	[super dealloc];
+}
+
 - (uint32_t) findObjectOffset:(NSData*) key
 {
 	int start;
