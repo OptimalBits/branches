@@ -14,7 +14,6 @@
 		64197F9912109C8A00AA687A /* GitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 64197F9812109C8A00AA687A /* GitFile.m */; };
 		64198010121182A800AA687A /* bullet_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 6419800F121182A800AA687A /* bullet_error.png */; };
 		641BDFC61204ADAD00D2082D /* todo.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 641BDFC51204ADAD00D2082D /* todo.rtf */; };
-		641DF50F1272FC9E009B0DA7 /* question.png in Resources */ = {isa = PBXBuildFile; fileRef = 641DF50E1272FC9E009B0DA7 /* question.png */; };
 		642234D211B451AB003E944D /* gitfrontHistoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 642234D111B451AB003E944D /* gitfrontHistoryController.m */; };
 		6422354111B5A5A0003E944D /* CocoaCryptoHashing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422353011B5A5A0003E944D /* CocoaCryptoHashing.m */; };
 		6422354211B5A5A0003E944D /* GitBlobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422353211B5A5A0003E944D /* GitBlobObject.m */; };
@@ -22,7 +21,6 @@
 		6422354811B5A5A0003E944D /* NSDataExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422353E11B5A5A0003E944D /* NSDataExtension.m */; };
 		6422354911B5A5A0003E944D /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422354011B5A5A0003E944D /* RegexKitLite.m */; };
 		64267FB012189CDC0044FD96 /* GitFrontIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 64267FAF12189CDC0044FD96 /* GitFrontIcons.m */; };
-		642684061219C8020044FD96 /* blue-folders-stack.png in Resources */ = {isa = PBXBuildFile; fileRef = 642684051219C8020044FD96 /* blue-folders-stack.png */; };
 		642E8E8011AF01EF00DB65B9 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 642E8E7F11AF01EF00DB65B9 /* libcrypto.dylib */; };
 		642E8E8211AF022C00DB65B9 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 642E8E8111AF022C00DB65B9 /* libicucore.dylib */; };
 		64337E7312397B35006CA968 /* DiffView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64337E7212397B34006CA968 /* DiffView.xib */; };
@@ -59,11 +57,12 @@
 		6486FCB9127C6D66007CA28A /* folder_go.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCB8127C6D66007CA28A /* folder_go.png */; };
 		6486FCBC127C6D8A007CA28A /* gitfront.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCBB127C6D8A007CA28A /* gitfront.icns */; };
 		6486FCBE127C6DAE007CA28A /* png4.128.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCBD127C6DAE007CA28A /* png4.128.png */; };
-		6486FCC0127C6DB9007CA28A /* question.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCBF127C6DB9007CA28A /* question.png */; };
-		6486FCC2127C6DC4007CA28A /* blue-folders-stack.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCC1127C6DC4007CA28A /* blue-folders-stack.png */; };
 		6486FCC4127C6DCE007CA28A /* tag-label.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCC3127C6DCE007CA28A /* tag-label.png */; };
 		6486FCC6127C6DD5007CA28A /* tags-label.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCC5127C6DD5007CA28A /* tags-label.png */; };
 		6486FCC8127C6DDD007CA28A /* pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCC7127C6DDD007CA28A /* pencil.png */; };
+		6486FCCE127C6F1C007CA28A /* blue-folders-stack.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCCD127C6F1C007CA28A /* blue-folders-stack.png */; };
+		6486FCD0127C6F25007CA28A /* question.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCCF127C6F25007CA28A /* question.png */; };
+		6486FDC6127C9E8C007CA28A /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6486FDC5127C9E8C007CA28A /* BWToolkitFramework.framework */; };
 		6491C2C2119B2F6500D2662B /* gitfendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6491C2C1119B2F6500D2662B /* gitfendController.m */; };
 		64A5E7601204D3E700DDB5C9 /* GitClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E75F1204D3E700DDB5C9 /* GitClient.m */; };
 		64A5E7631205AA1100DDB5C9 /* RepoConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A5E7621205AA1100DDB5C9 /* RepoConfig.xib */; };
@@ -81,8 +80,6 @@
 		64DBE33E11C5370B00DFB667 /* GitObjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 64DBE33D11C5370B00DFB667 /* GitObjectStore.m */; };
 		64DBE35011C572C400DFB667 /* History.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64DBE34F11C572C400DFB667 /* History.xib */; };
 		64F1C5C5121FD4C700321FEB /* features.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 64F1C5C4121FD4C700321FEB /* features.rtf */; };
-		64FA9D0C119B566D0077F7A1 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64FA9D0B119B566D0077F7A1 /* BWToolkitFramework.framework */; };
-		64FA9D13119B56E10077F7A1 /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 64FA9D0B119B566D0077F7A1 /* BWToolkitFramework.framework */; };
 		64FA9D88119F1D770077F7A1 /* gitfendConsoleController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64FA9D87119F1D770077F7A1 /* gitfendConsoleController.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -96,7 +93,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				64FA9D13119B56E10077F7A1 /* BWToolkitFramework.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,7 +117,6 @@
 		64197F9812109C8A00AA687A /* GitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitFile.m; sourceTree = "<group>"; };
 		6419800F121182A800AA687A /* bullet_error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet_error.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/bullet_error.png; sourceTree = SOURCE_ROOT; };
 		641BDFC51204ADAD00D2082D /* todo.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = todo.rtf; sourceTree = "<group>"; };
-		641DF50E1272FC9E009B0DA7 /* question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = question.png; sourceTree = "<group>"; };
 		642234D011B451AB003E944D /* gitfrontHistoryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gitfrontHistoryController.h; sourceTree = "<group>"; };
 		642234D111B451AB003E944D /* gitfrontHistoryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gitfrontHistoryController.m; sourceTree = "<group>"; };
 		6422352F11B5A5A0003E944D /* CocoaCryptoHashing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaCryptoHashing.h; sourceTree = "<group>"; };
@@ -135,7 +130,6 @@
 		6422354011B5A5A0003E944D /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		64267FAE12189CDC0044FD96 /* GitFrontIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitFrontIcons.h; sourceTree = "<group>"; };
 		64267FAF12189CDC0044FD96 /* GitFrontIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitFrontIcons.m; sourceTree = "<group>"; };
-		642684051219C8020044FD96 /* blue-folders-stack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blue-folders-stack.png"; sourceTree = "<group>"; };
 		642E8E7F11AF01EF00DB65B9 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		642E8E8111AF022C00DB65B9 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		64337E7212397B34006CA968 /* DiffView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiffView.xib; sourceTree = "<group>"; };
@@ -184,11 +178,12 @@
 		6486FCB8127C6D66007CA28A /* folder_go.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = folder_go.png; path = Resources/Icons/folder_go.png; sourceTree = "<group>"; };
 		6486FCBB127C6D8A007CA28A /* gitfront.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = gitfront.icns; path = Resources/Icons/gitfront.icns; sourceTree = "<group>"; };
 		6486FCBD127C6DAE007CA28A /* png4.128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = png4.128.png; path = Resources/Icons/png4.128.png; sourceTree = "<group>"; };
-		6486FCBF127C6DB9007CA28A /* question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = question.png; sourceTree = "<group>"; };
-		6486FCC1127C6DC4007CA28A /* blue-folders-stack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blue-folders-stack.png"; sourceTree = "<group>"; };
 		6486FCC3127C6DCE007CA28A /* tag-label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tag-label.png"; path = "Resources/Icons/tag-label.png"; sourceTree = "<group>"; };
 		6486FCC5127C6DD5007CA28A /* tags-label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tags-label.png"; path = "Resources/Icons/tags-label.png"; sourceTree = "<group>"; };
 		6486FCC7127C6DDD007CA28A /* pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pencil.png; path = Resources/Icons/pencil.png; sourceTree = "<group>"; };
+		6486FCCD127C6F1C007CA28A /* blue-folders-stack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "blue-folders-stack.png"; path = "Resources/Icons/blue-folders-stack.png"; sourceTree = "<group>"; };
+		6486FCCF127C6F25007CA28A /* question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = question.png; path = Resources/Icons/question.png; sourceTree = "<group>"; };
+		6486FDC5127C9E8C007CA28A /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = BWToolkit/BWToolkitFramework.framework; sourceTree = "<group>"; };
 		6491C2C0119B2F6500D2662B /* gitfendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gitfendController.h; sourceTree = "<group>"; };
 		6491C2C1119B2F6500D2662B /* gitfendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gitfendController.m; sourceTree = "<group>"; };
 		64A5E75E1204D3E700DDB5C9 /* GitClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitClient.h; sourceTree = "<group>"; };
@@ -217,7 +212,6 @@
 		64DBE33D11C5370B00DFB667 /* GitObjectStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitObjectStore.m; sourceTree = "<group>"; };
 		64DBE34F11C572C400DFB667 /* History.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = History.xib; sourceTree = "<group>"; };
 		64F1C5C4121FD4C700321FEB /* features.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = features.rtf; sourceTree = "<group>"; };
-		64FA9D0B119B566D0077F7A1 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = /Users/manuel/dev/BWToolkit/BWToolkitFramework.framework; sourceTree = "<absolute>"; };
 		64FA9D86119F1D770077F7A1 /* gitfendConsoleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gitfendConsoleController.h; sourceTree = "<group>"; };
 		64FA9D87119F1D770077F7A1 /* gitfendConsoleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gitfendConsoleController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* gitfend-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "gitfend-Info.plist"; sourceTree = "<group>"; };
@@ -230,11 +224,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				64FA9D0C119B566D0077F7A1 /* BWToolkitFramework.framework in Frameworks */,
 				642E8E8011AF01EF00DB65B9 /* libcrypto.dylib in Frameworks */,
 				642E8E8211AF022C00DB65B9 /* libicucore.dylib in Frameworks */,
 				64749CDA126116BA0015DC50 /* Cocoa.framework in Frameworks */,
 				64749D1A12619DB70015DC50 /* Carbon.framework in Frameworks */,
+				6486FDC6127C9E8C007CA28A /* BWToolkitFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,9 +271,10 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				642E8E7F11AF01EF00DB65B9 /* libcrypto.dylib */,
+				6486FDC5127C9E8C007CA28A /* BWToolkitFramework.framework */,
 				64749D1912619DB70015DC50 /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
-				64FA9D0B119B566D0077F7A1 /* BWToolkitFramework.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -316,7 +311,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				642E8E7F11AF01EF00DB65B9 /* libcrypto.dylib */,
 				64DBE2ED11C3CDDA00DFB667 /* Browser.xib */,
 				64DBE34F11C572C400DFB667 /* History.xib */,
 				64A5E7621205AA1100DDB5C9 /* RepoConfig.xib */,
@@ -446,15 +440,13 @@
 				6486FC8D127C6B22007CA28A /* git.png */,
 				6486FC8E127C6B22007CA28A /* page_save.png */,
 				6486FCBD127C6DAE007CA28A /* png4.128.png */,
-				6486FCBF127C6DB9007CA28A /* question.png */,
-				6486FCC1127C6DC4007CA28A /* blue-folders-stack.png */,
-				641DF50E1272FC9E009B0DA7 /* question.png */,
+				6486FCCD127C6F1C007CA28A /* blue-folders-stack.png */,
+				6486FCCF127C6F25007CA28A /* question.png */,
 				6486FC8F127C6B22007CA28A /* server_database.png */,
 				6486FCC3127C6DCE007CA28A /* tag-label.png */,
 				6486FCC5127C6DD5007CA28A /* tags-label.png */,
 				6486FC90127C6B22007CA28A /* tick.png */,
 				6486FCC7127C6DDD007CA28A /* pencil.png */,
-				642684051219C8020044FD96 /* blue-folders-stack.png */,
 			);
 			name = icons;
 			sourceTree = "<group>";
@@ -541,11 +533,9 @@
 				64198010121182A800AA687A /* bullet_error.png in Resources */,
 				64B790EC1212053E00223E14 /* credits.rtf in Resources */,
 				64B792441215492500223E14 /* arrow_up.png in Resources */,
-				642684061219C8020044FD96 /* blue-folders-stack.png in Resources */,
 				640E83C0121AA9BD0087FB27 /* WorkingDirBrowser.xib in Resources */,
 				64F1C5C5121FD4C700321FEB /* features.rtf in Resources */,
 				64337E7312397B35006CA968 /* DiffView.xib in Resources */,
-				641DF50F1272FC9E009B0DA7 /* question.png in Resources */,
 				6486FC91127C6B22007CA28A /* accept.png in Resources */,
 				6486FC92127C6B22007CA28A /* add.png in Resources */,
 				6486FC93127C6B22007CA28A /* arrow_branch.png in Resources */,
@@ -564,11 +554,11 @@
 				6486FCB9127C6D66007CA28A /* folder_go.png in Resources */,
 				6486FCBC127C6D8A007CA28A /* gitfront.icns in Resources */,
 				6486FCBE127C6DAE007CA28A /* png4.128.png in Resources */,
-				6486FCC0127C6DB9007CA28A /* question.png in Resources */,
-				6486FCC2127C6DC4007CA28A /* blue-folders-stack.png in Resources */,
 				6486FCC4127C6DCE007CA28A /* tag-label.png in Resources */,
 				6486FCC6127C6DD5007CA28A /* tags-label.png in Resources */,
 				6486FCC8127C6DDD007CA28A /* pencil.png in Resources */,
+				6486FCCE127C6F1C007CA28A /* blue-folders-stack.png in Resources */,
+				6486FCD0127C6F25007CA28A /* question.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -647,6 +637,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../BWToolkit\"",
+					"\"$(SRCROOT)/BWToolkit\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -673,6 +664,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../BWToolkit\"",
+					"\"$(SRCROOT)/BWToolkit\"",
 				);
 				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_MODEL_TUNING = G5;
