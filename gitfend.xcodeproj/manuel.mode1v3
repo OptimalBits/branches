@@ -335,7 +335,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>6486FEA7127CB5A8007CA28A</string>
+										<string>6486FEA8127CBB9D007CA28A</string>
 										<key>history</key>
 										<array>
 											<string>6429F5AB11A8645D00FAAB90</string>
@@ -650,8 +650,8 @@
 		<string>6486FC4B127B64B9007CA28A</string>
 		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
-		<string>64B58222119090C400047C5A</string>
 		<string>/Users/manuel/dev/gitfend/gitfend.xcodeproj</string>
+		<string>64B58222119090C400047C5A</string>
 	</array>
 	<key>WindowString</key>
 	<string>-1278 291 1278 727 -1280 224 1280 800 </string>
@@ -686,7 +686,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1276, 452}}</string>
 								<key>RubberWindowFrame</key>
-								<string>0 56 1276 946 0 0 1280 1002 </string>
+								<string>20 23 1276 946 0 0 1280 1002 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -710,7 +710,7 @@
 								<key>Frame</key>
 								<string>{{0, 457}, {1276, 448}}</string>
 								<key>RubberWindowFrame</key>
-								<string>0 56 1276 946 0 0 1280 1002 </string>
+								<string>20 23 1276 946 0 0 1280 1002 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXBuildResultsModule</string>
@@ -742,7 +742,7 @@
 			<key>WindowContentMinSize</key>
 			<string>486 300</string>
 			<key>WindowString</key>
-			<string>0 56 1276 946 0 0 1280 1002 </string>
+			<string>20 23 1276 946 0 0 1280 1002 </string>
 			<key>WindowToolGUID</key>
 			<string>64B58222119090C400047C5A</string>
 			<key>WindowToolIsVisible</key>

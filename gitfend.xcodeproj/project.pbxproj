@@ -25,8 +25,6 @@
 		642E8E8211AF022C00DB65B9 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 642E8E8111AF022C00DB65B9 /* libicucore.dylib */; };
 		64337E7312397B35006CA968 /* DiffView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64337E7212397B34006CA968 /* DiffView.xib */; };
 		64337E81123ABC45006CA968 /* CCDiffViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64337E80123ABC45006CA968 /* CCDiffViewController.m */; };
-		64338003123D2B07006CA968 /* NoodleLineNumberMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 64338000123D2B07006CA968 /* NoodleLineNumberMarker.m */; };
-		64338004123D2B07006CA968 /* NoodleLineNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 64338002123D2B07006CA968 /* NoodleLineNumberView.m */; };
 		6433841C1244E2E1006CA968 /* CCDiffView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6433841B1244E2E1006CA968 /* CCDiffView.m */; };
 		644D5478120965C000AFF18B /* RepoContextMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 644D5477120965C000AFF18B /* RepoContextMenu.xib */; };
 		644D548A120A0E6500AFF18B /* GitReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 644D5489120A0E6500AFF18B /* GitReference.m */; };
@@ -63,6 +61,8 @@
 		6486FCCE127C6F1C007CA28A /* blue-folders-stack.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCCD127C6F1C007CA28A /* blue-folders-stack.png */; };
 		6486FCD0127C6F25007CA28A /* question.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCCF127C6F25007CA28A /* question.png */; };
 		6486FDC6127C9E8C007CA28A /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6486FDC5127C9E8C007CA28A /* BWToolkitFramework.framework */; };
+		6486FEE1127CBD32007CA28A /* NoodleLineNumberMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6486FEDE127CBD32007CA28A /* NoodleLineNumberMarker.m */; };
+		6486FEE2127CBD32007CA28A /* NoodleLineNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6486FEE0127CBD32007CA28A /* NoodleLineNumberView.m */; };
 		6491C2C2119B2F6500D2662B /* gitfendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6491C2C1119B2F6500D2662B /* gitfendController.m */; };
 		64A5E7601204D3E700DDB5C9 /* GitClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E75F1204D3E700DDB5C9 /* GitClient.m */; };
 		64A5E7631205AA1100DDB5C9 /* RepoConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A5E7621205AA1100DDB5C9 /* RepoConfig.xib */; };
@@ -135,10 +135,6 @@
 		64337E7212397B34006CA968 /* DiffView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiffView.xib; sourceTree = "<group>"; };
 		64337E7F123ABC45006CA968 /* CCDiffViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDiffViewController.h; sourceTree = "<group>"; };
 		64337E80123ABC45006CA968 /* CCDiffViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCDiffViewController.m; sourceTree = "<group>"; };
-		64337FFF123D2B07006CA968 /* NoodleLineNumberMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleLineNumberMarker.h; path = NoodleKit/NoodleLineNumberMarker.h; sourceTree = "<group>"; };
-		64338000123D2B07006CA968 /* NoodleLineNumberMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleLineNumberMarker.m; path = NoodleKit/NoodleLineNumberMarker.m; sourceTree = "<group>"; };
-		64338001123D2B07006CA968 /* NoodleLineNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleLineNumberView.h; path = NoodleKit/NoodleLineNumberView.h; sourceTree = "<group>"; };
-		64338002123D2B07006CA968 /* NoodleLineNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleLineNumberView.m; path = NoodleKit/NoodleLineNumberView.m; sourceTree = "<group>"; };
 		6433841A1244E2E1006CA968 /* CCDiffView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDiffView.h; sourceTree = "<group>"; };
 		6433841B1244E2E1006CA968 /* CCDiffView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCDiffView.m; sourceTree = "<group>"; };
 		644D5477120965C000AFF18B /* RepoContextMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RepoContextMenu.xib; sourceTree = "<group>"; };
@@ -184,6 +180,10 @@
 		6486FCCD127C6F1C007CA28A /* blue-folders-stack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "blue-folders-stack.png"; path = "Resources/Icons/blue-folders-stack.png"; sourceTree = "<group>"; };
 		6486FCCF127C6F25007CA28A /* question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = question.png; path = Resources/Icons/question.png; sourceTree = "<group>"; };
 		6486FDC5127C9E8C007CA28A /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = BWToolkit/BWToolkitFramework.framework; sourceTree = "<group>"; };
+		6486FEDD127CBD32007CA28A /* NoodleLineNumberMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleLineNumberMarker.h; path = "Third Party/NoodleLineNumberMarker.h"; sourceTree = "<group>"; };
+		6486FEDE127CBD32007CA28A /* NoodleLineNumberMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleLineNumberMarker.m; path = "Third Party/NoodleLineNumberMarker.m"; sourceTree = "<group>"; };
+		6486FEDF127CBD32007CA28A /* NoodleLineNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleLineNumberView.h; path = "Third Party/NoodleLineNumberView.h"; sourceTree = "<group>"; };
+		6486FEE0127CBD32007CA28A /* NoodleLineNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleLineNumberView.m; path = "Third Party/NoodleLineNumberView.m"; sourceTree = "<group>"; };
 		6491C2C0119B2F6500D2662B /* gitfendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gitfendController.h; sourceTree = "<group>"; };
 		6491C2C1119B2F6500D2662B /* gitfendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gitfendController.m; sourceTree = "<group>"; };
 		64A5E75E1204D3E700DDB5C9 /* GitClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitClient.h; sourceTree = "<group>"; };
@@ -394,10 +394,10 @@
 		64197F8712109B6000AA687A /* Third Party */ = {
 			isa = PBXGroup;
 			children = (
-				64337FFF123D2B07006CA968 /* NoodleLineNumberMarker.h */,
-				64338000123D2B07006CA968 /* NoodleLineNumberMarker.m */,
-				64338001123D2B07006CA968 /* NoodleLineNumberView.h */,
-				64338002123D2B07006CA968 /* NoodleLineNumberView.m */,
+				6486FEDD127CBD32007CA28A /* NoodleLineNumberMarker.h */,
+				6486FEDE127CBD32007CA28A /* NoodleLineNumberMarker.m */,
+				6486FEDF127CBD32007CA28A /* NoodleLineNumberView.h */,
+				6486FEE0127CBD32007CA28A /* NoodleLineNumberView.m */,
 				64197F8D12109BB200AA687A /* RegexKitLite.h */,
 				6422354011B5A5A0003E944D /* RegexKitLite.m */,
 				6422353011B5A5A0003E944D /* CocoaCryptoHashing.m */,
@@ -600,10 +600,10 @@
 				64566A02121DBD1800F96CCD /* GitTagObject.m in Sources */,
 				64566A8C121DE5CA00F96CCD /* CCDiff.m in Sources */,
 				64337E81123ABC45006CA968 /* CCDiffViewController.m in Sources */,
-				64338003123D2B07006CA968 /* NoodleLineNumberMarker.m in Sources */,
-				64338004123D2B07006CA968 /* NoodleLineNumberView.m in Sources */,
 				6433841C1244E2E1006CA968 /* CCDiffView.m in Sources */,
 				646CA742126CDCE500B33102 /* GitReferenceStorage.m in Sources */,
+				6486FEE1127CBD32007CA28A /* NoodleLineNumberMarker.m in Sources */,
+				6486FEE2127CBD32007CA28A /* NoodleLineNumberView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
