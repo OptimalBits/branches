@@ -12,7 +12,6 @@
     NSWindow *window;
 }
 
-//@property (assign) IBOutlet GitFrontRepositories *repos;
 @property (assign) IBOutlet NSWindow *window;
 
 
