@@ -144,13 +144,12 @@
 
 - (IBAction) changeMainView:(id) sender
 {	
-	NSInteger tag = [sender tag];
+	NSInteger clickedSegment = [sender selectedSegment];
+    NSInteger tag = [[sender cell] tagForSegment:clickedSegment];
+	
 	currentController = [viewControllers objectAtIndex:tag];
 	
 	[self displayViewController:currentController];
-	
-	
-	//[self displayViewController:workingDirBrowseController];
 }
 
 - (IBAction) addRepo: sender
@@ -350,6 +349,12 @@
 		
 		[workingDirBrowseController updateView];
 		
+		NSAttributedString *emptyString = 
+			[[[NSAttributedString alloc] initWithString:@""] autorelease];
+		
+		
+		[[commitMessageView textStorage] setAttributedString:emptyString];
+		 
 		// update the commit window (window showing the commits not yet pushed)
 		// and also increase the number in the repo browser.
 	}
@@ -593,29 +598,32 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSLog(@"Selection did change");
 	NSLog(@"Selected: %@", item);
 	
-	//if ( currentView == historyController )
+	if ( [item isKindOfClass:[GitFrontRepositoriesLeaf class]] )
 	{
-		//[historyController setHistory:[[item repo] revisionHistoryFor:[item sha1]]];
-	}
-	
-	// Branch Browse
-	/*
-	if ( [item repo] != nil )
-	{
-		GitRepo *repo = [item repo];
-	//	NSLog( [[repo refs] objectForKey:@"master"] );
-		GitCommitObject *commit = [repo getObject:[item sha1]];
-		NSData *tree = [commit tree];
-		[browseController setTree:tree commit:[item sha1] repo:repo];
-	}
-	 */
-
-	// Working Dir browser.
-	if ( [item repo] != nil )
-	{
-		GitRepo *repo = [item repo];
+		if ( [item repo] != nil )
+		{
+			GitRepo *repo = [item repo];
 		
-		[workingDirBrowseController setRepo:repo];
+			if ( currentController == historyController )
+			{
+				NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
+				[historyController setHistory:[repo revisionHistoryFor:headSha1]];
+			}
+			
+			if ( currentController == browseController )
+			{
+				NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
+				GitCommitObject *commit = [repo getObject:headSha1];
+				
+				NSData *tree = [commit tree];
+				[browseController setTree:tree commit:headSha1 repo:repo];
+			}
+			
+			if ( currentController == workingDirBrowseController )
+			{
+				[workingDirBrowseController setRepo:repo];
+			}
+		}
 	}
 }
 
