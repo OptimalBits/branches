@@ -327,7 +327,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1178, 5980}}";
 			sepNavSelRange = "{3150, 0}";
-			sepNavVisRange = "{2914, 667}";
+			sepNavVisRange = "{2854, 630}";
 			sepNavWindowFrame = "{{220, 224}, {851, 778}}";
 		};
 	};
@@ -837,6 +837,20 @@
 		modificationTime = 310080634.270404;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
+	};
+	64268300121996F30044FD96 /* tags-label.png */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = image.png;
+		name = "tags-label.png";
+		path = "/Users/manuel/dev/gitfend/tags-label.png";
+		sourceTree = "<absolute>";
+	};
+	642683021219970F0044FD96 /* tag-label.png */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = image.png;
+		name = "tag-label.png";
+		path = "/Users/manuel/dev/gitfend/tag-label.png";
+		sourceTree = "<absolute>";
 	};
 	6429F58411A84F7300FAAB90 /* CocoaCryptoHashing.h */ = {
 		isa = PBXFileReference;
@@ -2410,6 +2424,13 @@
 		vrLen = 2784;
 		vrLoc = 34;
 	};
+	64B792AB12156AD800223E14 /* folder_go.png */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = image.png;
+		name = folder_go.png;
+		path = /Users/manuel/dev/gitfend/folder_go.png;
+		sourceTree = "<absolute>";
+	};
 	64B793571216B8BF00223E14 /* GitFrontRepositories.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {933, 1092}}";
@@ -2463,6 +2484,20 @@
 		path = /Users/manuel/dev/gitfend/exclamation.png;
 		sourceTree = "<absolute>";
 	};
+	64CCA3AB122A3AA200F70D4F /* pencil.png */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = image.png;
+		name = pencil.png;
+		path = /Users/manuel/dev/gitfend/pencil.png;
+		sourceTree = "<absolute>";
+	};
+	64CCA3D8122A3EEF00F70D4F /* png4.128.png */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = image.png;
+		name = png4.128.png;
+		path = /Users/manuel/dev/gitfend/png4.128.png;
+		sourceTree = "<absolute>";
+	};
 	64CCA3E0122A429000F70D4F /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 089C165DFE840E0CC02AAC07 /* English */;
@@ -2474,6 +2509,11 @@
 		vrLoc = 0;
 	};
 	64CCA3F2122ADFEF00F70D4F /* gitfront.icns */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = image.icns;
+		name = gitfront.icns;
+		path = /Users/manuel/dev/gitfend/gitfront.icns;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavWindowFrame = "{{15, 0}, {851, 778}}";
 		};

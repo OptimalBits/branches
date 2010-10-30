@@ -22,8 +22,6 @@
 		6422354811B5A5A0003E944D /* NSDataExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422353E11B5A5A0003E944D /* NSDataExtension.m */; };
 		6422354911B5A5A0003E944D /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422354011B5A5A0003E944D /* RegexKitLite.m */; };
 		64267FB012189CDC0044FD96 /* GitFrontIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 64267FAF12189CDC0044FD96 /* GitFrontIcons.m */; };
-		64268301121996F30044FD96 /* tags-label.png in Resources */ = {isa = PBXBuildFile; fileRef = 64268300121996F30044FD96 /* tags-label.png */; };
-		642683031219970F0044FD96 /* tag-label.png in Resources */ = {isa = PBXBuildFile; fileRef = 642683021219970F0044FD96 /* tag-label.png */; };
 		642684061219C8020044FD96 /* blue-folders-stack.png in Resources */ = {isa = PBXBuildFile; fileRef = 642684051219C8020044FD96 /* blue-folders-stack.png */; };
 		642E8E8011AF01EF00DB65B9 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 642E8E7F11AF01EF00DB65B9 /* libcrypto.dylib */; };
 		642E8E8211AF022C00DB65B9 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 642E8E8111AF022C00DB65B9 /* libicucore.dylib */; };
@@ -58,6 +56,14 @@
 		6486FC9E127C6B22007CA28A /* server_database.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC8F127C6B22007CA28A /* server_database.png */; };
 		6486FC9F127C6B22007CA28A /* tick.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC90127C6B22007CA28A /* tick.png */; };
 		6486FCA1127C6BBB007CA28A /* blue-document-medium.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCA0127C6BBB007CA28A /* blue-document-medium.png */; };
+		6486FCB9127C6D66007CA28A /* folder_go.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCB8127C6D66007CA28A /* folder_go.png */; };
+		6486FCBC127C6D8A007CA28A /* gitfront.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCBB127C6D8A007CA28A /* gitfront.icns */; };
+		6486FCBE127C6DAE007CA28A /* png4.128.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCBD127C6DAE007CA28A /* png4.128.png */; };
+		6486FCC0127C6DB9007CA28A /* question.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCBF127C6DB9007CA28A /* question.png */; };
+		6486FCC2127C6DC4007CA28A /* blue-folders-stack.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCC1127C6DC4007CA28A /* blue-folders-stack.png */; };
+		6486FCC4127C6DCE007CA28A /* tag-label.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCC3127C6DCE007CA28A /* tag-label.png */; };
+		6486FCC6127C6DD5007CA28A /* tags-label.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCC5127C6DD5007CA28A /* tags-label.png */; };
+		6486FCC8127C6DDD007CA28A /* pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCC7127C6DDD007CA28A /* pencil.png */; };
 		6491C2C2119B2F6500D2662B /* gitfendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6491C2C1119B2F6500D2662B /* gitfendController.m */; };
 		64A5E7601204D3E700DDB5C9 /* GitClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E75F1204D3E700DDB5C9 /* GitClient.m */; };
 		64A5E7631205AA1100DDB5C9 /* RepoConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A5E7621205AA1100DDB5C9 /* RepoConfig.xib */; };
@@ -66,12 +72,8 @@
 		64B768F311A45ECB00DEDF82 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B768F211A45ECB00DEDF82 /* ImageAndTextCell.m */; };
 		64B790EC1212053E00223E14 /* credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 64B790EB1212053E00223E14 /* credits.rtf */; };
 		64B792441215492500223E14 /* arrow_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 64B792431215492500223E14 /* arrow_up.png */; };
-		64B792AC12156AD800223E14 /* folder_go.png in Resources */ = {isa = PBXBuildFile; fileRef = 64B792AB12156AD800223E14 /* folder_go.png */; };
 		64B793591216B8BF00223E14 /* GitFrontRepositories.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B793581216B8BF00223E14 /* GitFrontRepositories.m */; };
 		64B793611216BA9C00223E14 /* GitRepo.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B793601216BA9C00223E14 /* GitRepo.m */; };
-		64CCA3AC122A3AA200F70D4F /* pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = 64CCA3AB122A3AA200F70D4F /* pencil.png */; };
-		64CCA3D9122A3EEF00F70D4F /* png4.128.png in Resources */ = {isa = PBXBuildFile; fileRef = 64CCA3D8122A3EEF00F70D4F /* png4.128.png */; };
-		64CCA3F3122ADFEF00F70D4F /* gitfront.icns in Resources */ = {isa = PBXBuildFile; fileRef = 64CCA3F2122ADFEF00F70D4F /* gitfront.icns */; };
 		64DBE08811BEA6E800DFB667 /* GitFrontTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 64DBE08711BEA6E800DFB667 /* GitFrontTree.m */; };
 		64DBE2EE11C3CDDA00DFB667 /* Browser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64DBE2ED11C3CDDA00DFB667 /* Browser.xib */; };
 		64DBE2F411C3D1A300DFB667 /* GitFrontBrowseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64DBE2F311C3D1A300DFB667 /* GitFrontBrowseController.m */; };
@@ -133,8 +135,6 @@
 		6422354011B5A5A0003E944D /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		64267FAE12189CDC0044FD96 /* GitFrontIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitFrontIcons.h; sourceTree = "<group>"; };
 		64267FAF12189CDC0044FD96 /* GitFrontIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitFrontIcons.m; sourceTree = "<group>"; };
-		64268300121996F30044FD96 /* tags-label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tags-label.png"; sourceTree = "<group>"; };
-		642683021219970F0044FD96 /* tag-label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tag-label.png"; sourceTree = "<group>"; };
 		642684051219C8020044FD96 /* blue-folders-stack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blue-folders-stack.png"; sourceTree = "<group>"; };
 		642E8E7F11AF01EF00DB65B9 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		642E8E8111AF022C00DB65B9 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -181,6 +181,14 @@
 		6486FC8F127C6B22007CA28A /* server_database.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = server_database.png; path = Resources/Icons/server_database.png; sourceTree = "<group>"; };
 		6486FC90127C6B22007CA28A /* tick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick.png; path = Resources/Icons/tick.png; sourceTree = "<group>"; };
 		6486FCA0127C6BBB007CA28A /* blue-document-medium.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "blue-document-medium.png"; path = "Resources/Icons/blue-document-medium.png"; sourceTree = "<group>"; };
+		6486FCB8127C6D66007CA28A /* folder_go.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = folder_go.png; path = Resources/Icons/folder_go.png; sourceTree = "<group>"; };
+		6486FCBB127C6D8A007CA28A /* gitfront.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = gitfront.icns; path = Resources/Icons/gitfront.icns; sourceTree = "<group>"; };
+		6486FCBD127C6DAE007CA28A /* png4.128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = png4.128.png; path = Resources/Icons/png4.128.png; sourceTree = "<group>"; };
+		6486FCBF127C6DB9007CA28A /* question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = question.png; sourceTree = "<group>"; };
+		6486FCC1127C6DC4007CA28A /* blue-folders-stack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blue-folders-stack.png"; sourceTree = "<group>"; };
+		6486FCC3127C6DCE007CA28A /* tag-label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tag-label.png"; path = "Resources/Icons/tag-label.png"; sourceTree = "<group>"; };
+		6486FCC5127C6DD5007CA28A /* tags-label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tags-label.png"; path = "Resources/Icons/tags-label.png"; sourceTree = "<group>"; };
+		6486FCC7127C6DDD007CA28A /* pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pencil.png; path = Resources/Icons/pencil.png; sourceTree = "<group>"; };
 		6491C2C0119B2F6500D2662B /* gitfendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gitfendController.h; sourceTree = "<group>"; };
 		6491C2C1119B2F6500D2662B /* gitfendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gitfendController.m; sourceTree = "<group>"; };
 		64A5E75E1204D3E700DDB5C9 /* GitClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitClient.h; sourceTree = "<group>"; };
@@ -194,14 +202,10 @@
 		64B768F211A45ECB00DEDF82 /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
 		64B790EB1212053E00223E14 /* credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = credits.rtf; sourceTree = "<group>"; };
 		64B792431215492500223E14 /* arrow_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_up.png; sourceTree = "<group>"; };
-		64B792AB12156AD800223E14 /* folder_go.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder_go.png; sourceTree = "<group>"; };
 		64B793571216B8BF00223E14 /* GitFrontRepositories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitFrontRepositories.h; sourceTree = "<group>"; };
 		64B793581216B8BF00223E14 /* GitFrontRepositories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitFrontRepositories.m; sourceTree = "<group>"; };
 		64B7935F1216BA9C00223E14 /* GitRepo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitRepo.h; sourceTree = "<group>"; };
 		64B793601216BA9C00223E14 /* GitRepo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitRepo.m; sourceTree = "<group>"; };
-		64CCA3AB122A3AA200F70D4F /* pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pencil.png; sourceTree = "<group>"; };
-		64CCA3D8122A3EEF00F70D4F /* png4.128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = png4.128.png; sourceTree = "<group>"; };
-		64CCA3F2122ADFEF00F70D4F /* gitfront.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = gitfront.icns; sourceTree = "<group>"; };
 		64DBE08611BEA6E800DFB667 /* GitFrontTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitFrontTree.h; sourceTree = "<group>"; };
 		64DBE08711BEA6E800DFB667 /* GitFrontTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitFrontTree.m; sourceTree = "<group>"; };
 		64DBE2ED11C3CDDA00DFB667 /* Browser.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Browser.xib; sourceTree = "<group>"; };
@@ -337,7 +341,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				64CCA3F2122ADFEF00F70D4F /* gitfront.icns */,
 				64197FE9121180C600AA687A /* icons */,
 				8D1107310486CEB800E47090 /* gitfend-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -425,6 +428,7 @@
 		64197FE9121180C600AA687A /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				6486FCBB127C6D8A007CA28A /* gitfront.icns */,
 				6486FC82127C6B22007CA28A /* accept.png */,
 				6486FC83127C6B22007CA28A /* add.png */,
 				64B792431215492500223E14 /* arrow_up.png */,
@@ -434,21 +438,23 @@
 				6486FCA0127C6BBB007CA28A /* blue-document-medium.png */,
 				6419800F121182A800AA687A /* bullet_error.png */,
 				6486FC88127C6B22007CA28A /* cancel.png */,
+				6486FCB8127C6D66007CA28A /* folder_go.png */,
 				6486FC89127C6B22007CA28A /* delete.png */,
 				6486FC8A127C6B22007CA28A /* error.png */,
 				6486FC8B127C6B22007CA28A /* exclamation.png */,
-				64B792AB12156AD800223E14 /* folder_go.png */,
 				6486FC8C127C6B22007CA28A /* folder.png */,
 				6486FC8D127C6B22007CA28A /* git.png */,
 				6486FC8E127C6B22007CA28A /* page_save.png */,
-				64CCA3D8122A3EEF00F70D4F /* png4.128.png */,
+				6486FCBD127C6DAE007CA28A /* png4.128.png */,
+				6486FCBF127C6DB9007CA28A /* question.png */,
+				6486FCC1127C6DC4007CA28A /* blue-folders-stack.png */,
 				641DF50E1272FC9E009B0DA7 /* question.png */,
 				6486FC8F127C6B22007CA28A /* server_database.png */,
+				6486FCC3127C6DCE007CA28A /* tag-label.png */,
+				6486FCC5127C6DD5007CA28A /* tags-label.png */,
 				6486FC90127C6B22007CA28A /* tick.png */,
+				6486FCC7127C6DDD007CA28A /* pencil.png */,
 				642684051219C8020044FD96 /* blue-folders-stack.png */,
-				642683021219970F0044FD96 /* tag-label.png */,
-				64268300121996F30044FD96 /* tags-label.png */,
-				64CCA3AB122A3AA200F70D4F /* pencil.png */,
 			);
 			name = icons;
 			sourceTree = "<group>";
@@ -535,15 +541,9 @@
 				64198010121182A800AA687A /* bullet_error.png in Resources */,
 				64B790EC1212053E00223E14 /* credits.rtf in Resources */,
 				64B792441215492500223E14 /* arrow_up.png in Resources */,
-				64B792AC12156AD800223E14 /* folder_go.png in Resources */,
-				64268301121996F30044FD96 /* tags-label.png in Resources */,
-				642683031219970F0044FD96 /* tag-label.png in Resources */,
 				642684061219C8020044FD96 /* blue-folders-stack.png in Resources */,
 				640E83C0121AA9BD0087FB27 /* WorkingDirBrowser.xib in Resources */,
 				64F1C5C5121FD4C700321FEB /* features.rtf in Resources */,
-				64CCA3AC122A3AA200F70D4F /* pencil.png in Resources */,
-				64CCA3D9122A3EEF00F70D4F /* png4.128.png in Resources */,
-				64CCA3F3122ADFEF00F70D4F /* gitfront.icns in Resources */,
 				64337E7312397B35006CA968 /* DiffView.xib in Resources */,
 				641DF50F1272FC9E009B0DA7 /* question.png in Resources */,
 				6486FC91127C6B22007CA28A /* accept.png in Resources */,
@@ -561,6 +561,14 @@
 				6486FC9E127C6B22007CA28A /* server_database.png in Resources */,
 				6486FC9F127C6B22007CA28A /* tick.png in Resources */,
 				6486FCA1127C6BBB007CA28A /* blue-document-medium.png in Resources */,
+				6486FCB9127C6D66007CA28A /* folder_go.png in Resources */,
+				6486FCBC127C6D8A007CA28A /* gitfront.icns in Resources */,
+				6486FCBE127C6DAE007CA28A /* png4.128.png in Resources */,
+				6486FCC0127C6DB9007CA28A /* question.png in Resources */,
+				6486FCC2127C6DC4007CA28A /* blue-folders-stack.png in Resources */,
+				6486FCC4127C6DCE007CA28A /* tag-label.png in Resources */,
+				6486FCC6127C6DD5007CA28A /* tags-label.png in Resources */,
+				6486FCC8127C6DDD007CA28A /* pencil.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
