@@ -11,7 +11,6 @@
 #import "gitobject.h"
 #import "gittreeobject.h"
 
-
 @protocol GitNodeVisitor
 -(BOOL) visit:(GitObject*) object;
 @end
@@ -21,7 +20,8 @@
 	NSURL *url;
 	NSURL *objectsUrl;
 	GitPackFile *packFile;
-	NSMutableArray *packFiles; // There can be more than one, so we need to have an array.	
+	NSMutableArray *packFiles; // There can be more than one, so we need to 
+							   // have an array.	
 }
 
 /**
@@ -31,8 +31,6 @@
 -(id) initWithUrl:(NSURL*) url;
 
 -(id) getObject:(NSData*) sha1;
-
-
 
 -(void) walk: (NSData*) commitSha with: (id) visitor;
 
@@ -44,9 +42,12 @@
  
 	@return an array of Sha keys for the commits that modified the given file.
  
-	Note: This function can be called successivelly, setting a max value different from zero.
-    This is because the whole history can take a really long time to be computed.
+	Note: 
  
+	This function can be called successivelly, setting a max value 
+	different from zero.
+    This is because the whole history can take a really long time 
+	to be computed.
  */
 -(NSArray*) fileHistory:(NSString*) filename 
 			 fromCommit:(NSData*) sha1 
@@ -91,7 +92,7 @@
 	returns the sha1 key if succesfull, nil otherwise.
  
  */
--(NSData*) addObject: (GitObject*) object;
+-(NSData*) addObject:(GitObject*) object;
 
 /**
 	Deletes an object from the object database.
@@ -104,12 +105,17 @@
 	deleted ).
  
 	Note:
-	It can only delete objects that are loose. Note that it can delete 
+	It can only delete objects that are loose. Note also that it can delete 
 	an object even if other objects depend on it, creating corrupted object 
 	stores if used wrongly.
  
+	Note2: This functionality is not really needed anymore, since the index
+	will not write any objects to the database until writeTree is performed.
+ 
  */
--(BOOL) deleteObject: (NSData*) sha1;
+-(BOOL) deleteObject:(NSData*) sha1;
 
+
+-(BOOL) objectsDependsOn:(NSData*) sha1;
 
 @end

@@ -114,7 +114,7 @@
 
 static GitPackFile *readPackFile( NSURL *url );
 static GitObject *parseObject( NSData* data, NSData* key );
-static NSData *encodeObject( GitObject *object );
+
 static BOOL writeObject( NSData *sha1,
 						 NSData *object, 
 						 NSURL *baseUrl );
@@ -404,7 +404,7 @@ static BOOL writeObject( NSData *sha1,
 	if ( [object isKindOfClass:[GitCommitObject class]] )
 	{
 		GitCommitObject *commitObject = (GitCommitObject*) object;
-		NSLog([[commitObject tree] description], nil  );
+
 		return [self getObject:[commitObject tree]];
 	}
 	return nil;
@@ -464,7 +464,7 @@ static BOOL writeObject( NSData *sha1,
  */
 -(NSData*) addObject: (GitObject*) object
 {
-	NSData *encodedObject = encodeObject( object );
+	NSData *encodedObject = [object encode];
 	NSData *sha1 = [encodedObject sha1Digest];
 	
 	NSData *compressedObject = [encodedObject zlibDeflate];
@@ -604,44 +604,6 @@ static GitObject *parseObject( NSData* data, NSData* key )
 	return nil;
 }
 
-static NSData *encodeObject( GitObject *object )
-{	
-	NSString *objectType = @"";
-	NSString *header;
-	
-	if ( [object isKindOfClass:[GitBlobObject class]] )
-	{
-		objectType = @"blob";
-	}
-	else if ( [object isKindOfClass:[GitCommitObject class]] )
-	{
-		objectType = @"commit";
-	}	
-	else if ( [object isKindOfClass:[GitTreeObject class]] )
-	{
-		objectType = @"tree";
-	}		
-	/*	else if ( [object isKindOfClass:[GitTagObject class]] )
-	 {
-	 objectType = @"tag";
-	 }
-	 */
-	
-	NSData *objectData = [object data];
-	header = [NSString stringWithFormat:@"\"%@\" %d",
-			  objectType, 
-			  [objectData length]];
-	NSMutableData *result = 
-	[NSMutableData dataWithCapacity:[header length]+[objectData length]+1];
-	
-	[result appendBytes:[header cStringUsingEncoding:NSUTF8StringEncoding]
-				 length:[header length]];
-	
-	[result appendData:objectData];
-	
-	return result;
-}
-
 
 static BOOL writeObject( NSData *sha1,
 						 NSData *object, 
@@ -656,7 +618,7 @@ static BOOL writeObject( NSData *sha1,
 	
 	if ([baseUrl checkResourceIsReachableAndReturnError:&error] == YES)
 	{
-		NSString *fanout = [NSString stringWithFormat:@"%x",
+		NSString *fanout = [NSString stringWithFormat:@"%02x",
 							(u_int32_t)((u_int8_t*)[sha1 bytes])[0]];
 		
 		NSString *filename = 
