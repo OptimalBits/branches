@@ -29,6 +29,7 @@
 -(void) dealloc
 {
 	[filename release];
+	[super dealloc];
 }
 
 

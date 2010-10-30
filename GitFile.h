@@ -10,14 +10,14 @@
 
 typedef enum
 {
-	kFileStatusUpdated,
-	kFileStatusAdded,
-	kFileStatusRemoved,
-	kFileStatusRenamed,
-	kFileStatusModified,
-	kFileStatusStaged,
-	kFileStatusTracked,
-	kFileStatusUntracked
+	kFileStatusUpdated		= 1,
+	kFileStatusAdded		= 2,
+	kFileStatusRemoved		= 4,
+	kFileStatusRenamed		= 8,
+	kFileStatusModified		= 16,
+	kFileStatusStaged		= 32,
+	kFileStatusTracked		= 64,
+	kFileStatusUntracked	= 128
 } GitFileStatus;
 
 @interface GitFile : NSObject {
@@ -31,6 +31,5 @@ typedef enum
 
 -(id) initWithName:(NSString*) filename andStatus:(GitFileStatus) status;
 -(void) dealloc;
-
 
 @end
