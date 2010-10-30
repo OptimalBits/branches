@@ -8,6 +8,7 @@
 
 #import "GitFrontTree.h"
 #import "GitReference.h"
+#import "GitReferenceStorage.h"
 #import "NSDataExtension.h"
 
 @implementation GitFrontTreeLeaf
@@ -52,13 +53,13 @@
 		{
 			[self setRepo:_repo];
 						
-			NSDictionary *dict = [repo refs];
+			NSDictionary *dict = [[repo refs] refsDict];
 			
 			[self setName:[repo name]];
 			
 			[self setIcon:[iconsDict objectForKey:@"git"]];
 			
-			[self addLeaf:[repo head] key:@"HEAD"];
+			[self addLeaf:[[repo refs] head] key:@"HEAD"];
 			
 			NSArray *keyArray = 
 				[[dict allKeys]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -91,7 +92,7 @@
 		else if ( [key isEqualToString:@"remotes"] )
 		{
 			[node setName:@"Remotes"];
-			[node setIcon:[iconsDict objectForKey:@"remote"]];			
+			[node setIcon:[iconsDict objectForKey:@"remote"]];
 		}
 		else if ( [key isEqualToString:@"tags"] )
 		{
@@ -134,7 +135,7 @@
 	GitFrontTreeLeaf *leaf = [[[GitFrontTreeLeaf alloc] init] autorelease];
 
 	[leaf setName:key];
-	[leaf setSha1:[content resolve:repo]];
+	[leaf setSha1:[content resolve:[repo refs]]];
 	[leaf setRepo:[self repo]];
 
 	if ( [key isEqualToString:@"stash"] )
@@ -144,7 +145,7 @@
 	}
 	else if ( [key isEqualToString:@"HEAD"] )
 	{
-		NSString *branchName = [[repo head] branch];
+		NSString *branchName = [[[repo refs] head] branch];
 		NSString *head = [NSString stringWithFormat:@"%@", branchName];
 		
 		[leaf setName:head];
