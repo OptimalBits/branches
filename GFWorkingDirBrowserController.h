@@ -41,7 +41,10 @@
 - (void) dealloc;
 
 - (void) setRepo:(GitRepo*) _repo;
+- (GitRepo*) repo;
+
 - (void) setDiffView:(CCDiffViewController*) diffView;
 
+-(void) updateView;
 
 @end

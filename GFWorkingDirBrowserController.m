@@ -11,10 +11,13 @@
 
 #import "GitRepo.h"
 #import "GitReference.h"
+#import "GitReferenceStorage.h"
 #import "GitIndex.h"
 #import "GitBlobObject.h"
 #import "GitFile.h"
 #import "GitFrontIcons.h"
+
+#import "NSDataExtension.h"
 
 #import "ImageAndTextCell.h"
 
@@ -29,7 +32,6 @@
 		[self setTitle:@"GitFront - Browser"];
 		
 		icons = [GitFrontIcons icons];
-		
 	}
 	return self;
 }
@@ -37,7 +39,9 @@
 - (void) dealloc
 {
 	[fileManager release];
+	[modifiedFiles release];
 	[repo release];
+	[super dealloc];
 }
 
 
@@ -99,24 +103,17 @@
 	[_repo retain];
 	repo = _repo;
 	
-	GitIndex *index = [repo index];
-		
-	modifiedFiles = [[index modifiedFiles:[repo workingDir]] retain];
-
-	[workingDirBrowseView reloadData];
-
-	///
-	
-	NSData *headSha1 = [[repo head] resolve:repo];
+	NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
 	GitTreeObject *tree = [[repo objectStore] getTreeFromCommit:headSha1];
 	
-	headTree = [[[repo objectStore] flattenTree:tree] retain];
+//	headTree = [[[repo objectStore] flattenTree:tree] retain];
 	
-	// Update status
-	statusTree = [[self treeFromStatus:[index status:headTree] 
-								object:nil] retain];
-	
-	[stageAreaBrowseView reloadData];
+	[self updateView];
+}
+
+- (GitRepo*) repo
+{
+	return repo;
 }
 
 - (IBAction) addFile:(id) sender
@@ -133,35 +130,35 @@
 	
 		GitBlobObject *object = 
 			[[[GitBlobObject alloc] initWithData:fileContents] autorelease];
+		
+		[[repo index] addFile:filename blob:object];
 	
-		NSData *sha1 = [[repo objectStore] addObject:object];
-	
-		if ( sha1 == nil )
-		{
-			// Show alert window!
-		}
-		else
-		{
-			[[repo index] addFile:filename sha1:sha1];
-		}
-		
-		[modifiedFiles release];
-		modifiedFiles = [[[repo index] modifiedFiles:[repo workingDir]] retain];
-		
-		[workingDirBrowseView reloadData];
-		
-		// Update status
-		statusTree = [[self treeFromStatus:[[repo index] status:headTree] 
-								   object:nil] retain];
-		
-		[stageAreaBrowseView reloadData];
+		[self updateView];
 	}
 }
-
 
 - (void) setDiffView:(CCDiffViewController*) _diffView
 {
 	diffView = _diffView;
+}
+
+-(void) updateView
+{
+	[modifiedFiles release];
+	modifiedFiles = [[[repo index] modifiedFiles:[repo workingDir]] retain];
+	
+	[statusTree release];
+	
+	NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
+	GitTreeObject *tree = [[repo objectStore] getTreeFromCommit:headSha1];
+	
+	headTree = [[repo objectStore] flattenTree:tree];
+	
+	statusTree = [[self treeFromStatus:[[repo index] status:headTree] 
+								object:nil] retain];
+	
+	[workingDirBrowseView reloadData];
+	[stageAreaBrowseView reloadData];
 }
 
 
@@ -331,12 +328,11 @@
 			}
 			else if ( [[repo index] isFileTracked: filename] )
 			{
-				//return @"T";
 				[iconCell setImage:[icons objectForKey:@"tick"]];
 			}
 			else
 			{
-				[iconCell setImage:nil];
+				[iconCell setImage:[icons objectForKey:@"question"]];
 			}
 		}
 	}
@@ -370,7 +366,7 @@
 					}
 					else
 					{
-						[iconCell setImage:nil];
+						[iconCell setImage:[icons objectForKey:@"question"]];
 					}
 
 				}
@@ -435,9 +431,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
 	id item = [workingDirBrowseView itemAtRow:[workingDirBrowseView selectedRow]];
 	
-	NSLog(@"Selection did change");
-	NSLog(@"Selected: %@", item);
-	
 	BOOL isDirectory;
 	
 	[fileManager fileExistsAtPath:[item path] isDirectory:&isDirectory];
@@ -457,13 +450,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			GitBlobObject *obj = 
 				[repo getObject:[index sha1ForFilename:filename]];
-
+				  
 			NSString *before = [[NSString alloc ] initWithBytes:[[obj data] bytes]
 														 length:[[obj data] length]
 													   encoding:NSUTF8StringEncoding];
 			
 			[diffView setStringsBefore:before andAfter:contents];
-			NSLog(@"niaaadasd",nil);
+			
+			[before release];
 		}
 	}
 }
