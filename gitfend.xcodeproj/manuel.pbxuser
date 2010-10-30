@@ -102,7 +102,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					757,
+					759,
 					20,
 					48,
 					43,
@@ -153,8 +153,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 310164606;
-			PBXWorkspaceStateSaveDate = 310164606;
+			PBXPerProjectTemplateStateSaveDate = 310165163;
+			PBXWorkspaceStateSaveDate = 310165163;
 		};
 		perUserProjectItems = {
 			64197F2A120F5D8D00AA687A = 64197F2A120F5D8D00AA687A /* PBXTextBookmark */;
@@ -175,7 +175,6 @@
 			6429F5AB11A8645D00FAAB90 = 6429F5AB11A8645D00FAAB90 /* PBXTextBookmark */;
 			6429F64111A8785500FAAB90 = 6429F64111A8785500FAAB90 /* PBXTextBookmark */;
 			642E8E9011AF030E00DB65B9 = 642E8E9011AF030E00DB65B9 /* PBXTextBookmark */;
-			6433802B123D3019006CA968 = 6433802B123D3019006CA968 /* PBXTextBookmark */;
 			6433805F123D34B6006CA968 = 6433805F123D34B6006CA968 /* PBXTextBookmark */;
 			64338060123D34B6006CA968 = 64338060123D34B6006CA968 /* PBXTextBookmark */;
 			643380BE123D4D8D006CA968 = 643380BE123D4D8D006CA968 /* PBXTextBookmark */;
@@ -234,8 +233,8 @@
 			6486FE7C127CB40B007CA28A = 6486FE7C127CB40B007CA28A /* PBXTextBookmark */;
 			6486FE7E127CB40B007CA28A = 6486FE7E127CB40B007CA28A /* PBXTextBookmark */;
 			6486FE9C127CB528007CA28A = 6486FE9C127CB528007CA28A /* PBXTextBookmark */;
-			6486FE9D127CB528007CA28A = 6486FE9D127CB528007CA28A /* PBXTextBookmark */;
-			6486FEA8127CBB9D007CA28A = 6486FEA8127CBB9D007CA28A /* PBXTextBookmark */;
+			6486FEEA127CBDB5007CA28A = 6486FEEA127CBDB5007CA28A /* PBXTextBookmark */;
+			6486FEEB127CBDB5007CA28A = 6486FEEB127CBDB5007CA28A /* PBXTextBookmark */;
 			6490432F12624CA300CCDD79 = 6490432F12624CA300CCDD79 /* PBXTextBookmark */;
 			64961DAE127A0D5F005EA49F = 64961DAE127A0D5F005EA49F /* PBXTextBookmark */;
 			64961DCD127A12C6005EA49F = 64961DCD127A12C6005EA49F /* PBXTextBookmark */;
@@ -309,9 +308,9 @@
 	};
 	64197F8D12109BB200AA687A /* RegexKitLite.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {930, 4160}}";
+			sepNavIntBoundsRect = "{{0, 0}, {937, 4199}}";
 			sepNavSelRange = "{131, 1}";
-			sepNavVisRange = "{0, 1835}";
+			sepNavVisRange = "{0, 1983}";
 		};
 	};
 	64197F9112109BE500AA687A /* PBXTextBookmark */ = {
@@ -366,6 +365,11 @@
 		vrLoc = 8370;
 	};
 	6419800F121182A800AA687A /* bullet_error.png */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = image.png;
+		name = bullet_error.png;
+		path = /Users/manuel/Downloads/famfamfam_silk_icons_v013/icons/bullet_error.png;
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavWindowFrame = "{{138, 22}, {983, 946}}";
 		};
@@ -693,19 +697,6 @@
 			sepNavVisRange = "{721, 1662}";
 		};
 	};
-	64337FFF123D2B07006CA968 /* NoodleLineNumberMarker.h */ = {
-		isa = PBXFileReference;
-		fileEncoding = 4;
-		lastKnownFileType = sourcecode.c.h;
-		name = NoodleLineNumberMarker.h;
-		path = /Users/manuel/dev/gitfend/NoodleKit/NoodleLineNumberMarker.h;
-		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {943, 676}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 1726}";
-		};
-	};
 	64338000123D2B07006CA968 /* NoodleLineNumberMarker.m */ = {
 		isa = PBXFileReference;
 		fileEncoding = 4;
@@ -713,11 +704,6 @@
 		name = NoodleLineNumberMarker.m;
 		path = /Users/manuel/dev/gitfend/NoodleKit/NoodleLineNumberMarker.m;
 		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {936, 1339}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{1608, 836}";
-		};
 	};
 	64338001123D2B07006CA968 /* NoodleLineNumberView.h */ = {
 		isa = PBXFileReference;
@@ -726,11 +712,6 @@
 		name = NoodleLineNumberView.h;
 		path = /Users/manuel/dev/gitfend/NoodleKit/NoodleLineNumberView.h;
 		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {936, 910}}";
-			sepNavSelRange = "{1827, 18}";
-			sepNavVisRange = "{1129, 1141}";
-		};
 	};
 	64338002123D2B07006CA968 /* NoodleLineNumberView.m */ = {
 		isa = PBXFileReference;
@@ -739,21 +720,6 @@
 		name = NoodleLineNumberView.m;
 		path = /Users/manuel/dev/gitfend/NoodleKit/NoodleLineNumberView.m;
 		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1328, 7930}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{5550, 1218}";
-		};
-	};
-	6433802B123D3019006CA968 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 64337FFF123D2B07006CA968 /* NoodleLineNumberMarker.h */;
-		name = "NoodleLineNumberMarker.h: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1641;
-		vrLoc = 85;
 	};
 	6433805F123D34B6006CA968 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -1561,25 +1527,25 @@
 		vrLen = 955;
 		vrLoc = 236;
 	};
-	6486FE9D127CB528007CA28A /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 6491C2C1119B2F6500D2662B /* gitfendController.m */;
-		name = "gitfendController.m: 612";
-		rLen = 0;
-		rLoc = 13504;
-		rType = 0;
-		vrLen = 1041;
-		vrLoc = 12961;
-	};
-	6486FEA8127CBB9D007CA28A /* PBXTextBookmark */ = {
+	6486FEEA127CBDB5007CA28A /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 6491C2C1119B2F6500D2662B /* gitfendController.m */;
 		name = "gitfendController.m: 605";
 		rLen = 0;
 		rLoc = 13302;
 		rType = 0;
-		vrLen = 1130;
-		vrLoc = 12970;
+		vrLen = 1161;
+		vrLoc = 12965;
+	};
+	6486FEEB127CBDB5007CA28A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 64197F8D12109BB200AA687A /* RegexKitLite.h */;
+		name = "RegexKitLite.h: 6";
+		rLen = 1;
+		rLoc = 131;
+		rType = 0;
+		vrLen = 1983;
+		vrLoc = 0;
 	};
 	6490432F12624CA300CCDD79 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -1601,9 +1567,9 @@
 	};
 	6491C2C1119B2F6500D2662B /* gitfendController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {935, 10101}}";
+			sepNavIntBoundsRect = "{{0, 0}, {937, 9997}}";
 			sepNavSelRange = "{13302, 0}";
-			sepNavVisRange = "{12968, 1155}";
+			sepNavVisRange = "{12965, 1161}";
 			sepNavWindowFrame = "{{261, 169}, {851, 778}}";
 		};
 	};
@@ -2076,15 +2042,27 @@
 		rType = 1;
 	};
 	64FA9D86119F1D770077F7A1 /* gitfendConsoleController.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = gitfendConsoleController.h;
+		path = /Users/manuel/dev/gitfend/gitfendConsoleController.h;
+		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {914, 772}}";
+			sepNavIntBoundsRect = "{{0, 0}, {937, 676}}";
 			sepNavSelRange = "{282, 0}";
 			sepNavVisRange = "{0, 282}";
 		};
 	};
 	64FA9D87119F1D770077F7A1 /* gitfendConsoleController.m */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.objc;
+		name = gitfendConsoleController.m;
+		path = /Users/manuel/dev/gitfend/gitfendConsoleController.m;
+		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {914, 772}}";
+			sepNavIntBoundsRect = "{{0, 0}, {937, 676}}";
 			sepNavSelRange = "{0, 0}";
 			sepNavVisRange = "{0, 242}";
 		};
