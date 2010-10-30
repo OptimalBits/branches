@@ -8,6 +8,8 @@
 
 #import "GitFrontIcons.h"
 
+static NSImage *getBundlePngImage(NSString * pngImageName);
+
 @implementation GitFrontIcons
 
 +(NSDictionary*) icons
@@ -46,7 +48,6 @@
 	  NSURL *blueFolderImageUrl  = [bundle URLForResource:@"blue-folders-stack" 
 											withExtension:@"png"];
 	  NSImage *blueFolderImage = [[[NSImage alloc] initWithContentsOfURL:blueFolderImageUrl] autorelease];
-	  
 	 
 	  NSURL *addImageUrl  = [bundle URLForResource:@"add" 
 									 withExtension:@"png"];
@@ -83,6 +84,7 @@
 							 tickImage,@"tick",
 							 renameImage,@"rename",
 							 exclamationImage,@"exclamation",
+							 getBundlePngImage(@"question"), @"question",
 							 nil ] retain];
 	  
 	  //remotesIcon = [[[NSWorkspace sharedWorkspace] iconForFileType:NSFileTypeForHFSTypeCode(kGenericFileServerIcon)] retain];
@@ -91,6 +93,18 @@
 	
   return iconsDict;
 }
+
+
+NSImage *getBundlePngImage(NSString * pngImageName)
+{
+	NSBundle *bundle = [NSBundle mainBundle];
+	
+	NSURL *url  = [bundle URLForResource:pngImageName withExtension:@"png"];
+	NSImage *image = [[[NSImage alloc] initWithContentsOfURL:url] autorelease];
+	
+	return image;
+}
+
 
 
 @end
