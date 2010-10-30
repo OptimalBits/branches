@@ -9,10 +9,11 @@
 #import <Cocoa/Cocoa.h>
 
 @class NoodleLineNumberView;
+@class CCDiffView;
 
 @interface CCDiffViewController : NSViewController {
-	NSTextView *leftView;
-	NSTextView *rightView;
+	CCDiffView *leftView;
+	CCDiffView *rightView;
 	
 	IBOutlet NSScrollView *leftScrollView;
 	IBOutlet NSScrollView *rightScrollView;
@@ -26,8 +27,7 @@
 
 -(void) setStringsBefore:(NSString*) before andAfter:(NSString*) after;
 
-
-- (void)synchronizedViewContentBoundsDidChange:(NSNotification *)notification;
+-(void)synchronizedViewContentBoundsDidChange:(NSNotification *)notification;
 
 
 @end

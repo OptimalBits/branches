@@ -12,6 +12,8 @@
 
 #import "NoodleLineNumberView.h"
 
+#include <Carbon/Carbon.h>
+
 // #import "NSTextView+Wrapping.h"
 
 // references:
@@ -59,20 +61,41 @@
 
 -(void) setStringsBefore:(NSString*) before andAfter:(NSString*) after
 {
-	CCDiff *diff = [[CCDiff alloc] initWithBefore:before andAfter:after];
+	CCDiff *diff = 
+		[[[CCDiff alloc] initWithBefore:before andAfter:after] autorelease];
 	
 	NSArray *lcs = [diff diff];
 		
 	leftView = [[CCDiffView alloc] initWithScrollView:leftScrollView
-												 font:[NSFont fontWithName:@"Menlo-Regular" size:12.0]
+												 font:[NSFont fontWithName:@"Menlo-Regular" size:11.0]
 												lines:lcs
 												 mask:CCDiffViewLineOriginal|CCDiffViewLineRemoved];
 	
 	rightView =[[CCDiffView alloc] initWithScrollView:rightScrollView
-												 font:[NSFont fontWithName:@"Menlo-Regular" size:12.0]
+												 font:[NSFont fontWithName:@"Menlo-Regular" size:11.0]
 												lines:lcs
 												 mask:CCDiffViewLineOriginal|CCDiffViewLineAdded];
 }
+
+-(void) keyDown:(NSEvent *)theEvent
+{
+	unsigned short keyCode = [theEvent keyCode];
+	
+	switch( keyCode )
+	{
+		case kVK_DownArrow:
+			
+ 			[leftView moveToNextDiff];
+			
+			 break;
+			
+		case kVK_UpArrow:
+			[leftView moveToPreviousDiff];
+
+			break;
+	}
+}
+
 - (void)synchronizedViewContentBoundsDidChange:(NSNotification *)notification
 {
 	NSScrollView *scrollView;
@@ -102,7 +125,10 @@
 	NSPoint curOffset = [[scrollView contentView] bounds].origin;
     NSPoint newOffset = curOffset;
 	
+	NSSize size = [scrollView contentSize];
+	
     newOffset.y = changedBoundsOrigin.y;
+	newOffset.x = changedBoundsOrigin.x;
 	
     if (!NSEqualPoints(curOffset, changedBoundsOrigin))
     {
