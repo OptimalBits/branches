@@ -612,7 +612,13 @@ return [NSString stringWithUTF8String:(char *)digestString];
 
 - (NSData*) sha1Digest
 {
-	HEComputeDigestNSData(SHA1);
+	unsigned char sha1Bytes[20];
+	
+	SHA1([self bytes], [self length], sha1Bytes);
+
+	return [NSData dataWithBytes:sha1Bytes length:20];
+	
+//	HEComputeDigestNSData(SHA1);
 }
 
 - (NSString*) sha1DigestString
