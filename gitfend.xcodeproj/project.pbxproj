@@ -12,19 +12,7 @@
 		640E83C0121AA9BD0087FB27 /* WorkingDirBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 640E83BF121AA9BD0087FB27 /* WorkingDirBrowser.xib */; };
 		640E83C4121AAA050087FB27 /* GFWorkingDirBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */; };
 		64197F9912109C8A00AA687A /* GitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 64197F9812109C8A00AA687A /* GitFile.m */; };
-		64197FF81211810B00AA687A /* arrow_branch.png in Resources */ = {isa = PBXBuildFile; fileRef = 64197FF71211810B00AA687A /* arrow_branch.png */; };
-		641980011211819E00AA687A /* server_database.png in Resources */ = {isa = PBXBuildFile; fileRef = 641980001211819E00AA687A /* server_database.png */; };
-		641980081211825200AA687A /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = 641980071211825200AA687A /* add.png */; };
-		6419800A1211825C00AA687A /* accept.png in Resources */ = {isa = PBXBuildFile; fileRef = 641980091211825C00AA687A /* accept.png */; };
-		6419800C1211828300AA687A /* arrow_merge.png in Resources */ = {isa = PBXBuildFile; fileRef = 6419800B1211828300AA687A /* arrow_merge.png */; };
-		6419800E1211829100AA687A /* arrow_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 6419800D1211829100AA687A /* arrow_refresh.png */; };
 		64198010121182A800AA687A /* bullet_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 6419800F121182A800AA687A /* bullet_error.png */; };
-		64198012121182BA00AA687A /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 64198011121182BA00AA687A /* cancel.png */; };
-		64198014121182E100AA687A /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 64198013121182E100AA687A /* delete.png */; };
-		641980161211830100AA687A /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = 641980151211830100AA687A /* error.png */; };
-		641980181211834500AA687A /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = 641980171211834500AA687A /* folder.png */; };
-		6419801C121183EA00AA687A /* tick.png in Resources */ = {isa = PBXBuildFile; fileRef = 6419801B121183EA00AA687A /* tick.png */; };
-		641980201211848600AA687A /* page_save.png in Resources */ = {isa = PBXBuildFile; fileRef = 6419801F1211848600AA687A /* page_save.png */; };
 		641BDFC61204ADAD00D2082D /* todo.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 641BDFC51204ADAD00D2082D /* todo.rtf */; };
 		641DF50F1272FC9E009B0DA7 /* question.png in Resources */ = {isa = PBXBuildFile; fileRef = 641DF50E1272FC9E009B0DA7 /* question.png */; };
 		642234D211B451AB003E944D /* gitfrontHistoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 642234D111B451AB003E944D /* gitfrontHistoryController.m */; };
@@ -55,19 +43,32 @@
 		646CA742126CDCE500B33102 /* GitReferenceStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 646CA741126CDCE500B33102 /* GitReferenceStorage.m */; };
 		64749CDA126116BA0015DC50 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64749CD9126116BA0015DC50 /* Cocoa.framework */; };
 		64749D1A12619DB70015DC50 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64749D1912619DB70015DC50 /* Carbon.framework */; };
+		6486FC91127C6B22007CA28A /* accept.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC82127C6B22007CA28A /* accept.png */; };
+		6486FC92127C6B22007CA28A /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC83127C6B22007CA28A /* add.png */; };
+		6486FC93127C6B22007CA28A /* arrow_branch.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC84127C6B22007CA28A /* arrow_branch.png */; };
+		6486FC94127C6B22007CA28A /* arrow_merge.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC85127C6B22007CA28A /* arrow_merge.png */; };
+		6486FC95127C6B22007CA28A /* arrow_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC86127C6B22007CA28A /* arrow_refresh.png */; };
+		6486FC97127C6B22007CA28A /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC88127C6B22007CA28A /* cancel.png */; };
+		6486FC98127C6B22007CA28A /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC89127C6B22007CA28A /* delete.png */; };
+		6486FC99127C6B22007CA28A /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC8A127C6B22007CA28A /* error.png */; };
+		6486FC9A127C6B22007CA28A /* exclamation.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC8B127C6B22007CA28A /* exclamation.png */; };
+		6486FC9B127C6B22007CA28A /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC8C127C6B22007CA28A /* folder.png */; };
+		6486FC9C127C6B22007CA28A /* git.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC8D127C6B22007CA28A /* git.png */; };
+		6486FC9D127C6B22007CA28A /* page_save.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC8E127C6B22007CA28A /* page_save.png */; };
+		6486FC9E127C6B22007CA28A /* server_database.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC8F127C6B22007CA28A /* server_database.png */; };
+		6486FC9F127C6B22007CA28A /* tick.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC90127C6B22007CA28A /* tick.png */; };
+		6486FCA1127C6BBB007CA28A /* blue-document-medium.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCA0127C6BBB007CA28A /* blue-document-medium.png */; };
 		6491C2C2119B2F6500D2662B /* gitfendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6491C2C1119B2F6500D2662B /* gitfendController.m */; };
 		64A5E7601204D3E700DDB5C9 /* GitClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E75F1204D3E700DDB5C9 /* GitClient.m */; };
 		64A5E7631205AA1100DDB5C9 /* RepoConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A5E7621205AA1100DDB5C9 /* RepoConfig.xib */; };
 		64A5E7671205F7F300DDB5C9 /* GitConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E7661205F7F300DDB5C9 /* GitConfig.m */; };
 		64A5E76A1205FFFB00DDB5C9 /* GitConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E7691205FFFB00DDB5C9 /* GitConfigParser.m */; };
 		64B768F311A45ECB00DEDF82 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B768F211A45ECB00DEDF82 /* ImageAndTextCell.m */; };
-		64B790491211EBB300223E14 /* git.png in Resources */ = {isa = PBXBuildFile; fileRef = 64B790481211EBB300223E14 /* git.png */; };
 		64B790EC1212053E00223E14 /* credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 64B790EB1212053E00223E14 /* credits.rtf */; };
 		64B792441215492500223E14 /* arrow_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 64B792431215492500223E14 /* arrow_up.png */; };
 		64B792AC12156AD800223E14 /* folder_go.png in Resources */ = {isa = PBXBuildFile; fileRef = 64B792AB12156AD800223E14 /* folder_go.png */; };
 		64B793591216B8BF00223E14 /* GitFrontRepositories.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B793581216B8BF00223E14 /* GitFrontRepositories.m */; };
 		64B793611216BA9C00223E14 /* GitRepo.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B793601216BA9C00223E14 /* GitRepo.m */; };
-		64CCA3AA122A3A3B00F70D4F /* exclamation.png in Resources */ = {isa = PBXBuildFile; fileRef = 64CCA3A9122A3A3B00F70D4F /* exclamation.png */; };
 		64CCA3AC122A3AA200F70D4F /* pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = 64CCA3AB122A3AA200F70D4F /* pencil.png */; };
 		64CCA3D9122A3EEF00F70D4F /* png4.128.png in Resources */ = {isa = PBXBuildFile; fileRef = 64CCA3D8122A3EEF00F70D4F /* png4.128.png */; };
 		64CCA3F3122ADFEF00F70D4F /* gitfront.icns in Resources */ = {isa = PBXBuildFile; fileRef = 64CCA3F2122ADFEF00F70D4F /* gitfront.icns */; };
@@ -116,19 +117,7 @@
 		64197F8D12109BB200AA687A /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		64197F9712109C8A00AA687A /* GitFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitFile.h; sourceTree = "<group>"; };
 		64197F9812109C8A00AA687A /* GitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitFile.m; sourceTree = "<group>"; };
-		64197FF71211810B00AA687A /* arrow_branch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_branch.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/arrow_branch.png; sourceTree = SOURCE_ROOT; };
-		641980001211819E00AA687A /* server_database.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = server_database.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/server_database.png; sourceTree = SOURCE_ROOT; };
-		641980071211825200AA687A /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/add.png; sourceTree = SOURCE_ROOT; };
-		641980091211825C00AA687A /* accept.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = accept.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/accept.png; sourceTree = SOURCE_ROOT; };
-		6419800B1211828300AA687A /* arrow_merge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_merge.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/arrow_merge.png; sourceTree = SOURCE_ROOT; };
-		6419800D1211829100AA687A /* arrow_refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_refresh.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/arrow_refresh.png; sourceTree = SOURCE_ROOT; };
 		6419800F121182A800AA687A /* bullet_error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet_error.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/bullet_error.png; sourceTree = SOURCE_ROOT; };
-		64198011121182BA00AA687A /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cancel.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/cancel.png; sourceTree = SOURCE_ROOT; };
-		64198013121182E100AA687A /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/delete.png; sourceTree = SOURCE_ROOT; };
-		641980151211830100AA687A /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = error.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/error.png; sourceTree = SOURCE_ROOT; };
-		641980171211834500AA687A /* folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = folder.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/folder.png; sourceTree = SOURCE_ROOT; };
-		6419801B121183EA00AA687A /* tick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/tick.png; sourceTree = SOURCE_ROOT; };
-		6419801F1211848600AA687A /* page_save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = page_save.png; path = ../../Downloads/famfamfam_silk_icons_v013/icons/page_save.png; sourceTree = SOURCE_ROOT; };
 		641BDFC51204ADAD00D2082D /* todo.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = todo.rtf; sourceTree = "<group>"; };
 		641DF50E1272FC9E009B0DA7 /* question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = question.png; sourceTree = "<group>"; };
 		642234D011B451AB003E944D /* gitfrontHistoryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gitfrontHistoryController.h; sourceTree = "<group>"; };
@@ -177,6 +166,21 @@
 		646CA741126CDCE500B33102 /* GitReferenceStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitReferenceStorage.m; sourceTree = "<group>"; };
 		64749CD9126116BA0015DC50 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		64749D1912619DB70015DC50 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		6486FC82127C6B22007CA28A /* accept.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = accept.png; path = Resources/Icons/accept.png; sourceTree = "<group>"; };
+		6486FC83127C6B22007CA28A /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add.png; path = Resources/Icons/add.png; sourceTree = "<group>"; };
+		6486FC84127C6B22007CA28A /* arrow_branch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_branch.png; path = Resources/Icons/arrow_branch.png; sourceTree = "<group>"; };
+		6486FC85127C6B22007CA28A /* arrow_merge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_merge.png; path = Resources/Icons/arrow_merge.png; sourceTree = "<group>"; };
+		6486FC86127C6B22007CA28A /* arrow_refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_refresh.png; path = Resources/Icons/arrow_refresh.png; sourceTree = "<group>"; };
+		6486FC88127C6B22007CA28A /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cancel.png; path = Resources/Icons/cancel.png; sourceTree = "<group>"; };
+		6486FC89127C6B22007CA28A /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = Resources/Icons/delete.png; sourceTree = "<group>"; };
+		6486FC8A127C6B22007CA28A /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = error.png; path = Resources/Icons/error.png; sourceTree = "<group>"; };
+		6486FC8B127C6B22007CA28A /* exclamation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = exclamation.png; path = Resources/Icons/exclamation.png; sourceTree = "<group>"; };
+		6486FC8C127C6B22007CA28A /* folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = folder.png; path = Resources/Icons/folder.png; sourceTree = "<group>"; };
+		6486FC8D127C6B22007CA28A /* git.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = git.png; path = Resources/Icons/git.png; sourceTree = "<group>"; };
+		6486FC8E127C6B22007CA28A /* page_save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = page_save.png; path = Resources/Icons/page_save.png; sourceTree = "<group>"; };
+		6486FC8F127C6B22007CA28A /* server_database.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = server_database.png; path = Resources/Icons/server_database.png; sourceTree = "<group>"; };
+		6486FC90127C6B22007CA28A /* tick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick.png; path = Resources/Icons/tick.png; sourceTree = "<group>"; };
+		6486FCA0127C6BBB007CA28A /* blue-document-medium.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "blue-document-medium.png"; path = "Resources/Icons/blue-document-medium.png"; sourceTree = "<group>"; };
 		6491C2C0119B2F6500D2662B /* gitfendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gitfendController.h; sourceTree = "<group>"; };
 		6491C2C1119B2F6500D2662B /* gitfendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gitfendController.m; sourceTree = "<group>"; };
 		64A5E75E1204D3E700DDB5C9 /* GitClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitClient.h; sourceTree = "<group>"; };
@@ -188,7 +192,6 @@
 		64A5E7691205FFFB00DDB5C9 /* GitConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitConfigParser.m; sourceTree = "<group>"; };
 		64B768F111A45ECB00DEDF82 /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
 		64B768F211A45ECB00DEDF82 /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
-		64B790481211EBB300223E14 /* git.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = git.png; path = Resources/Icons/git.png; sourceTree = "<group>"; };
 		64B790EB1212053E00223E14 /* credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = credits.rtf; sourceTree = "<group>"; };
 		64B792431215492500223E14 /* arrow_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_up.png; sourceTree = "<group>"; };
 		64B792AB12156AD800223E14 /* folder_go.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder_go.png; sourceTree = "<group>"; };
@@ -196,7 +199,6 @@
 		64B793581216B8BF00223E14 /* GitFrontRepositories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitFrontRepositories.m; sourceTree = "<group>"; };
 		64B7935F1216BA9C00223E14 /* GitRepo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitRepo.h; sourceTree = "<group>"; };
 		64B793601216BA9C00223E14 /* GitRepo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitRepo.m; sourceTree = "<group>"; };
-		64CCA3A9122A3A3B00F70D4F /* exclamation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exclamation.png; sourceTree = "<group>"; };
 		64CCA3AB122A3AA200F70D4F /* pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pencil.png; sourceTree = "<group>"; };
 		64CCA3D8122A3EEF00F70D4F /* png4.128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = png4.128.png; sourceTree = "<group>"; };
 		64CCA3F2122ADFEF00F70D4F /* gitfront.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = gitfront.icns; sourceTree = "<group>"; };
@@ -423,29 +425,30 @@
 		64197FE9121180C600AA687A /* icons */ = {
 			isa = PBXGroup;
 			children = (
-				641DF50E1272FC9E009B0DA7 /* question.png */,
-				64CCA3D8122A3EEF00F70D4F /* png4.128.png */,
-				64B790481211EBB300223E14 /* git.png */,
+				6486FC82127C6B22007CA28A /* accept.png */,
+				6486FC83127C6B22007CA28A /* add.png */,
 				64B792431215492500223E14 /* arrow_up.png */,
-				64197FF71211810B00AA687A /* arrow_branch.png */,
-				642684051219C8020044FD96 /* blue-folders-stack.png */,
-				64B792AB12156AD800223E14 /* folder_go.png */,
-				6419800B1211828300AA687A /* arrow_merge.png */,
-				6419800D1211829100AA687A /* arrow_refresh.png */,
+				6486FC84127C6B22007CA28A /* arrow_branch.png */,
+				6486FC85127C6B22007CA28A /* arrow_merge.png */,
+				6486FC86127C6B22007CA28A /* arrow_refresh.png */,
+				6486FCA0127C6BBB007CA28A /* blue-document-medium.png */,
 				6419800F121182A800AA687A /* bullet_error.png */,
-				641980001211819E00AA687A /* server_database.png */,
+				6486FC88127C6B22007CA28A /* cancel.png */,
+				6486FC89127C6B22007CA28A /* delete.png */,
+				6486FC8A127C6B22007CA28A /* error.png */,
+				6486FC8B127C6B22007CA28A /* exclamation.png */,
+				64B792AB12156AD800223E14 /* folder_go.png */,
+				6486FC8C127C6B22007CA28A /* folder.png */,
+				6486FC8D127C6B22007CA28A /* git.png */,
+				6486FC8E127C6B22007CA28A /* page_save.png */,
+				64CCA3D8122A3EEF00F70D4F /* png4.128.png */,
+				641DF50E1272FC9E009B0DA7 /* question.png */,
+				6486FC8F127C6B22007CA28A /* server_database.png */,
+				6486FC90127C6B22007CA28A /* tick.png */,
+				642684051219C8020044FD96 /* blue-folders-stack.png */,
 				642683021219970F0044FD96 /* tag-label.png */,
 				64268300121996F30044FD96 /* tags-label.png */,
-				641980171211834500AA687A /* folder.png */,
-				641980071211825200AA687A /* add.png */,
-				64198013121182E100AA687A /* delete.png */,
-				64CCA3A9122A3A3B00F70D4F /* exclamation.png */,
 				64CCA3AB122A3AA200F70D4F /* pencil.png */,
-				641980151211830100AA687A /* error.png */,
-				6419801B121183EA00AA687A /* tick.png */,
-				6419801F1211848600AA687A /* page_save.png */,
-				64198011121182BA00AA687A /* cancel.png */,
-				641980091211825C00AA687A /* accept.png */,
 			);
 			name = icons;
 			sourceTree = "<group>";
@@ -529,20 +532,7 @@
 				641BDFC61204ADAD00D2082D /* todo.rtf in Resources */,
 				64A5E7631205AA1100DDB5C9 /* RepoConfig.xib in Resources */,
 				644D5478120965C000AFF18B /* RepoContextMenu.xib in Resources */,
-				64197FF81211810B00AA687A /* arrow_branch.png in Resources */,
-				641980011211819E00AA687A /* server_database.png in Resources */,
-				641980081211825200AA687A /* add.png in Resources */,
-				6419800A1211825C00AA687A /* accept.png in Resources */,
-				6419800C1211828300AA687A /* arrow_merge.png in Resources */,
-				6419800E1211829100AA687A /* arrow_refresh.png in Resources */,
 				64198010121182A800AA687A /* bullet_error.png in Resources */,
-				64198012121182BA00AA687A /* cancel.png in Resources */,
-				64198014121182E100AA687A /* delete.png in Resources */,
-				641980161211830100AA687A /* error.png in Resources */,
-				641980181211834500AA687A /* folder.png in Resources */,
-				6419801C121183EA00AA687A /* tick.png in Resources */,
-				641980201211848600AA687A /* page_save.png in Resources */,
-				64B790491211EBB300223E14 /* git.png in Resources */,
 				64B790EC1212053E00223E14 /* credits.rtf in Resources */,
 				64B792441215492500223E14 /* arrow_up.png in Resources */,
 				64B792AC12156AD800223E14 /* folder_go.png in Resources */,
@@ -551,12 +541,26 @@
 				642684061219C8020044FD96 /* blue-folders-stack.png in Resources */,
 				640E83C0121AA9BD0087FB27 /* WorkingDirBrowser.xib in Resources */,
 				64F1C5C5121FD4C700321FEB /* features.rtf in Resources */,
-				64CCA3AA122A3A3B00F70D4F /* exclamation.png in Resources */,
 				64CCA3AC122A3AA200F70D4F /* pencil.png in Resources */,
 				64CCA3D9122A3EEF00F70D4F /* png4.128.png in Resources */,
 				64CCA3F3122ADFEF00F70D4F /* gitfront.icns in Resources */,
 				64337E7312397B35006CA968 /* DiffView.xib in Resources */,
 				641DF50F1272FC9E009B0DA7 /* question.png in Resources */,
+				6486FC91127C6B22007CA28A /* accept.png in Resources */,
+				6486FC92127C6B22007CA28A /* add.png in Resources */,
+				6486FC93127C6B22007CA28A /* arrow_branch.png in Resources */,
+				6486FC94127C6B22007CA28A /* arrow_merge.png in Resources */,
+				6486FC95127C6B22007CA28A /* arrow_refresh.png in Resources */,
+				6486FC97127C6B22007CA28A /* cancel.png in Resources */,
+				6486FC98127C6B22007CA28A /* delete.png in Resources */,
+				6486FC99127C6B22007CA28A /* error.png in Resources */,
+				6486FC9A127C6B22007CA28A /* exclamation.png in Resources */,
+				6486FC9B127C6B22007CA28A /* folder.png in Resources */,
+				6486FC9C127C6B22007CA28A /* git.png in Resources */,
+				6486FC9D127C6B22007CA28A /* page_save.png in Resources */,
+				6486FC9E127C6B22007CA28A /* server_database.png in Resources */,
+				6486FC9F127C6B22007CA28A /* tick.png in Resources */,
+				6486FCA1127C6BBB007CA28A /* blue-document-medium.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
