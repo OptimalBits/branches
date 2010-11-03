@@ -117,10 +117,11 @@ static NSString* encodeParents( NSArray *parents );
 		_sha1 = [[commitString stringByMatching:regExpTree capture:1L] cStringUsingEncoding:NSUTF8StringEncoding];
 		if ( _sha1 )
 		{
-			tree = [NSData dataWithHexCString:_sha1];
+			[self setTree:[NSData dataWithHexCString:_sha1]];
 		}
 		else
 		{
+			[self dealloc];
 			return nil;
 		}
 
@@ -164,7 +165,9 @@ static NSString* encodeParents( NSArray *parents );
 		count = [matches count];
 		if ( count > 0 )
 		{
-			[self setMessage:[NSString stringWithString:[commitString stringByMatching:msgRegExp capture:1L]]];
+			[self setMessage:[NSString stringWithString:
+							  [commitString stringByMatching:msgRegExp 
+													 capture:1L]]];
 		}
 	}
 	
@@ -224,7 +227,5 @@ static NSString* encodeParents( NSArray *parents )
 	
 	return string;
 }
-							
-							
-						
+
 						
