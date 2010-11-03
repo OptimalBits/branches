@@ -23,8 +23,6 @@
 	NSFileManager *fileManager;
 	
 	NSSet *modifiedFiles;
-	
-	NSDictionary *headTree;
 
 	NSTreeNode *statusTree;
 	

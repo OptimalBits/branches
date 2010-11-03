@@ -102,12 +102,7 @@
 {
 	[_repo retain];
 	repo = _repo;
-	
-	NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
-	GitTreeObject *tree = [[repo objectStore] getTreeFromCommit:headSha1];
-	
-//	headTree = [[[repo objectStore] flattenTree:tree] retain];
-	
+		
 	[self updateView];
 }
 
@@ -152,10 +147,12 @@
 	NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
 	GitTreeObject *tree = [[repo objectStore] getTreeFromCommit:headSha1];
 	
-	headTree = [[repo objectStore] flattenTree:tree];
+	NSDictionary *headTree = [[repo objectStore] flattenTree:tree];
 	
-	statusTree = [[self treeFromStatus:[[repo index] status:headTree] 
-								object:nil] retain];
+	statusTree = [self treeFromStatus:[[repo index] status:headTree] 
+							   object:nil];
+				  
+	[statusTree retain];
 	
 	[workingDirBrowseView reloadData];
 	[stageAreaBrowseView reloadData];
