@@ -1,6 +1,9 @@
 [submodule "SSHCore"]
 	path = SSHCore
-	url = git@github.com:manast/SSHCore.git
+	url = https://github.com/manast/SSHCore.git
 [submodule "NoodleKit"]
 	path = NoodleKit
 	url = http://github.com/MrNoodle/NoodleKit.git
+[submodule "gh-unit"]
+	path = gh-unit
+	url = http://github.com/gabriel/gh-unit.git
