@@ -25,6 +25,14 @@
 
 #define COMMIT_TAG 1
 
+
+@interface gitfendRepositoryController(Private)
+
+-(void)updateViews;
+
+@end
+
+
 @implementation gitfendRepositoryController
 
 - (id) init
@@ -148,6 +156,9 @@
     NSInteger tag = [[sender cell] tagForSegment:clickedSegment];
 	
 	currentController = [viewControllers objectAtIndex:tag];
+	
+	[self updateViews]; // TODO: This should be a NSOperation in order 
+						// not to block.
 	
 	[self displayViewController:currentController];
 }
@@ -591,40 +602,52 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 
 
-- (void)outlineViewSelectionDidChange:(NSNotification *)notification
+-(void)updateViews
 {
 	id item = [_outlineView itemAtRow:[_outlineView selectedRow]];
-
-	NSLog(@"Selection did change");
-	NSLog(@"Selected: %@", item);
 	
-	if ( [item isKindOfClass:[GitFrontRepositoriesLeaf class]] )
-	{
-		if ( [item repo] != nil )
-		{
-			GitRepo *repo = [item repo];
+	if ( ( [item isKindOfClass:[GitFrontRepositoriesLeaf class]] ) ||
+		 ( [item isKindOfClass:[GitFrontTreeLeaf class]] ) )
+	{	
+		NSData *sha1;
+		GitRepo *repo = [item repo];
 		
-			if ( currentController == historyController )
-			{
-				NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
-				[historyController setHistory:[repo revisionHistoryFor:headSha1]];
-			}
+		if ( repo == nil )
+		{
+			return;
+		}
+		
+		if ( [item isKindOfClass:[GitFrontTreeLeaf class]] )
+		{
+			sha1 = [item sha1];
+		}
+		else
+		{
+			sha1 = [[[repo refs] head] resolve:[repo refs]];
+		}
 			
-			if ( currentController == browseController )
-			{
-				NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
-				GitCommitObject *commit = [repo getObject:headSha1];
+		if ( currentController == historyController )
+		{
+			[historyController setHistory:[repo revisionHistoryFor:sha1]];
+		}
+		else if ( currentController == browseController )
+		{
+			GitCommitObject *commit = [repo getObject:sha1];
 				
-				NSData *tree = [commit tree];
-				[browseController setTree:tree commit:headSha1 repo:repo];
-			}
-			
-			if ( currentController == workingDirBrowseController )
-			{
-				[workingDirBrowseController setRepo:repo];
-			}
+			NSData *tree = [commit tree];
+			[browseController setTree:tree commit:sha1 repo:repo];
+		}
+		else if ( currentController == workingDirBrowseController )
+		{
+			[workingDirBrowseController setRepo:repo];
 		}
 	}
+}
+
+
+- (void)outlineViewSelectionDidChange:(NSNotification *)notification
+{
+	[self updateViews];
 }
 
 
