@@ -69,10 +69,9 @@ static BOOL createPath( NSString *basePath, NSString *dir, NSError **error );
 {
     BOOL isDir, found;
 	NSURL *repoDir = [workingDir URLByAppendingPathComponent:@".git"];
-	
-    NSFileManager *fileManager = [[NSFileManager alloc] init];
-    found = [fileManager fileExistsAtPath:[repoDir absoluteString] isDirectory:&isDir];
-    [fileManager release];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    found = [fileManager fileExistsAtPath:[repoDir path] isDirectory:&isDir];
     
     if (isDir && found) {
         // Perform further checks
