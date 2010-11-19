@@ -21,6 +21,11 @@
 
 #import "ImageAndTextCell.h"
 
+
+static NSTreeNode *workingDirTree( NSFileManager *fileManager, 
+								   NSURL *url,
+								   NSError **error );
+
 @implementation GFWorkingDirBrowserController
 
 - (id) init
@@ -139,6 +144,13 @@
 
 -(void) updateView
 {
+	NSError *error;
+	
+	fileTree = workingDirTree( fileManager, 
+							  [repo workingDir], 
+							  &error );
+	[fileTree retain];
+	
 	[modifiedFiles release];
 	modifiedFiles = [[[repo index] modifiedFiles:[repo workingDir]] retain];
 	
@@ -151,8 +163,9 @@
 	
 	statusTree = [self treeFromStatus:[[repo index] status:headTree] 
 							   object:nil];
-				  
 	[statusTree retain];
+	
+	
 	
 	[workingDirBrowseView reloadData];
 	[stageAreaBrowseView reloadData];
@@ -172,89 +185,57 @@
 		return nil;
 	}
 	
-	if ( outlineView == workingDirBrowseView )
+	if ( item != nil )
 	{
-		NSError *error;
-		NSURL *url;
-		NSArray *subPaths;
+		return [[item childNodes] objectAtIndex:index];
+	}
+	else
+	{
+		NSTreeNode *tree;
 		
-		if ( item == nil )
+		if ( outlineView == workingDirBrowseView )
 		{
-			url = [repo workingDir];
+			tree = fileTree;
+		}
+		else if( outlineView == stageAreaBrowseView )
+		{
+			tree = statusTree;
 		}
 		else
 		{
-			url = item;
+			return nil;
 		}
-		
-		subPaths = 
-		[fileManager contentsOfDirectoryAtURL:url 
-				   includingPropertiesForKeys:nil 
-									  options:NSDirectoryEnumerationSkipsHiddenFiles 
-										error:&error];
-		if ( subPaths )
-		{
-			NSURL *u = [[subPaths objectAtIndex:index] retain];
-			return u;
-		}
+
+		return [[tree childNodes] objectAtIndex:index];
 	}
-	else if ( outlineView == stageAreaBrowseView )
-	{
-		if ( item == nil )
-		{
-			return [[statusTree childNodes] objectAtIndex:index];
-		}		
-		else
-		{
-			return [[item childNodes] objectAtIndex:index];
-		}
-	}
-	return nil;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView 
    isItemExpandable:(id)item
 {
-	if ( outlineView == workingDirBrowseView )
+	if ( item != nil )
 	{
-		if ( item )
-		{
-			NSError *error;
-			NSURL *url = item;
-			NSArray *subPaths = 
-			[fileManager contentsOfDirectoryAtURL:url 
-					   includingPropertiesForKeys:nil 
-										  options:NSDirectoryEnumerationSkipsHiddenFiles 
-											error:&error];
-			
-			NSLog(@"Path: %@", [url description]);
-			
-			if ( subPaths )
-			{
-				if ( [subPaths count] > 0)
-				{
-					return YES;
-				}
-			}
-		}
+		return [[item childNodes] count] > 0;
 	}
-	else if ( outlineView == stageAreaBrowseView )
+	else
 	{
-		if ( item == nil )
-		{
-			if ( [[statusTree childNodes] count] > 0 )
-			{
-				return YES;
-			}
-		}
+		NSTreeNode *tree;
 		
-		if ([[item childNodes] count] > 0 )
+		if ( outlineView == workingDirBrowseView )
 		{
-			return YES;
+			tree = fileTree;
 		}
+		else if( outlineView == stageAreaBrowseView )
+		{
+			tree = statusTree;
+		}
+		else
+		{
+			return 0;
+		}
+
+		return [[tree childNodes] count] > 0;
 	}
-	
-	return NO;
 }
 
 - (NSInteger)outlineView:(NSOutlineView *)outlineView 
@@ -263,46 +244,31 @@
 	if ( repo == nil )
 	{
 		return 0;
-	}	
+	}
 	
-	if ( outlineView == workingDirBrowseView )
+	if ( item != nil )
 	{
-		NSError *error;
-		NSURL *url;
-		NSArray *subPaths;
-		
-		if ( item == nil )
+		return [[item childNodes] count];
+	}
+	else
+	{
+		NSTreeNode *tree;
+
+		if ( outlineView == workingDirBrowseView )
 		{
-			url = [repo workingDir];
+			tree = fileTree;
+		}
+		else if( outlineView == stageAreaBrowseView )
+		{
+			tree = statusTree;
 		}
 		else
 		{
-			url = item;
+			return 0;
 		}
-		
-		subPaths = 
-		[fileManager contentsOfDirectoryAtURL:url 
-				   includingPropertiesForKeys:nil 
-									  options:NSDirectoryEnumerationSkipsHiddenFiles 
-										error:&error];
-		if ( subPaths )
-		{
-			return [subPaths count];
-		}
+
+		return [[tree childNodes] count];
 	}
-	else if( outlineView == stageAreaBrowseView )
-	{
-		if ( item == nil )
-		{
-			return [[statusTree childNodes] count];
-		}
-		else
-		{
-			return [[item childNodes] count];
-		}
-	}
-	
-	return 0;
 }
 
 - (void)outlineView:(NSOutlineView *)olv 
@@ -316,8 +282,10 @@
 	{
 		if ([[[tableColumn headerCell] stringValue] compare:@"Status"] == NSOrderedSame) 
 		{
+			NSURL *url = [item representedObject];
+			
 			NSString *filename = 
-			[[item path] substringFromIndex:[[[repo workingDir] path] length]+1];
+			[[url path] substringFromIndex:[[[repo workingDir] path] length]+1];
 			
 			if ( [modifiedFiles containsObject:filename] )
 			{
@@ -379,18 +347,31 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
 	if ( outlineView == workingDirBrowseView )
 	{
+		id obj = [item representedObject];
+		
 		if ([[[tableColumn headerCell] stringValue] compare:@"Name"] == NSOrderedSame) 
 		{
-			return [item lastPathComponent];
+			return [obj lastPathComponent];
 		}
 		
-		if ([[[tableColumn headerCell] stringValue] compare:@"Status"] == NSOrderedSame) 
+		else if ([[[tableColumn headerCell] stringValue] compare:@"Status"] == NSOrderedSame) 
 		{
 			/*NSString *filename = 
 			[[item path] substringFromIndex:[[[repo workingDir] path] length]+1];
-			
 			return @"U";*/
 		}
+		
+		else if ([[[tableColumn headerCell] stringValue] compare:@"Mode"] == NSOrderedSame) 
+		{
+			char modeStr[8];
+			
+			//id obj = [item representedObject];
+			
+			strmode(0x644, &modeStr);
+			
+			return [NSString stringWithUTF8String:modeStr];
+		}
+		
 	}
 	else if( outlineView == stageAreaBrowseView )
 	{
@@ -435,11 +416,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if (isDirectory == NO)
 	{
 		NSError *error;
-		NSString *contents = [NSString stringWithContentsOfFile:[item path]
+		NSURL *url = [item representedObject];
+		
+		NSString *filename = 
+		[[url path] substringFromIndex:[[[repo workingDir] path] length]+1];
+		
+		NSString *contents = [NSString stringWithContentsOfFile:[url path]
 													   encoding:NSUTF8StringEncoding
 														  error:&error];
-		NSString *filename = 
-			[[item path] substringFromIndex:[[[repo workingDir] path] length]+1];
 		
 		GitIndex *index = [repo index];
 		if ( [index isFileTracked:filename] &&
@@ -460,5 +444,68 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 
 @end
+
+static void traverseDirTree( NSFileManager *fileManager, 
+							 NSURL *url,
+							 NSTreeNode *tree,
+							 NSError **error )
+{	
+	NSMutableArray *childs = [tree mutableChildNodes];
+
+	NSArray *subPaths = 
+	[fileManager contentsOfDirectoryAtURL:url 
+			   includingPropertiesForKeys:nil 
+								  options:NSDirectoryEnumerationSkipsHiddenFiles 
+									error:error];
+	if ( *error != nil )
+	{
+		return;
+	}
+	
+	for (NSURL *u in subPaths)
+	{
+		NSTreeNode *node = [[NSTreeNode alloc] initWithRepresentedObject:u];
+		[node autorelease];
+		
+		BOOL isDirectory;
+		
+		[fileManager fileExistsAtPath:[u path] isDirectory:&isDirectory];
+		
+		if ( isDirectory )
+		{
+			traverseDirTree( fileManager, u, node, error );
+			if ( *error != nil )
+			{
+				return;
+			}
+		}
+	
+		[childs addObject:node];
+	}
+	
+}
+
+static NSTreeNode *workingDirTree( NSFileManager *fileManager, 
+								   NSURL *url,
+								   NSError **error )
+{
+	// TODO: Add support for .gitignore files.
+	
+	NSTreeNode *tree;
+	
+	tree = [[NSTreeNode alloc] initWithRepresentedObject:nil];
+	[tree autorelease];
+	
+	traverseDirTree( fileManager, url, tree, error );
+	
+	if ( *error != nil )
+	{
+		return nil;
+	}
+	
+	return tree;
+}
+
+
 
 

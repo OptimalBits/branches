@@ -25,6 +25,8 @@
 	NSSet *modifiedFiles;
 
 	NSTreeNode *statusTree;
+	NSTreeNode *fileTree;
+	
 	
 	NSDictionary *icons;
 }
