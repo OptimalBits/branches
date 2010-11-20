@@ -61,6 +61,8 @@
 	
 	GitAuthor *author;
 	GitAuthor *committer;
+	
+	NSData *sha1;
 }
 
 @property (readwrite, retain) NSData *sha1;
