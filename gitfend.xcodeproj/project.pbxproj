@@ -12,6 +12,8 @@
 		640E83C0121AA9BD0087FB27 /* WorkingDirBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 640E83BF121AA9BD0087FB27 /* WorkingDirBrowser.xib */; };
 		640E83C4121AAA050087FB27 /* GFWorkingDirBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */; };
 		64197F9912109C8A00AA687A /* GitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 64197F9812109C8A00AA687A /* GitFile.m */; };
+		641B2CE51298062A00C2EA25 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 641B2CE41298062A00C2EA25 /* BWToolkitFramework.framework */; };
+		641B2D241298071500C2EA25 /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 641B2CE41298062A00C2EA25 /* BWToolkitFramework.framework */; };
 		641BDFC61204ADAD00D2082D /* todo.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 641BDFC51204ADAD00D2082D /* todo.rtf */; };
 		642234D211B451AB003E944D /* gitfrontHistoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 642234D111B451AB003E944D /* gitfrontHistoryController.m */; };
 		6422354111B5A5A0003E944D /* CocoaCryptoHashing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422353011B5A5A0003E944D /* CocoaCryptoHashing.m */; };
@@ -35,7 +37,6 @@
 		6466147811C7CCEE00289206 /* GitFrontBrowseTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 6466147711C7CCEE00289206 /* GitFrontBrowseTree.m */; };
 		646CA742126CDCE500B33102 /* GitReferenceStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 646CA741126CDCE500B33102 /* GitReferenceStorage.m */; };
 		64708292127CBEF40051F688 /* bullet_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 64708291127CBEF40051F688 /* bullet_error.png */; };
-		64749CDA126116BA0015DC50 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64749CD9126116BA0015DC50 /* Cocoa.framework */; };
 		64749D1A12619DB70015DC50 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64749D1912619DB70015DC50 /* Carbon.framework */; };
 		6486FC91127C6B22007CA28A /* accept.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC82127C6B22007CA28A /* accept.png */; };
 		6486FC92127C6B22007CA28A /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FC83127C6B22007CA28A /* add.png */; };
@@ -60,7 +61,6 @@
 		6486FCC8127C6DDD007CA28A /* pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCC7127C6DDD007CA28A /* pencil.png */; };
 		6486FCCE127C6F1C007CA28A /* blue-folders-stack.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCCD127C6F1C007CA28A /* blue-folders-stack.png */; };
 		6486FCD0127C6F25007CA28A /* question.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCCF127C6F25007CA28A /* question.png */; };
-		6486FDC6127C9E8C007CA28A /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6486FDC5127C9E8C007CA28A /* BWToolkitFramework.framework */; };
 		6486FEE1127CBD32007CA28A /* NoodleLineNumberMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6486FEDE127CBD32007CA28A /* NoodleLineNumberMarker.m */; };
 		6486FEE2127CBD32007CA28A /* NoodleLineNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6486FEE0127CBD32007CA28A /* NoodleLineNumberView.m */; };
 		6491C2C2119B2F6500D2662B /* gitfendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6491C2C1119B2F6500D2662B /* gitfendController.m */; };
@@ -93,7 +93,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8D1107260486CEB800E47090 /* gitfend */;
+			remoteGlobalIDString = 8D1107260486CEB800E47090;
 			remoteInfo = gitfend;
 		};
 /* End PBXContainerItemProxy section */
@@ -105,6 +105,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				641B2D241298071500C2EA25 /* BWToolkitFramework.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +128,7 @@
 		64197F8D12109BB200AA687A /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		64197F9712109C8A00AA687A /* GitFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitFile.h; sourceTree = "<group>"; };
 		64197F9812109C8A00AA687A /* GitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitFile.m; sourceTree = "<group>"; };
+		641B2CE41298062A00C2EA25 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = BWToolkit/BWToolkitFramework.framework; sourceTree = "<group>"; };
 		641BDFC51204ADAD00D2082D /* todo.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = todo.rtf; sourceTree = "<group>"; };
 		642234D011B451AB003E944D /* gitfrontHistoryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gitfrontHistoryController.h; sourceTree = "<group>"; };
 		642234D111B451AB003E944D /* gitfrontHistoryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gitfrontHistoryController.m; sourceTree = "<group>"; };
@@ -166,7 +168,6 @@
 		646CA740126CDCE500B33102 /* GitReferenceStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitReferenceStorage.h; sourceTree = "<group>"; };
 		646CA741126CDCE500B33102 /* GitReferenceStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitReferenceStorage.m; sourceTree = "<group>"; };
 		64708291127CBEF40051F688 /* bullet_error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet_error.png; path = Resources/Icons/bullet_error.png; sourceTree = "<group>"; };
-		64749CD9126116BA0015DC50 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		64749D1912619DB70015DC50 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		6486FC82127C6B22007CA28A /* accept.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = accept.png; path = Resources/Icons/accept.png; sourceTree = "<group>"; };
 		6486FC83127C6B22007CA28A /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add.png; path = Resources/Icons/add.png; sourceTree = "<group>"; };
@@ -191,7 +192,6 @@
 		6486FCC7127C6DDD007CA28A /* pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pencil.png; path = Resources/Icons/pencil.png; sourceTree = "<group>"; };
 		6486FCCD127C6F1C007CA28A /* blue-folders-stack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "blue-folders-stack.png"; path = "Resources/Icons/blue-folders-stack.png"; sourceTree = "<group>"; };
 		6486FCCF127C6F25007CA28A /* question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = question.png; path = Resources/Icons/question.png; sourceTree = "<group>"; };
-		6486FDC5127C9E8C007CA28A /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = BWToolkit/BWToolkitFramework.framework; sourceTree = "<group>"; };
 		6486FEDD127CBD32007CA28A /* NoodleLineNumberMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleLineNumberMarker.h; path = "Third Party/NoodleLineNumberMarker.h"; sourceTree = "<group>"; };
 		6486FEDE127CBD32007CA28A /* NoodleLineNumberMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleLineNumberMarker.m; path = "Third Party/NoodleLineNumberMarker.m"; sourceTree = "<group>"; };
 		6486FEDF127CBD32007CA28A /* NoodleLineNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleLineNumberView.h; path = "Third Party/NoodleLineNumberView.h"; sourceTree = "<group>"; };
@@ -241,9 +241,8 @@
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				642E8E8011AF01EF00DB65B9 /* libcrypto.dylib in Frameworks */,
 				642E8E8211AF022C00DB65B9 /* libicucore.dylib in Frameworks */,
-				64749CDA126116BA0015DC50 /* Cocoa.framework in Frameworks */,
 				64749D1A12619DB70015DC50 /* Carbon.framework in Frameworks */,
-				6486FDC6127C9E8C007CA28A /* BWToolkitFramework.framework in Frameworks */,
+				641B2CE51298062A00C2EA25 /* BWToolkitFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,9 +291,9 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				641B2CE41298062A00C2EA25 /* BWToolkitFramework.framework */,
 				E218E8B912835CC400897826 /* GHUnit.framework */,
 				642E8E7F11AF01EF00DB65B9 /* libcrypto.dylib */,
-				6486FDC5127C9E8C007CA28A /* BWToolkitFramework.framework */,
 				64749D1912619DB70015DC50 /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 			);
@@ -342,7 +341,6 @@
 				64B790EB1212053E00223E14 /* credits.rtf */,
 				640E83BF121AA9BD0087FB27 /* WorkingDirBrowser.xib */,
 				64337E7212397B34006CA968 /* DiffView.xib */,
-				64749CD9126116BA0015DC50 /* Cocoa.framework */,
 				E218E8B312835CB400897826 /* unittest-Info.plist */,
 			);
 			name = gitfend;
@@ -560,7 +558,6 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "gitfend" */;
 			compatibilityVersion = "Xcode 3.1";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
