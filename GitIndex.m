@@ -168,7 +168,6 @@ static void writeStatInfo( EntryInfo *entryInfo, NSMutableData *outputData );
  */
 -(NSSet*) modifiedFiles:(NSURL*) workDir
 {
-	NSError *error;
 	NSMutableSet *fileSet;
 	
 	fileSet = [[[NSMutableSet alloc] init] autorelease];
@@ -176,35 +175,12 @@ static void writeStatInfo( EntryInfo *entryInfo, NSMutableData *outputData );
 	for (NSString *filename in entries)
 	{
 		NSURL *fileUrl;
-		NSFileHandle *file;
-		GitIndexEntry *entry;
-		struct stat fileStat;
-		
-		entry = [entries objectForKey:filename];
 		
 		fileUrl = [NSURL URLWithString:filename relativeToURL:workDir];
 		
-		file = [NSFileHandle fileHandleForReadingFromURL:fileUrl
-												   error:&error];
-		if ( file )
+		if ( [self isFileModified:fileUrl filename:filename] )
 		{
-			if ( fstat([file fileDescriptor], &fileStat ) == 0 )
-			{
-				if ( checkStat( &fileStat, entry ) )
-				{
-					GitBlobObject *blob = [[[GitBlobObject alloc] initWithData:
-											[NSData dataWithContentsOfURL:fileUrl]] autorelease];
-						
-					if ( [[blob sha1] isEqualToData:[entry sha1]] )
-					{
-						setStat( &fileStat, entry );
-					}
-					else
-					{
-						[fileSet addObject:filename];
-					}
-				}
-			}
+			[fileSet addObject:filename];
 		}
 		else
 		{
@@ -214,6 +190,41 @@ static void writeStatInfo( EntryInfo *entryInfo, NSMutableData *outputData );
 	
 	return fileSet;
 }
+
+-(BOOL) isFileModified:(NSURL*) fileUrl filename:(NSString*) filename
+{
+	NSError *error;
+	
+	struct stat fileStat;
+	
+	NSFileHandle *file = [NSFileHandle fileHandleForReadingFromURL:fileUrl
+															 error:&error];
+	if ( file )
+	{
+		if ( fstat([file fileDescriptor], &fileStat ) == 0 )
+		{
+			GitIndexEntry *entry = [entries objectForKey:filename];
+			
+			if ( checkStat( &fileStat, entry ) )
+			{
+				GitBlobObject *blob = [[[GitBlobObject alloc] initWithData:
+										[NSData dataWithContentsOfURL:fileUrl]] autorelease];
+				
+				if ( [[blob sha1] isEqualToData:[entry sha1]] )
+				{
+					setStat( &fileStat, entry );
+				}
+				else
+				{
+					return YES;
+				}
+			}
+		}
+	}
+	
+	return NO;	
+}
+
 
 -(BOOL) isFileTracked:(NSString*) filename
 {
