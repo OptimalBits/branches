@@ -21,9 +21,11 @@
 
 #import "ImageAndTextCell.h"
 
+#include <sys/stat.h>
 
-static NSTreeNode *workingDirTree( NSFileManager *fileManager, 
-								   NSURL *url,
+
+static NSTreeNode *workingDirTree( GitRepo *repo,
+								   NSFileManager *fileManager, 
 								   NSError **error );
 
 @implementation GFWorkingDirBrowserController
@@ -32,6 +34,9 @@ static NSTreeNode *workingDirTree( NSFileManager *fileManager,
 {
 	if ( self = [super initWithNibName:@"WorkingDirBrowser" bundle:nil] )
     {
+		fileTree = nil;
+		statusTree = nil;
+		
 		fileManager = [[NSFileManager alloc] init];
 
 		[self setTitle:@"GitFront - Browser"];
@@ -144,28 +149,23 @@ static NSTreeNode *workingDirTree( NSFileManager *fileManager,
 
 -(void) updateView
 {
-	NSError *error;
+	NSError *error = nil;
 	
-	fileTree = workingDirTree( fileManager, 
-							  [repo workingDir], 
-							  &error );
+	NSLog( @"Creating file tree...", nil);
+	[fileTree release];
+	fileTree = workingDirTree( repo, fileManager, &error );
 	[fileTree retain];
-	
-	[modifiedFiles release];
-	modifiedFiles = [[[repo index] modifiedFiles:[repo workingDir]] retain];
-	
-	[statusTree release];
+	NSLog( @"Finished!", nil);
 	
 	NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
 	GitTreeObject *tree = [[repo objectStore] getTreeFromCommit:headSha1];
 	
 	NSDictionary *headTree = [[repo objectStore] flattenTree:tree];
 	
+	[statusTree release];
 	statusTree = [self treeFromStatus:[[repo index] status:headTree] 
 							   object:nil];
 	[statusTree retain];
-	
-	
 	
 	[workingDirBrowseView reloadData];
 	[stageAreaBrowseView reloadData];
@@ -282,16 +282,13 @@ static NSTreeNode *workingDirTree( NSFileManager *fileManager,
 	{
 		if ([[[tableColumn headerCell] stringValue] compare:@"Status"] == NSOrderedSame) 
 		{
-			NSURL *url = [item representedObject];
-			
-			NSString *filename = 
-			[[url path] substringFromIndex:[[[repo workingDir] path] length]+1];
-			
-			if ( [modifiedFiles containsObject:filename] )
+			GitFile *file = [item representedObject];
+						
+			if ( [file status] == kFileStatusModified )
 			{
 				[iconCell setImage:[icons objectForKey:@"exclamation"]];
 			}
-			else if ( [[repo index] isFileTracked: filename] )
+			else if ( [file status] == kFileStatusTracked )
 			{
 				[iconCell setImage:[icons objectForKey:@"tick"]];
 			}
@@ -340,38 +337,44 @@ static NSTreeNode *workingDirTree( NSFileManager *fileManager,
 	}
 }
 
-
 - (id)outlineView:(NSOutlineView *)outlineView 
 objectValueForTableColumn:(NSTableColumn *)tableColumn 
 		   byItem:(id)item
 {
 	if ( outlineView == workingDirBrowseView )
 	{
-		id obj = [item representedObject];
+		GitFile *file = [item representedObject];
 		
 		if ([[[tableColumn headerCell] stringValue] compare:@"Name"] == NSOrderedSame) 
 		{
-			return [obj lastPathComponent];
+			return [file filename];
 		}
 		
 		else if ([[[tableColumn headerCell] stringValue] compare:@"Status"] == NSOrderedSame) 
 		{
-			/*NSString *filename = 
-			[[item path] substringFromIndex:[[[repo workingDir] path] length]+1];
-			return @"U";*/
+
 		}
 		
 		else if ([[[tableColumn headerCell] stringValue] compare:@"Mode"] == NSOrderedSame) 
 		{
+			// TODO: move mode to GitFile to avoid this extra fstat.
+			NSError *error;
 			char modeStr[8];
+			struct stat fileStat;
 			
-			//id obj = [item representedObject];
-			
-			strmode(0x644, &modeStr);
-			
-			return [NSString stringWithUTF8String:modeStr];
+			NSFileHandle *fileHandle = 
+				[NSFileHandle fileHandleForReadingFromURL:[file url]
+													error:&error];
+			if ( fileHandle )
+			{
+				if ( fstat([fileHandle fileDescriptor], &fileStat ) == 0 )
+				{
+					strmode(fileStat.st_mode, modeStr);
+					return [NSString stringWithUTF8String:modeStr];
+				}
+			}
+			return nil;
 		}
-		
 	}
 	else if( outlineView == stageAreaBrowseView )
 	{
@@ -407,27 +410,27 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification
 {
-	id item = [workingDirBrowseView itemAtRow:[workingDirBrowseView selectedRow]];
+	NSTreeNode *node = 
+		[workingDirBrowseView itemAtRow:[workingDirBrowseView selectedRow]];
+	
+	GitFile *file = [node representedObject];
 	
 	BOOL isDirectory;
 	
-	[fileManager fileExistsAtPath:[item path] isDirectory:&isDirectory];
+	[fileManager fileExistsAtPath:[[file url] path] isDirectory:&isDirectory];
 	
 	if (isDirectory == NO)
 	{
 		NSError *error;
-		NSURL *url = [item representedObject];
 		
 		NSString *filename = 
-		[[url path] substringFromIndex:[[[repo workingDir] path] length]+1];
+		[[[file url] path] substringFromIndex:[[[repo workingDir] path] length]+1];
 		
-		NSString *contents = [NSString stringWithContentsOfFile:[url path]
+		NSString *contents = [NSString stringWithContentsOfURL:[file url]
 													   encoding:NSUTF8StringEncoding
 														  error:&error];
-		
 		GitIndex *index = [repo index];
-		if ( [index isFileTracked:filename] &&
-			 [modifiedFiles containsObject:filename] )
+		if ( [file status] == kFileStatusModified )
 		{
 			GitBlobObject *obj = 
 				[repo getObject:[index sha1ForFilename:filename]];
@@ -445,11 +448,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 @end
 
-static void traverseDirTree( NSFileManager *fileManager, 
-							 NSURL *url,
-							 NSTreeNode *tree,
-							 NSError **error )
+static GitFileStatus traverseDirTree( GitIndex *index,
+									  NSString *workingDir,
+									  NSFileManager *fileManager, 
+									  NSURL *url,
+									  NSTreeNode *tree,
+									  NSError **error )
 {	
+	GitFileStatus status = kFileStatusUntracked;
+	
 	NSMutableArray *childs = [tree mutableChildNodes];
 
 	NSArray *subPaths = 
@@ -459,13 +466,14 @@ static void traverseDirTree( NSFileManager *fileManager,
 									error:error];
 	if ( *error != nil )
 	{
-		return;
+		return 0;
 	}
 	
 	for (NSURL *u in subPaths)
 	{
-		NSTreeNode *node = [[NSTreeNode alloc] initWithRepresentedObject:u];
-		[node autorelease];
+		GitFile *file = [GitFile alloc];
+		
+		NSTreeNode *node = [[NSTreeNode alloc] initWithRepresentedObject:file];
 		
 		BOOL isDirectory;
 		
@@ -473,30 +481,66 @@ static void traverseDirTree( NSFileManager *fileManager,
 		
 		if ( isDirectory )
 		{
-			traverseDirTree( fileManager, u, node, error );
+			GitFileStatus dirStatus = 
+		      traverseDirTree( index, workingDir, fileManager, u, node, error );
 			if ( *error != nil )
 			{
-				return;
+				return 0;
 			}
+			[file initWithUrl:u andStatus:dirStatus];
 		}
-	
+		else
+		{
+			NSString *filename = 
+							[[u path] substringFromIndex:[workingDir length]+1];
+			
+			if ( [index isFileTracked:filename] )
+			{
+				if ( [index isFileModified:u filename:filename] )
+				{
+					[file initWithUrl:u andStatus:kFileStatusModified];
+				}
+				else
+				{
+					[file initWithUrl:u andStatus:kFileStatusTracked];
+				}
+			}
+			else
+			{
+				[file initWithUrl:u andStatus:kFileStatusUntracked];
+			}			
+		}		
 		[childs addObject:node];
+		[node release];
+		[file release];
+		
+		if ( ( status != kFileStatusModified ) && 
+			 ( [file status] != kFileStatusUntracked ) )
+		{
+			status = [file status];
+		}
 	}
 	
+	return status;
 }
 
-static NSTreeNode *workingDirTree( NSFileManager *fileManager, 
-								   NSURL *url,
+static NSTreeNode *workingDirTree( GitRepo *repo,
+								   NSFileManager *fileManager, 
 								   NSError **error )
 {
 	// TODO: Add support for .gitignore files.
 	
 	NSTreeNode *tree;
-	
+
 	tree = [[NSTreeNode alloc] initWithRepresentedObject:nil];
 	[tree autorelease];
 	
-	traverseDirTree( fileManager, url, tree, error );
+	traverseDirTree( [repo index], 
+					 [[repo workingDir] path], 
+					 fileManager, 
+					 [repo workingDir], 
+					 tree, 
+					 error );
 	
 	if ( *error != nil )
 	{
