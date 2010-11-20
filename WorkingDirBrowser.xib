@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1060</int>
-		<string key="IBDocument.SystemVersion">10F569</string>
+		<string key="IBDocument.SystemVersion">10H574</string>
 		<string key="IBDocument.InterfaceBuilderVersion">788</string>
-		<string key="IBDocument.AppKitVersion">1038.29</string>
+		<string key="IBDocument.AppKitVersion">1038.35</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -21,7 +21,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="5"/>
+			<integer value="1"/>
 			<integer value="47"/>
 			<integer value="44"/>
 		</object>
@@ -73,13 +73,13 @@
 											<object class="NSOutlineView" id="159315811">
 												<reference key="NSNextResponder" ref="185594439"/>
 												<int key="NSvFlags">256</int>
-												<string key="NSFrameSize">{459, 209}</string>
+												<string key="NSFrameSize">{475, 194}</string>
 												<reference key="NSSuperview" ref="185594439"/>
 												<bool key="NSEnabled">YES</bool>
 												<object class="NSTableHeaderView" key="NSHeaderView" id="616663082">
 													<reference key="NSNextResponder" ref="506454166"/>
 													<int key="NSvFlags">256</int>
-													<string key="NSFrameSize">{459, 17}</string>
+													<string key="NSFrameSize">{475, 17}</string>
 													<reference key="NSSuperview" ref="506454166"/>
 													<reference key="NSTableView" ref="159315811"/>
 												</object>
@@ -176,7 +176,7 @@
 														<reference key="NSTableView" ref="159315811"/>
 													</object>
 													<object class="NSTableColumn" id="163231923">
-														<double key="NSWidth">64</double>
+														<double key="NSWidth">81</double>
 														<double key="NSMinWidth">10</double>
 														<double key="NSMaxWidth">3.4028234663852886e+38</double>
 														<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -206,7 +206,6 @@
 														</object>
 														<int key="NSResizingMask">3</int>
 														<bool key="NSIsResizeable">YES</bool>
-														<bool key="NSIsEditable">YES</bool>
 														<reference key="NSTableView" ref="159315811"/>
 													</object>
 													<object class="NSTableColumn" id="98579409">
@@ -232,7 +231,6 @@
 														</object>
 														<int key="NSResizingMask">3</int>
 														<bool key="NSIsResizeable">YES</bool>
-														<bool key="NSIsEditable">YES</bool>
 														<reference key="NSTableView" ref="159315811"/>
 													</object>
 												</object>
@@ -249,7 +247,7 @@
 													</object>
 												</object>
 												<double key="NSRowHeight">16</double>
-												<int key="NSTvFlags">-744488960</int>
+												<int key="NSTvFlags">-757071872</int>
 												<reference key="NSDelegate"/>
 												<reference key="NSDataSource"/>
 												<int key="NSGridStyleMask">1</int>
@@ -261,7 +259,7 @@
 												<reference key="NSOutlineViewOutlineTableColumnKey" ref="831060530"/>
 											</object>
 										</object>
-										<string key="NSFrame">{{0, 17}, {459, 209}}</string>
+										<string key="NSFrame">{{0, 17}, {459, 194}}</string>
 										<reference key="NSSuperview" ref="1005570366"/>
 										<reference key="NSNextKeyView" ref="159315811"/>
 										<reference key="NSDocView" ref="159315811"/>
@@ -275,18 +273,18 @@
 										<reference key="NSSuperview" ref="1005570366"/>
 										<reference key="NSTarget" ref="1005570366"/>
 										<string key="NSAction">_doScroller:</string>
-										<double key="NSPercent">0.97035573122529639</double>
+										<double key="NSPercent">0.92822966507177029</double>
 									</object>
 									<object class="NSScroller" id="572076107">
 										<reference key="NSNextResponder" ref="1005570366"/>
-										<int key="NSvFlags">-2147483392</int>
-										<string key="NSFrame">{{0, 508}, {331, 15}}</string>
+										<int key="NSvFlags">256</int>
+										<string key="NSFrame">{{0, 211}, {459, 15}}</string>
 										<reference key="NSSuperview" ref="1005570366"/>
+										<bool key="NSEnabled">YES</bool>
 										<int key="NSsFlags">1</int>
 										<reference key="NSTarget" ref="1005570366"/>
 										<string key="NSAction">_doScroller:</string>
-										<double key="NSCurValue">1</double>
-										<double key="NSPercent">0.97928994082840237</double>
+										<double key="NSPercent">0.96631578947368424</double>
 									</object>
 									<object class="NSClipView" id="506454166">
 										<reference key="NSNextResponder" ref="1005570366"/>
@@ -307,7 +305,7 @@
 								<string key="NSFrameSize">{459, 226}</string>
 								<reference key="NSSuperview" ref="664406634"/>
 								<reference key="NSNextKeyView" ref="185594439"/>
-								<int key="NSsFlags">560</int>
+								<int key="NSsFlags">688</int>
 								<reference key="NSVScroller" ref="629312035"/>
 								<reference key="NSHScroller" ref="572076107"/>
 								<reference key="NSContentView" ref="185594439"/>
@@ -1061,6 +1059,10 @@
 					<string>6.IBPluginDependency</string>
 					<string>60.IBPluginDependency</string>
 					<string>61.IBPluginDependency</string>
+					<string>66.IBPluginDependency</string>
+					<string>67.IBPluginDependency</string>
+					<string>68.IBPluginDependency</string>
+					<string>69.IBPluginDependency</string>
 					<string>7.IBPluginDependency</string>
 					<string>8.IBPluginDependency</string>
 					<string>9.IBPluginDependency</string>
@@ -1079,7 +1081,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{36, 575}, {939, 226}}</string>
+					<string>{{58, 128}, {939, 226}}</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.brandonwalkin.BWToolkit</string>
@@ -1102,6 +1104,10 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
