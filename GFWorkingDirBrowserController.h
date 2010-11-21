@@ -11,6 +11,7 @@
 @class GitRepo;
 @class GitFrontIcons;
 @class CCDiffViewController;
+@class GFRepoWatcher;
 
 @interface GFWorkingDirBrowserController : NSViewController <NSOutlineViewDataSource> 
 {
@@ -26,6 +27,8 @@
 
 	NSTreeNode *statusTree;
 	NSTreeNode *fileTree;
+	
+	GFRepoWatcher *repoWatcher;
 	
 	
 	NSDictionary *icons;
