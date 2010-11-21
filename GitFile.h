@@ -23,12 +23,15 @@ typedef enum
 @interface GitFile : NSObject {
 	
 	GitFileStatus status;
+	NSURL	 *url;
 	NSString *filename;
 }
 
-@property (readwrite, assign) GitFileStatus status;
-@property (readwrite, copy) NSString *filename;
+@property (readwrite, assign)	GitFileStatus status;
+@property (readwrite, copy)		NSString *filename;
+@property (readwrite, copy)		NSURL *url;
 
+-(id) initWithUrl:(NSURL*) url andStatus:(GitFileStatus) status;
 -(id) initWithName:(NSString*) filename andStatus:(GitFileStatus) status;
 -(void) dealloc;
 

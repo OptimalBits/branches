@@ -135,6 +135,16 @@ typedef struct
 
 
 /**
+	Checks if a file has been modified. Returns true whether the file content
+	or the file mode have been modified.
+ 
+	@params fileUrl The absolute file path to the file.
+	@params filename The filename relative the root of the working dir.
+ 
+ */
+-(BOOL) isFileModified:(NSURL*) fileUrl filename:(NSString*) filename;
+
+/**
 	Check if a file is tracked.
 	
  */

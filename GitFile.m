@@ -13,6 +13,18 @@
 
 @synthesize filename;
 @synthesize status;
+@synthesize url;
+
+-(id) initWithUrl:(NSURL*) _url andStatus:(GitFileStatus) _status
+{
+	if ( self = [super init] )
+	{
+		[self setUrl:_url];
+		[self setFilename:[_url lastPathComponent]];
+		[self setStatus:_status];
+	}
+	return self;
+}
 
 -(id) initWithName:(NSString*) _filename andStatus:(GitFileStatus) _status
 {
