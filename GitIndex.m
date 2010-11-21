@@ -15,7 +15,7 @@
 
 #import "NSDataExtension.h"
 
-#include <sys/stat.h>
+#include <sys/stat.h>	
 
 #define ENTRY_INFO_SIZE 62
 #define ENTRY_NUL_SIZE 1
@@ -207,21 +207,27 @@ static void writeStatInfo( EntryInfo *entryInfo, NSMutableData *outputData );
 			
 			if ( checkStat( &fileStat, entry ) )
 			{
-				GitBlobObject *blob = [[[GitBlobObject alloc] initWithData:
-										[NSData dataWithContentsOfURL:fileUrl]] autorelease];
+				if ( fileStat.st_mode == [entry entryInfo]->stat.mode )
+				{
+					GitBlobObject *blob = [[[GitBlobObject alloc] initWithData:
+											[NSData dataWithContentsOfURL:fileUrl]] autorelease];
 				
-				if ( [[blob sha1] isEqualToData:[entry sha1]] )
-				{
-					setStat( &fileStat, entry );
+					if ( [[blob sha1] isEqualToData:[entry sha1]] )
+					{
+						setStat( &fileStat, entry );
+						return NO;
+					}
 				}
-				else
-				{
-					return YES;
-				}
+				
+				return YES;
 			}
 		}
 	}
-	
+	else
+	{
+		// File is missing!
+	}
+
 	return NO;	
 }
 
