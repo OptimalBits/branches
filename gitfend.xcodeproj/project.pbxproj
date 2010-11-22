@@ -84,9 +84,32 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		E218E8BA12835CC400897826 /* GHUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E218E8B912835CC400897826 /* GHUnit.framework */; };
 		E218E8C412835D6D00897826 /* unittest1.m in Sources */ = {isa = PBXBuildFile; fileRef = E218E8C312835D6D00897826 /* unittest1.m */; };
 		E218E8CC12835FA300897826 /* GHUnitTestMain.m in Sources */ = {isa = PBXBuildFile; fileRef = E218E8C112835D0C00897826 /* GHUnitTestMain.m */; };
+		E2F370121285705000C2ABB8 /* tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F36FAD1285535E00C2ABB8 /* tests.m */; };
+		E2F3704F1285757600C2ABB8 /* GitClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E75F1204D3E700DDB5C9 /* GitClient.m */; };
+		E2F370501285757700C2ABB8 /* GitConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E7661205F7F300DDB5C9 /* GitConfig.m */; };
+		E2F370511285757800C2ABB8 /* GitConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E7691205FFFB00DDB5C9 /* GitConfigParser.m */; };
+		E2F370521285757F00C2ABB8 /* GitRepo.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B793601216BA9C00223E14 /* GitRepo.m */; };
+		E2F370571285759000C2ABB8 /* GitBlobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422353211B5A5A0003E944D /* GitBlobObject.m */; };
+		E2F370581285759100C2ABB8 /* GitCommitObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 645669BE121DB75A00F96CCD /* GitCommitObject.m */; };
+		E2F370591285759200C2ABB8 /* GitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 64197F9812109C8A00AA687A /* GitFile.m */; };
+		E2F3705A1285759300C2ABB8 /* GitIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */; };
+		E2F3705B1285759400C2ABB8 /* GitObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 645669FA121DB96E00F96CCD /* GitObject.m */; };
+		E2F3705C1285759500C2ABB8 /* GitObjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 64DBE33D11C5370B00DFB667 /* GitObjectStore.m */; };
+		E2F3705D1285759800C2ABB8 /* gitpackfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422353811B5A5A0003E944D /* gitpackfile.m */; };
+		E2F3705E1285759800C2ABB8 /* GitReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 644D5489120A0E6500AFF18B /* GitReference.m */; };
+		E2F3705F1285759900C2ABB8 /* GitReferenceStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 646CA741126CDCE500B33102 /* GitReferenceStorage.m */; };
+		E2F370601285759A00C2ABB8 /* GitTagObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 64566A01121DBD1800F96CCD /* GitTagObject.m */; };
+		E2F370611285759B00C2ABB8 /* GitTreeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 645669FC121DB96E00F96CCD /* GitTreeObject.m */; };
+		E2F373A412876EDC00C2ABB8 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422354011B5A5A0003E944D /* RegexKitLite.m */; };
+		E2F373F21287701100C2ABB8 /* NSDataExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422353E11B5A5A0003E944D /* NSDataExtension.m */; };
+		E2F3740A128770C700C2ABB8 /* NoodleLineNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6486FEE0127CBD32007CA28A /* NoodleLineNumberView.m */; };
+		E2F3740B128770C800C2ABB8 /* NoodleLineNumberMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6486FEDE127CBD32007CA28A /* NoodleLineNumberMarker.m */; };
+		E2F3740C128770C900C2ABB8 /* CocoaCryptoHashing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422353011B5A5A0003E944D /* CocoaCryptoHashing.m */; };
+		E2F374C81287712D00C2ABB8 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 642E8E7F11AF01EF00DB65B9 /* libcrypto.dylib */; };
+		E2F374C91287712E00C2ABB8 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 642E8E8111AF022C00DB65B9 /* libicucore.dylib */; };
+		E2F374CA1287712F00C2ABB8 /* GHUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E218E8B912835CC400897826 /* GHUnit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -234,6 +257,7 @@
 		E218E8B912835CC400897826 /* GHUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GHUnit.framework; path = Library/Frameworks/GHUnit.framework; sourceTree = SDKROOT; };
 		E218E8C112835D0C00897826 /* GHUnitTestMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHUnitTestMain.m; sourceTree = "<group>"; };
 		E218E8C312835D6D00897826 /* unittest1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = unittest1.m; sourceTree = "<group>"; };
+		E2F36FAD1285535E00C2ABB8 /* tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = tests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,7 +277,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E218E8BA12835CC400897826 /* GHUnit.framework in Frameworks */,
+				E2F374C81287712D00C2ABB8 /* libcrypto.dylib in Frameworks */,
+				E2F374C91287712E00C2ABB8 /* libicucore.dylib in Frameworks */,
+				E2F374CA1287712F00C2ABB8 /* GHUnit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,6 +538,7 @@
 			children = (
 				E218E8C112835D0C00897826 /* GHUnitTestMain.m */,
 				E218E8C312835D6D00897826 /* unittest1.m */,
+				E2F36FAD1285535E00C2ABB8 /* tests.m */,
 			);
 			name = UnitTest;
 			sourceTree = "<group>";
@@ -563,6 +590,7 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "gitfend" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -682,6 +710,27 @@
 			files = (
 				E218E8C412835D6D00897826 /* unittest1.m in Sources */,
 				E218E8CC12835FA300897826 /* GHUnitTestMain.m in Sources */,
+				E2F370121285705000C2ABB8 /* tests.m in Sources */,
+				E2F3704F1285757600C2ABB8 /* GitClient.m in Sources */,
+				E2F370501285757700C2ABB8 /* GitConfig.m in Sources */,
+				E2F370511285757800C2ABB8 /* GitConfigParser.m in Sources */,
+				E2F370521285757F00C2ABB8 /* GitRepo.m in Sources */,
+				E2F370571285759000C2ABB8 /* GitBlobObject.m in Sources */,
+				E2F370581285759100C2ABB8 /* GitCommitObject.m in Sources */,
+				E2F370591285759200C2ABB8 /* GitFile.m in Sources */,
+				E2F3705A1285759300C2ABB8 /* GitIndex.m in Sources */,
+				E2F3705B1285759400C2ABB8 /* GitObject.m in Sources */,
+				E2F3705C1285759500C2ABB8 /* GitObjectStore.m in Sources */,
+				E2F3705D1285759800C2ABB8 /* gitpackfile.m in Sources */,
+				E2F3705E1285759800C2ABB8 /* GitReference.m in Sources */,
+				E2F3705F1285759900C2ABB8 /* GitReferenceStorage.m in Sources */,
+				E2F370601285759A00C2ABB8 /* GitTagObject.m in Sources */,
+				E2F370611285759B00C2ABB8 /* GitTreeObject.m in Sources */,
+				E2F373A412876EDC00C2ABB8 /* RegexKitLite.m in Sources */,
+				E2F373F21287701100C2ABB8 /* NSDataExtension.m in Sources */,
+				E2F3740A128770C700C2ABB8 /* NoodleLineNumberView.m in Sources */,
+				E2F3740B128770C800C2ABB8 /* NoodleLineNumberMarker.m in Sources */,
+				E2F3740C128770C900C2ABB8 /* CocoaCryptoHashing.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -816,6 +865,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/BWToolkit\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -829,6 +882,7 @@
 					Foundation,
 					"-framework",
 					AppKit,
+					"-lz",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = unittest;
@@ -841,6 +895,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/BWToolkit\"",
+				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
