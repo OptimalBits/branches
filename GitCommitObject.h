@@ -43,7 +43,7 @@
 @property (readwrite, retain) NSString *name;
 @property (readwrite, retain) NSString *email;
 @property (readwrite, retain) NSDate *time;
-@property (readwrite, assign)   NSInteger gmtSeconds;
+@property (readwrite, assign) NSInteger gmtSeconds;
 
 -(id) initWithName: name email: email andTime: time;
 

@@ -129,11 +129,12 @@ static NSTreeNode *workingDirTree( GitRepo *repo,
 
 - (IBAction) addFile:(id) sender
 {
-	NSURL *url = 
-		[workingDirBrowseView itemAtRow:[workingDirBrowseView selectedRow]];
+    int row = [workingDirBrowseView selectedRow];
+	NSTreeNode *treeNode = [workingDirBrowseView itemAtRow:row];
+    GitFile *file = [treeNode representedObject];
+    NSURL *url = [file url];
 	
-	NSString *filename = 
-		[[url path] substringFromIndex:[[[repo workingDir] path] length]+1];
+	NSString *filename = [[url path] substringFromIndex:[[[repo workingDir] path] length]+1];
 	
 //	if ( [modifiedFiles containsObject:filename] )
 	{
