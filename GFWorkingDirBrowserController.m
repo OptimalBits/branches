@@ -9,6 +9,8 @@
 #import "GFWorkingDirBrowserController.h"
 #import "CCDiffViewController.h"
 
+#import "GFRepoWatcher.h"
+
 #import "GitRepo.h"
 #import "GitReference.h"
 #import "GitReferenceStorage.h"
@@ -36,6 +38,8 @@ static NSTreeNode *workingDirTree( GitRepo *repo,
     {
 		fileTree = nil;
 		statusTree = nil;
+		
+		repoWatcher = nil;
 		
 		fileManager = [[NSFileManager alloc] init];
 
@@ -107,12 +111,14 @@ static NSTreeNode *workingDirTree( GitRepo *repo,
 	return result;
 }
 
-
 - (void) setRepo:(GitRepo*) _repo
 {
 	[_repo retain];
 	repo = _repo;
 		
+	[repoWatcher release];
+	repoWatcher = [[GFRepoWatcher alloc] initWithRepo:repo delegate:self];
+	
 	[self updateView];
 }
 
@@ -330,7 +336,6 @@ static NSTreeNode *workingDirTree( GitRepo *repo,
 					{
 						[iconCell setImage:[icons objectForKey:@"question"]];
 					}
-
 				}
 			}
 		}
@@ -445,6 +450,25 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}
 	}
 }
+
+
+-(void) modifiedDirectories:(NSArray*) directories
+{
+	NSError *error = nil;
+	
+	NSLog(@"Here we are", nil);
+	
+	// 
+	
+	[fileTree release];
+	fileTree = workingDirTree( repo, fileManager, &error );
+	[fileTree retain];
+	
+	//
+	
+	[workingDirBrowseView reloadData];
+}
+
 
 @end
 

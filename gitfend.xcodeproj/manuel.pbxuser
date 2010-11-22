@@ -31,32 +31,33 @@
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeArchitecturePreference = x86_64;
-		activeBuildConfigurationName = Release;
+		activeBuildConfigurationName = Debug;
 		activeExecutable = 64B58211119090B200047C5A /* gitfend */;
 		activeTarget = 8D1107260486CEB800E47090 /* gitfend */;
 		addToTargets = (
 			8D1107260486CEB800E47090 /* gitfend */,
 		);
 		breakpoints = (
-			64197F24120F5D0E00AA687A /* GitIndex.m:655 */,
+			64197F24120F5D0E00AA687A /* GitIndex.m:661 */,
 			64B79181121340B500223E14 /* GitFrontBrowseController.m:53 */,
 			64B793681216BAFD00223E14 /* gitfendAppDelegate.h:12 */,
 			642681E6121979860044FD96 /* gitfendController.m:283 */,
 			647ED148121C31A7007B0A60 /* GitIndex.m:178 */,
-			641DF53A1272FDC9009B0DA7 /* GFWorkingDirBrowserController.m:375 */,
 			6484BD3E12776DBF00BB89CC /* gitfendController.m:397 */,
-			64961DB2127A0D7A005EA49F /* GitIndex.m:509 */,
+			64961DB2127A0D7A005EA49F /* GitIndex.m:515 */,
 			64961DF9127A171D005EA49F /* GitReferenceStorage.m:329 */,
-			64961E26127A1A5C005EA49F /* GitIndex.m:481 */,
-			64961E5F127A1F75005EA49F /* GitIndex.m:475 */,
+			64961E26127A1A5C005EA49F /* GitIndex.m:487 */,
+			64961E5F127A1F75005EA49F /* GitIndex.m:481 */,
 			6486FC3E127B64AE007CA28A /* GitTreeObject.m:133 */,
 			6486FC4C127B65A3007CA28A /* GitTreeObject.m:131 */,
-			6486FC5A127B6CA6007CA28A /* GitIndex.m:507 */,
-			641B2D6A1298403100C2EA25 /* GFWorkingDirBrowserController.m:393 */,
-			641B2DB21298767E00C2EA25 /* GFWorkingDirBrowserController.m:286 */,
-			641B2DCE1298793200C2EA25 /* GFWorkingDirBrowserController.m:416 */,
-			641B2DD01298793900C2EA25 /* GFWorkingDirBrowserController.m:346 */,
-			641B2DDC1298796F00C2EA25 /* GFWorkingDirBrowserController.m:156 */,
+			6486FC5A127B6CA6007CA28A /* GitIndex.m:513 */,
+			641B2D6A1298403100C2EA25 /* GFWorkingDirBrowserController.m:398 */,
+			641B2DCE1298793200C2EA25 /* GFWorkingDirBrowserController.m:421 */,
+			641B2DDC1298796F00C2EA25 /* GFWorkingDirBrowserController.m:162 */,
+			641B2E9E129998CC00C2EA25 /* GFWorkingDirBrowserController.m:120 */,
+			641B2EB1129999D000C2EA25 /* GFRepoWatcher.m:131 */,
+			641B2F381299D38C00C2EA25 /* GFWorkingDirBrowserController.m:459 */,
+			641B2F461299D3BD00C2EA25 /* GFWorkingDirBrowserController.m:250 */,
 		);
 		codeSenseManager = 64B5822F119090C400047C5A /* Code sense */;
 		executables = (
@@ -280,6 +281,125 @@
 			641B2E60129888D500C2EA25 /* PBXTextBookmark */ = 641B2E60129888D500C2EA25 /* PBXTextBookmark */;
 			641B2E681298894500C2EA25 /* PBXTextBookmark */ = 641B2E681298894500C2EA25 /* PBXTextBookmark */;
 			641B2E691298894500C2EA25 /* PBXTextBookmark */ = 641B2E691298894500C2EA25 /* PBXTextBookmark */;
+			641B2E6C12988CC400C2EA25 /* PBXTextBookmark */ = 641B2E6C12988CC400C2EA25 /* PBXTextBookmark */;
+			641B2E6D12988CC400C2EA25 /* XCBuildMessageTextBookmark */ = 641B2E6D12988CC400C2EA25 /* XCBuildMessageTextBookmark */;
+			641B2E6E12988CC400C2EA25 /* PBXTextBookmark */ = 641B2E6E12988CC400C2EA25 /* PBXTextBookmark */;
+			641B2E7112988E5D00C2EA25 /* PBXTextBookmark */ = 641B2E7112988E5D00C2EA25 /* PBXTextBookmark */;
+			641B2E7212988E5D00C2EA25 /* PBXTextBookmark */ = 641B2E7212988E5D00C2EA25 /* PBXTextBookmark */;
+			641B2E7312988E5D00C2EA25 /* PBXTextBookmark */ = 641B2E7312988E5D00C2EA25 /* PBXTextBookmark */;
+			641B2E7412988E5D00C2EA25 /* PBXTextBookmark */ = 641B2E7412988E5D00C2EA25 /* PBXTextBookmark */;
+			641B2E7812988F7B00C2EA25 /* PBXTextBookmark */ = 641B2E7812988F7B00C2EA25 /* PBXTextBookmark */;
+			641B2E7912988F7B00C2EA25 /* PBXTextBookmark */ = 641B2E7912988F7B00C2EA25 /* PBXTextBookmark */;
+			641B2E9112997B7500C2EA25 /* PBXTextBookmark */ = 641B2E9112997B7500C2EA25 /* PBXTextBookmark */;
+			641B2E9212997B7500C2EA25 /* PBXTextBookmark */ = 641B2E9212997B7500C2EA25 /* PBXTextBookmark */;
+			641B2E9312997B7500C2EA25 /* PBXTextBookmark */ = 641B2E9312997B7500C2EA25 /* PBXTextBookmark */;
+			641B2E9412997B7500C2EA25 /* PBXTextBookmark */ = 641B2E9412997B7500C2EA25 /* PBXTextBookmark */;
+			641B2E9512997B7500C2EA25 /* PBXTextBookmark */ = 641B2E9512997B7500C2EA25 /* PBXTextBookmark */;
+			641B2E9612997B7500C2EA25 /* PBXTextBookmark */ = 641B2E9612997B7500C2EA25 /* PBXTextBookmark */;
+			641B2E9712997B7500C2EA25 /* PBXTextBookmark */ = 641B2E9712997B7500C2EA25 /* PBXTextBookmark */;
+			641B2EA4129998F100C2EA25 /* PBXTextBookmark */ = 641B2EA4129998F100C2EA25 /* PBXTextBookmark */;
+			641B2EA5129998F100C2EA25 /* PBXTextBookmark */ = 641B2EA5129998F100C2EA25 /* PBXTextBookmark */;
+			641B2EA6129998F100C2EA25 /* PBXTextBookmark */ = 641B2EA6129998F100C2EA25 /* PBXTextBookmark */;
+			641B2EA7129998F100C2EA25 /* PBXTextBookmark */ = 641B2EA7129998F100C2EA25 /* PBXTextBookmark */;
+			641B2EA8129998F100C2EA25 /* PBXTextBookmark */ = 641B2EA8129998F100C2EA25 /* PBXTextBookmark */;
+			641B2EAC1299992700C2EA25 /* PBXTextBookmark */ = 641B2EAC1299992700C2EA25 /* PBXTextBookmark */;
+			641B2EAD1299992700C2EA25 /* PBXTextBookmark */ = 641B2EAD1299992700C2EA25 /* PBXTextBookmark */;
+			641B2EAE1299992700C2EA25 /* PBXTextBookmark */ = 641B2EAE1299992700C2EA25 /* PBXTextBookmark */;
+			641B2EAF1299992700C2EA25 /* PBXTextBookmark */ = 641B2EAF1299992700C2EA25 /* PBXTextBookmark */;
+			641B2EB3129999D400C2EA25 /* PBXTextBookmark */ = 641B2EB3129999D400C2EA25 /* PBXTextBookmark */;
+			641B2EB4129999D400C2EA25 /* PBXTextBookmark */ = 641B2EB4129999D400C2EA25 /* PBXTextBookmark */;
+			641B2EB5129999D400C2EA25 /* PBXTextBookmark */ = 641B2EB5129999D400C2EA25 /* PBXTextBookmark */;
+			641B2EB812999B2400C2EA25 /* PBXTextBookmark */ = 641B2EB812999B2400C2EA25 /* PBXTextBookmark */;
+			641B2EB912999B2400C2EA25 /* PBXTextBookmark */ = 641B2EB912999B2400C2EA25 /* PBXTextBookmark */;
+			641B2EBA12999B2400C2EA25 /* PBXTextBookmark */ = 641B2EBA12999B2400C2EA25 /* PBXTextBookmark */;
+			641B2EBB12999B2400C2EA25 /* PBXTextBookmark */ = 641B2EBB12999B2400C2EA25 /* PBXTextBookmark */;
+			641B2EBE12999B3D00C2EA25 /* PBXTextBookmark */ = 641B2EBE12999B3D00C2EA25 /* PBXTextBookmark */;
+			641B2EBF12999B3D00C2EA25 /* PBXTextBookmark */ = 641B2EBF12999B3D00C2EA25 /* PBXTextBookmark */;
+			641B2EC11299A39900C2EA25 /* PBXTextBookmark */ = 641B2EC11299A39900C2EA25 /* PBXTextBookmark */;
+			641B2EC21299A39900C2EA25 /* PBXTextBookmark */ = 641B2EC21299A39900C2EA25 /* PBXTextBookmark */;
+			641B2EC31299A4E700C2EA25 /* PBXTextBookmark */ = 641B2EC31299A4E700C2EA25 /* PBXTextBookmark */;
+			641B2EC41299A4E700C2EA25 /* PBXTextBookmark */ = 641B2EC41299A4E700C2EA25 /* PBXTextBookmark */;
+			641B2EC51299A50000C2EA25 /* PBXTextBookmark */ = 641B2EC51299A50000C2EA25 /* PBXTextBookmark */;
+			641B2EC61299A50000C2EA25 /* PBXTextBookmark */ = 641B2EC61299A50000C2EA25 /* PBXTextBookmark */;
+			641B2EC71299C0CD00C2EA25 /* PBXTextBookmark */ = 641B2EC71299C0CD00C2EA25 /* PBXTextBookmark */;
+			641B2EC81299C0CD00C2EA25 /* PBXTextBookmark */ = 641B2EC81299C0CD00C2EA25 /* PBXTextBookmark */;
+			641B2EC91299C18A00C2EA25 /* PBXTextBookmark */ = 641B2EC91299C18A00C2EA25 /* PBXTextBookmark */;
+			641B2ECA1299C18A00C2EA25 /* PBXTextBookmark */ = 641B2ECA1299C18A00C2EA25 /* PBXTextBookmark */;
+			641B2ECB1299C23700C2EA25 /* PBXTextBookmark */ = 641B2ECB1299C23700C2EA25 /* PBXTextBookmark */;
+			641B2ECC1299C23700C2EA25 /* PBXTextBookmark */ = 641B2ECC1299C23700C2EA25 /* PBXTextBookmark */;
+			641B2ECD1299C23700C2EA25 /* PBXTextBookmark */ = 641B2ECD1299C23700C2EA25 /* PBXTextBookmark */;
+			641B2ECE1299C23700C2EA25 /* PBXTextBookmark */ = 641B2ECE1299C23700C2EA25 /* PBXTextBookmark */;
+			641B2ECF1299C32D00C2EA25 /* PBXTextBookmark */ = 641B2ECF1299C32D00C2EA25 /* PBXTextBookmark */;
+			641B2ED01299C32D00C2EA25 /* PBXTextBookmark */ = 641B2ED01299C32D00C2EA25 /* PBXTextBookmark */;
+			641B2ED11299C32D00C2EA25 /* PBXTextBookmark */ = 641B2ED11299C32D00C2EA25 /* PBXTextBookmark */;
+			641B2ED21299C32D00C2EA25 /* PBXTextBookmark */ = 641B2ED21299C32D00C2EA25 /* PBXTextBookmark */;
+			641B2ED31299C32D00C2EA25 /* PBXTextBookmark */ = 641B2ED31299C32D00C2EA25 /* PBXTextBookmark */;
+			641B2ED41299C32D00C2EA25 /* PBXTextBookmark */ = 641B2ED41299C32D00C2EA25 /* PBXTextBookmark */;
+			641B2EDB1299C3C400C2EA25 /* XCBuildMessageTextBookmark */ = 641B2EDB1299C3C400C2EA25 /* XCBuildMessageTextBookmark */;
+			641B2EDC1299C3DC00C2EA25 /* PBXTextBookmark */ = 641B2EDC1299C3DC00C2EA25 /* PBXTextBookmark */;
+			641B2EDD1299C3DC00C2EA25 /* PBXTextBookmark */ = 641B2EDD1299C3DC00C2EA25 /* PBXTextBookmark */;
+			641B2EDE1299C3DC00C2EA25 /* PBXTextBookmark */ = 641B2EDE1299C3DC00C2EA25 /* PBXTextBookmark */;
+			641B2EE11299C3DC00C2EA25 /* PBXTextBookmark */ = 641B2EE11299C3DC00C2EA25 /* PBXTextBookmark */;
+			641B2EE21299C3DC00C2EA25 /* PBXTextBookmark */ = 641B2EE21299C3DC00C2EA25 /* PBXTextBookmark */;
+			641B2EE81299C49500C2EA25 /* PBXTextBookmark */ = 641B2EE81299C49500C2EA25 /* PBXTextBookmark */;
+			641B2EE91299C49500C2EA25 /* PBXTextBookmark */ = 641B2EE91299C49500C2EA25 /* PBXTextBookmark */;
+			641B2EEA1299C49500C2EA25 /* PBXTextBookmark */ = 641B2EEA1299C49500C2EA25 /* PBXTextBookmark */;
+			641B2EEB1299C49500C2EA25 /* PBXTextBookmark */ = 641B2EEB1299C49500C2EA25 /* PBXTextBookmark */;
+			641B2EEC1299C49500C2EA25 /* PBXTextBookmark */ = 641B2EEC1299C49500C2EA25 /* PBXTextBookmark */;
+			641B2EED1299C49500C2EA25 /* PBXTextBookmark */ = 641B2EED1299C49500C2EA25 /* PBXTextBookmark */;
+			641B2EF01299C55300C2EA25 /* PBXTextBookmark */ = 641B2EF01299C55300C2EA25 /* PBXTextBookmark */;
+			641B2EF11299C55300C2EA25 /* PBXTextBookmark */ = 641B2EF11299C55300C2EA25 /* PBXTextBookmark */;
+			641B2EF21299C55300C2EA25 /* PBXTextBookmark */ = 641B2EF21299C55300C2EA25 /* PBXTextBookmark */;
+			641B2EF31299C55300C2EA25 /* PBXTextBookmark */ = 641B2EF31299C55300C2EA25 /* PBXTextBookmark */;
+			641B2EF41299C55300C2EA25 /* PBXTextBookmark */ = 641B2EF41299C55300C2EA25 /* PBXTextBookmark */;
+			641B2EF71299C67100C2EA25 /* PBXTextBookmark */ = 641B2EF71299C67100C2EA25 /* PBXTextBookmark */;
+			641B2EF81299C67100C2EA25 /* PBXTextBookmark */ = 641B2EF81299C67100C2EA25 /* PBXTextBookmark */;
+			641B2EF91299C67100C2EA25 /* PBXTextBookmark */ = 641B2EF91299C67100C2EA25 /* PBXTextBookmark */;
+			641B2EFA1299C67100C2EA25 /* PBXTextBookmark */ = 641B2EFA1299C67100C2EA25 /* PBXTextBookmark */;
+			641B2EFB1299C67100C2EA25 /* PBXTextBookmark */ = 641B2EFB1299C67100C2EA25 /* PBXTextBookmark */;
+			641B2EFE1299C71700C2EA25 /* PBXTextBookmark */ = 641B2EFE1299C71700C2EA25 /* PBXTextBookmark */;
+			641B2EFF1299C71700C2EA25 /* PBXTextBookmark */ = 641B2EFF1299C71700C2EA25 /* PBXTextBookmark */;
+			641B2F001299C71700C2EA25 /* PBXTextBookmark */ = 641B2F001299C71700C2EA25 /* PBXTextBookmark */;
+			641B2F0F1299CE2A00C2EA25 /* PBXTextBookmark */ = 641B2F0F1299CE2A00C2EA25 /* PBXTextBookmark */;
+			641B2F101299CE2A00C2EA25 /* PBXTextBookmark */ = 641B2F101299CE2A00C2EA25 /* PBXTextBookmark */;
+			641B2F111299CE2A00C2EA25 /* PBXTextBookmark */ = 641B2F111299CE2A00C2EA25 /* PBXTextBookmark */;
+			641B2F121299CE2A00C2EA25 /* PBXTextBookmark */ = 641B2F121299CE2A00C2EA25 /* PBXTextBookmark */;
+			641B2F131299CE2A00C2EA25 /* PBXTextBookmark */ = 641B2F131299CE2A00C2EA25 /* PBXTextBookmark */;
+			641B2F141299CE2A00C2EA25 /* PBXTextBookmark */ = 641B2F141299CE2A00C2EA25 /* PBXTextBookmark */;
+			641B2F151299CE2A00C2EA25 /* PBXTextBookmark */ = 641B2F151299CE2A00C2EA25 /* PBXTextBookmark */;
+			641B2F1B1299CEBC00C2EA25 /* PBXTextBookmark */ = 641B2F1B1299CEBC00C2EA25 /* PBXTextBookmark */;
+			641B2F1C1299CEBC00C2EA25 /* PBXTextBookmark */ = 641B2F1C1299CEBC00C2EA25 /* PBXTextBookmark */;
+			641B2F1D1299CEBC00C2EA25 /* PBXTextBookmark */ = 641B2F1D1299CEBC00C2EA25 /* PBXTextBookmark */;
+			641B2F211299CF8200C2EA25 /* PBXTextBookmark */ = 641B2F211299CF8200C2EA25 /* PBXTextBookmark */;
+			641B2F221299CF8200C2EA25 /* PBXTextBookmark */ = 641B2F221299CF8200C2EA25 /* PBXTextBookmark */;
+			641B2F231299CF8200C2EA25 /* PBXTextBookmark */ = 641B2F231299CF8200C2EA25 /* PBXTextBookmark */;
+			641B2F241299CF8200C2EA25 /* PBXTextBookmark */ = 641B2F241299CF8200C2EA25 /* PBXTextBookmark */;
+			641B2F251299CF8200C2EA25 /* PBXTextBookmark */ = 641B2F251299CF8200C2EA25 /* PBXTextBookmark */;
+			641B2F281299D02200C2EA25 /* PBXTextBookmark */ = 641B2F281299D02200C2EA25 /* PBXTextBookmark */;
+			641B2F291299D02200C2EA25 /* PBXTextBookmark */ = 641B2F291299D02200C2EA25 /* PBXTextBookmark */;
+			641B2F2A1299D02200C2EA25 /* PBXTextBookmark */ = 641B2F2A1299D02200C2EA25 /* PBXTextBookmark */;
+			641B2F2C1299D08400C2EA25 /* PBXTextBookmark */ = 641B2F2C1299D08400C2EA25 /* PBXTextBookmark */;
+			641B2F2D1299D08400C2EA25 /* PBXTextBookmark */ = 641B2F2D1299D08400C2EA25 /* PBXTextBookmark */;
+			641B2F2E1299D08400C2EA25 /* PBXTextBookmark */ = 641B2F2E1299D08400C2EA25 /* PBXTextBookmark */;
+			641B2F2F1299D16B00C2EA25 /* PBXTextBookmark */ = 641B2F2F1299D16B00C2EA25 /* PBXTextBookmark */;
+			641B2F301299D16B00C2EA25 /* PBXTextBookmark */ = 641B2F301299D16B00C2EA25 /* PBXTextBookmark */;
+			641B2F311299D16B00C2EA25 /* PBXTextBookmark */ = 641B2F311299D16B00C2EA25 /* PBXTextBookmark */;
+			641B2F341299D33400C2EA25 /* PBXTextBookmark */ = 641B2F341299D33400C2EA25 /* PBXTextBookmark */;
+			641B2F351299D33400C2EA25 /* PBXTextBookmark */ = 641B2F351299D33400C2EA25 /* PBXTextBookmark */;
+			641B2F361299D33400C2EA25 /* PBXTextBookmark */ = 641B2F361299D33400C2EA25 /* PBXTextBookmark */;
+			641B2F3A1299D39200C2EA25 /* PBXTextBookmark */ = 641B2F3A1299D39200C2EA25 /* PBXTextBookmark */;
+			641B2F3B1299D39200C2EA25 /* PBXTextBookmark */ = 641B2F3B1299D39200C2EA25 /* PBXTextBookmark */;
+			641B2F3C1299D39200C2EA25 /* PBXTextBookmark */ = 641B2F3C1299D39200C2EA25 /* PBXTextBookmark */;
+			641B2F3D1299D39200C2EA25 /* PBXTextBookmark */ = 641B2F3D1299D39200C2EA25 /* PBXTextBookmark */;
+			641B2F3E1299D39200C2EA25 /* PBXTextBookmark */ = 641B2F3E1299D39200C2EA25 /* PBXTextBookmark */;
+			641B2F3F1299D39400C2EA25 /* PBXTextBookmark */ = 641B2F3F1299D39400C2EA25 /* PBXTextBookmark */;
+			641B2F401299D39400C2EA25 /* PBXTextBookmark */ = 641B2F401299D39400C2EA25 /* PBXTextBookmark */;
+			641B2F411299D39400C2EA25 /* PBXTextBookmark */ = 641B2F411299D39400C2EA25 /* PBXTextBookmark */;
+			641B2F4D1299D47F00C2EA25 /* PBXTextBookmark */ = 641B2F4D1299D47F00C2EA25 /* PBXTextBookmark */;
+			641B2F4E1299D47F00C2EA25 /* PBXTextBookmark */ = 641B2F4E1299D47F00C2EA25 /* PBXTextBookmark */;
+			641B2F4F1299D47F00C2EA25 /* PBXTextBookmark */ = 641B2F4F1299D47F00C2EA25 /* PBXTextBookmark */;
+			641B2F501299D47F00C2EA25 /* PBXTextBookmark */ = 641B2F501299D47F00C2EA25 /* PBXTextBookmark */;
+			641B2F511299D47F00C2EA25 /* PBXTextBookmark */ = 641B2F511299D47F00C2EA25 /* PBXTextBookmark */;
 			641DF3371271FBF0009B0DA7 = 641DF3371271FBF0009B0DA7 /* PBXTextBookmark */;
 			641DF36B12720F58009B0DA7 = 641DF36B12720F58009B0DA7 /* PBXTextBookmark */;
 			641DF36E12720F58009B0DA7 = 641DF36E12720F58009B0DA7 /* PBXTextBookmark */;
@@ -385,19 +505,19 @@
 	640E83C2121AAA050087FB27 /* GFWorkingDirBrowserController.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {710, 788}}";
-			sepNavSelRange = "{561, 0}";
-			sepNavVisRange = "{0, 916}";
+			sepNavSelRange = "{329, 25}";
+			sepNavVisRange = "{0, 969}";
 		};
 	};
 	640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {792, 7111}}";
-			sepNavSelRange = "{9225, 0}";
-			sepNavVisRange = "{8081, 1305}";
+			sepNavIntBoundsRect = "{{0, 0}, {792, 7436}}";
+			sepNavSelRange = "{9635, 0}";
+			sepNavVisRange = "{8226, 1158}";
 			sepNavWindowFrame = "{{220, 224}, {851, 778}}";
 		};
 	};
-	64197F24120F5D0E00AA687A /* GitIndex.m:655 */ = {
+	64197F24120F5D0E00AA687A /* GitIndex.m:661 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -409,9 +529,9 @@
 		functionName = "readEntry()";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 655;
+		lineNumber = 661;
 		location = gitfend;
-		modificationTime = 311983520.611962;
+		modificationTime = 312071052.379119;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -562,7 +682,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 159";
 		rLen = 0;
-		rLoc = 3152;
+		rLoc = 3300;
 		rType = 0;
 		vrLen = 1135;
 		vrLoc = 6603;
@@ -572,7 +692,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 368";
 		rLen = 0;
-		rLoc = 7500;
+		rLoc = 7647;
 		rType = 0;
 		vrLen = 1017;
 		vrLoc = 6779;
@@ -582,7 +702,7 @@
 		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
 		name = "GitIndex.m: 352";
 		rLen = 0;
-		rLoc = 7484;
+		rLoc = 7596;
 		rType = 0;
 		vrLen = 1184;
 		vrLoc = 7689;
@@ -592,7 +712,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 366";
 		rLen = 0;
-		rLoc = 7495;
+		rLoc = 7642;
 		rType = 0;
 		vrLen = 678;
 		vrLoc = 3456;
@@ -602,7 +722,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 366";
 		rLen = 0;
-		rLoc = 7495;
+		rLoc = 7642;
 		rType = 0;
 		vrLen = 599;
 		vrLoc = 3456;
@@ -621,7 +741,7 @@
 		isa = PBXTextBookmark;
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		rLen = 0;
-		rLoc = 182;
+		rLoc = 188;
 		rType = 1;
 	};
 	641B2D3F12980DAC00C2EA25 /* PBXTextBookmark */ = {
@@ -629,7 +749,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 182";
 		rLen = 0;
-		rLoc = 3688;
+		rLoc = 3836;
 		rType = 0;
 		vrLen = 642;
 		vrLoc = 3430;
@@ -659,7 +779,7 @@
 		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
 		name = "GitIndex.m: 194";
 		rLen = 0;
-		rLoc = 3403;
+		rLoc = 3404;
 		rType = 0;
 		vrLen = 1229;
 		vrLoc = 2849;
@@ -669,7 +789,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 377";
 		rLen = 0;
-		rLoc = 7427;
+		rLoc = 7574;
 		rType = 0;
 		vrLen = 1416;
 		vrLoc = 6473;
@@ -679,12 +799,12 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 374";
 		rLen = 0;
-		rLoc = 7323;
+		rLoc = 7470;
 		rType = 0;
 		vrLen = 1402;
 		vrLoc = 6538;
 	};
-	641B2D6A1298403100C2EA25 /* GFWorkingDirBrowserController.m:393 */ = {
+	641B2D6A1298403100C2EA25 /* GFWorkingDirBrowserController.m:398 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -696,9 +816,9 @@
 		functionName = "-outlineView:objectValueForTableColumn:byItem:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 393;
+		lineNumber = 398;
 		location = gitfend;
-		modificationTime = 311983521.48005;
+		modificationTime = 312071060.163577;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -727,7 +847,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 359";
 		rLen = 0;
-		rLoc = 6958;
+		rLoc = 7105;
 		rType = 0;
 		vrLen = 1325;
 		vrLoc = 7091;
@@ -737,7 +857,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 359";
 		rLen = 0;
-		rLoc = 6958;
+		rLoc = 7105;
 		rType = 0;
 		vrLen = 1322;
 		vrLoc = 6622;
@@ -747,7 +867,7 @@
 		fRef = 640E83C2121AAA050087FB27 /* GFWorkingDirBrowserController.h */;
 		name = "GFWorkingDirBrowserController.h: 27";
 		rLen = 0;
-		rLoc = 561;
+		rLoc = 583;
 		rType = 0;
 		vrLen = 916;
 		vrLoc = 0;
@@ -757,7 +877,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 38";
 		rLen = 0;
-		rLoc = 763;
+		rLoc = 790;
 		rType = 0;
 		vrLen = 1251;
 		vrLoc = 8953;
@@ -767,7 +887,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 161";
 		rLen = 0;
-		rLoc = 3140;
+		rLoc = 3288;
 		rType = 0;
 		vrLen = 1073;
 		vrLoc = 9382;
@@ -777,7 +897,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 438";
 		rLen = 0;
-		rLoc = 8730;
+		rLoc = 8877;
 		rType = 0;
 		vrLen = 1599;
 		vrLoc = 8005;
@@ -787,7 +907,7 @@
 		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
 		name = "GitIndex.m: 194";
 		rLen = 0;
-		rLoc = 3403;
+		rLoc = 3404;
 		rType = 0;
 		vrLen = 1229;
 		vrLoc = 2849;
@@ -797,7 +917,7 @@
 		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
 		name = "GitIndex.m: 217";
 		rLen = 0;
-		rLoc = 4169;
+		rLoc = 4281;
 		rType = 0;
 		vrLen = 1107;
 		vrLoc = 3193;
@@ -817,7 +937,7 @@
 		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
 		name = "GitIndex.m: 217";
 		rLen = 0;
-		rLoc = 4169;
+		rLoc = 4281;
 		rType = 0;
 		vrLen = 1115;
 		vrLoc = 3051;
@@ -837,7 +957,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 503";
 		rLen = 0;
-		rLoc = 10393;
+		rLoc = 10803;
 		rType = 0;
 		vrLen = 1283;
 		vrLoc = 9225;
@@ -847,7 +967,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 509";
 		rLen = 0;
-		rLoc = 10557;
+		rLoc = 10967;
 		rType = 0;
 		vrLen = 1262;
 		vrLoc = 9225;
@@ -857,7 +977,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 503";
 		rLen = 0;
-		rLoc = 10395;
+		rLoc = 10805;
 		rType = 0;
 		vrLen = 1270;
 		vrLoc = 9410;
@@ -867,7 +987,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 503";
 		rLen = 0;
-		rLoc = 10321;
+		rLoc = 10731;
 		rType = 0;
 		vrLen = 1230;
 		vrLoc = 9410;
@@ -877,7 +997,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 506";
 		rLen = 0;
-		rLoc = 10481;
+		rLoc = 10891;
 		rType = 0;
 		vrLen = 1254;
 		vrLoc = 9410;
@@ -887,7 +1007,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 504";
 		rLen = 0;
-		rLoc = 10338;
+		rLoc = 10748;
 		rType = 0;
 		vrLen = 1251;
 		vrLoc = 9410;
@@ -898,7 +1018,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		fallbackIsa = XCBuildMessageTextBookmark;
 		rLen = 1;
-		rLoc = 451;
+		rLoc = 475;
 		rType = 1;
 	};
 	641B2D97129873C500C2EA25 /* XCBuildMessageTextBookmark */ = {
@@ -907,7 +1027,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		fallbackIsa = XCBuildMessageTextBookmark;
 		rLen = 1;
-		rLoc = 451;
+		rLoc = 475;
 		rType = 1;
 	};
 	641B2D98129873C500C2EA25 /* PBXTextBookmark */ = {
@@ -915,7 +1035,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 457";
 		rLen = 0;
-		rLoc = 9126;
+		rLoc = 9536;
 		rType = 0;
 		vrLen = 656;
 		vrLoc = 9034;
@@ -925,7 +1045,7 @@
 		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
 		name = "GitIndex.m: 194";
 		rLen = 69;
-		rLoc = 3469;
+		rLoc = 3470;
 		rType = 0;
 		vrLen = 1134;
 		vrLoc = 3036;
@@ -955,7 +1075,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 508";
 		rLen = 0;
-		rLoc = 10416;
+		rLoc = 10826;
 		rType = 0;
 		vrLen = 1249;
 		vrLoc = 9489;
@@ -965,7 +1085,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 533";
 		rLen = 0;
-		rLoc = 11086;
+		rLoc = 11496;
 		rType = 0;
 		vrLen = 1321;
 		vrLoc = 6655;
@@ -975,7 +1095,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 457";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1165;
 		vrLoc = 9196;
@@ -985,7 +1105,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 360";
 		rLen = 0;
-		rLoc = 6958;
+		rLoc = 7105;
 		rType = 0;
 		vrLen = 1321;
 		vrLoc = 6655;
@@ -995,7 +1115,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 518";
 		rLen = 0;
-		rLoc = 10782;
+		rLoc = 11192;
 		rType = 0;
 		vrLen = 1041;
 		vrLoc = 10024;
@@ -1005,35 +1125,17 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 457";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1051;
 		vrLoc = 9189;
-	};
-	641B2DB21298767E00C2EA25 /* GFWorkingDirBrowserController.m:286 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		breakpointStyle = 0;
-		continueAfterActions = 0;
-		countType = 0;
-		delayBeforeContinue = 0;
-		fileReference = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
-		functionName = "-outlineView:willDisplayCell:forTableColumn:item:";
-		hitCount = 0;
-		ignoreCount = 0;
-		lineNumber = 286;
-		location = gitfend;
-		modificationTime = 311983521.54611;
-		originalNumberOfMultipleMatches = 1;
-		state = 1;
 	};
 	641B2DB41298769900C2EA25 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 287";
 		rLen = 0;
-		rLoc = 5303;
+		rLoc = 5451;
 		rType = 0;
 		vrLen = 1442;
 		vrLoc = 4845;
@@ -1043,7 +1145,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 476";
 		rLen = 0;
-		rLoc = 9734;
+		rLoc = 10144;
 		rType = 0;
 		vrLen = 1213;
 		vrLoc = 9640;
@@ -1053,7 +1155,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1163;
 		vrLoc = 9192;
@@ -1063,7 +1165,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 510";
 		rLen = 0;
-		rLoc = 10486;
+		rLoc = 10896;
 		rType = 0;
 		vrLen = 1366;
 		vrLoc = 9433;
@@ -1073,7 +1175,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1200;
 		vrLoc = 9192;
@@ -1083,7 +1185,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 510";
 		rLen = 0;
-		rLoc = 10486;
+		rLoc = 10896;
 		rType = 0;
 		vrLen = 1381;
 		vrLoc = 9155;
@@ -1093,7 +1195,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1200;
 		vrLoc = 9192;
@@ -1103,7 +1205,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 510";
 		rLen = 0;
-		rLoc = 10486;
+		rLoc = 10896;
 		rType = 0;
 		vrLen = 1288;
 		vrLoc = 9846;
@@ -1113,7 +1215,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1200;
 		vrLoc = 9192;
@@ -1123,7 +1225,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 510";
 		rLen = 0;
-		rLoc = 10486;
+		rLoc = 10896;
 		rType = 0;
 		vrLen = 1250;
 		vrLoc = 6954;
@@ -1133,7 +1235,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1200;
 		vrLoc = 9192;
@@ -1143,7 +1245,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 380";
 		rLen = 0;
-		rLoc = 7519;
+		rLoc = 7666;
 		rType = 0;
 		vrLen = 1311;
 		vrLoc = 6993;
@@ -1153,12 +1255,12 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 455";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1219;
 		vrLoc = 9235;
 	};
-	641B2DCE1298793200C2EA25 /* GFWorkingDirBrowserController.m:416 */ = {
+	641B2DCE1298793200C2EA25 /* GFWorkingDirBrowserController.m:421 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1170,27 +1272,9 @@
 		functionName = "-outlineViewSelectionDidChange:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 416;
+		lineNumber = 421;
 		location = gitfend;
-		modificationTime = 311983521.590713;
-		originalNumberOfMultipleMatches = 1;
-		state = 1;
-	};
-	641B2DD01298793900C2EA25 /* GFWorkingDirBrowserController.m:346 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		breakpointStyle = 0;
-		continueAfterActions = 0;
-		countType = 0;
-		delayBeforeContinue = 0;
-		fileReference = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
-		functionName = "-outlineView:objectValueForTableColumn:byItem:";
-		hitCount = 0;
-		ignoreCount = 0;
-		lineNumber = 346;
-		location = gitfend;
-		modificationTime = 311983521.63452;
+		modificationTime = 312071060.284461;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1219,7 +1303,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 374";
 		rLen = 0;
-		rLoc = 7353;
+		rLoc = 7500;
 		rType = 0;
 		vrLen = 1337;
 		vrLoc = 6639;
@@ -1229,7 +1313,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 374";
 		rLen = 0;
-		rLoc = 7353;
+		rLoc = 7500;
 		rType = 0;
 		vrLen = 1138;
 		vrLoc = 2926;
@@ -1239,12 +1323,12 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1189;
 		vrLoc = 9285;
 	};
-	641B2DDC1298796F00C2EA25 /* GFWorkingDirBrowserController.m:156 */ = {
+	641B2DDC1298796F00C2EA25 /* GFWorkingDirBrowserController.m:162 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1254,11 +1338,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		functionName = "-updateView";
-		hitCount = 1;
+		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 156;
+		lineNumber = 162;
 		location = gitfend;
-		modificationTime = 311983529.243974;
+		modificationTime = 312071060.430233;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1267,7 +1351,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 374";
 		rLen = 0;
-		rLoc = 7353;
+		rLoc = 7500;
 		rType = 0;
 		vrLen = 1138;
 		vrLoc = 2926;
@@ -1277,7 +1361,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 374";
 		rLen = 0;
-		rLoc = 7353;
+		rLoc = 7500;
 		rType = 0;
 		vrLen = 1138;
 		vrLoc = 2926;
@@ -1287,7 +1371,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1189;
 		vrLoc = 9285;
@@ -1306,7 +1390,7 @@
 		isa = PBXTextBookmark;
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		rLen = 0;
-		rLoc = 459;
+		rLoc = 483;
 		rType = 1;
 	};
 	641B2DE5129879A700C2EA25 /* PBXTextBookmark */ = {
@@ -1314,7 +1398,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 461";
 		rLen = 0;
-		rLoc = 9386;
+		rLoc = 9796;
 		rType = 0;
 		vrLen = 1503;
 		vrLoc = 8700;
@@ -1324,7 +1408,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1189;
 		vrLoc = 9285;
@@ -1334,7 +1418,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 461";
 		rLen = 0;
-		rLoc = 9386;
+		rLoc = 9796;
 		rType = 0;
 		vrLen = 1483;
 		vrLoc = 8731;
@@ -1344,7 +1428,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1189;
 		vrLoc = 9285;
@@ -1354,7 +1438,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 461";
 		rLen = 0;
-		rLoc = 9386;
+		rLoc = 9796;
 		rType = 0;
 		vrLen = 1491;
 		vrLoc = 8812;
@@ -1364,7 +1448,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1189;
 		vrLoc = 9291;
@@ -1374,7 +1458,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 461";
 		rLen = 0;
-		rLoc = 9386;
+		rLoc = 9796;
 		rType = 0;
 		vrLen = 1452;
 		vrLoc = 8771;
@@ -1384,7 +1468,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1192;
 		vrLoc = 9291;
@@ -1394,7 +1478,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 461";
 		rLen = 0;
-		rLoc = 9386;
+		rLoc = 9796;
 		rType = 0;
 		vrLen = 1428;
 		vrLoc = 8858;
@@ -1404,7 +1488,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1177;
 		vrLoc = 9291;
@@ -1414,7 +1498,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 461";
 		rLen = 0;
-		rLoc = 9386;
+		rLoc = 9796;
 		rType = 0;
 		vrLen = 1470;
 		vrLoc = 8862;
@@ -1424,7 +1508,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1173;
 		vrLoc = 9291;
@@ -1434,7 +1518,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 456";
 		rLen = 0;
-		rLoc = 9386;
+		rLoc = 9796;
 		rType = 0;
 		vrLen = 1346;
 		vrLoc = 9063;
@@ -1444,7 +1528,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 451";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1137;
 		vrLoc = 9342;
@@ -1454,7 +1538,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 449";
 		rLen = 0;
-		rLoc = 9126;
+		rLoc = 9536;
 		rType = 0;
 		vrLen = 910;
 		vrLoc = 8354;
@@ -1474,7 +1558,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 449";
 		rLen = 0;
-		rLoc = 9133;
+		rLoc = 9543;
 		rType = 0;
 		vrLen = 1351;
 		vrLoc = 9063;
@@ -1484,7 +1568,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 467";
 		rLen = 0;
-		rLoc = 9659;
+		rLoc = 10069;
 		rType = 0;
 		vrLen = 1201;
 		vrLoc = 3;
@@ -1494,7 +1578,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 451";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1191;
 		vrLoc = 9230;
@@ -1504,7 +1588,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 517";
 		rLen = 0;
-		rLoc = 10683;
+		rLoc = 11093;
 		rType = 0;
 		vrLen = 1309;
 		vrLoc = 9683;
@@ -1514,7 +1598,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 451";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1191;
 		vrLoc = 9230;
@@ -1524,7 +1608,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 423";
 		rLen = 0;
-		rLoc = 8477;
+		rLoc = 8624;
 		rType = 0;
 		vrLen = 1201;
 		vrLoc = 3;
@@ -1534,7 +1618,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 449";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1334;
 		vrLoc = 8202;
@@ -1544,7 +1628,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 423";
 		rLen = 0;
-		rLoc = 8477;
+		rLoc = 8624;
 		rType = 0;
 		vrLen = 1270;
 		vrLoc = 3;
@@ -1554,7 +1638,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 415";
 		rLen = 0;
-		rLoc = 8289;
+		rLoc = 8436;
 		rType = 0;
 		vrLen = 1483;
 		vrLoc = 7841;
@@ -1564,7 +1648,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 452";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1284;
 		vrLoc = 8093;
@@ -1574,7 +1658,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 415";
 		rLen = 0;
-		rLoc = 8289;
+		rLoc = 8436;
 		rType = 0;
 		vrLen = 1535;
 		vrLoc = 7841;
@@ -1603,7 +1687,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 452";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1284;
 		vrLoc = 8093;
@@ -1613,7 +1697,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 415";
 		rLen = 0;
-		rLoc = 8289;
+		rLoc = 8436;
 		rType = 0;
 		vrLen = 1535;
 		vrLoc = 7841;
@@ -1647,7 +1731,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 452";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1284;
 		vrLoc = 8093;
@@ -1667,7 +1751,7 @@
 		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
 		name = "GitIndex.m: 194";
 		rLen = 69;
-		rLoc = 3469;
+		rLoc = 3470;
 		rType = 0;
 		vrLen = 1068;
 		vrLoc = 16219;
@@ -1677,7 +1761,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 457";
 		rLen = 0;
-		rLoc = 9376;
+		rLoc = 9786;
 		rType = 0;
 		vrLen = 1312;
 		vrLoc = 9752;
@@ -1687,7 +1771,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 452";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1286;
 		vrLoc = 8093;
@@ -1697,7 +1781,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 375";
 		rLen = 0;
-		rLoc = 7500;
+		rLoc = 7647;
 		rType = 0;
 		vrLen = 1345;
 		vrLoc = 6524;
@@ -1707,7 +1791,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 453";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1286;
 		vrLoc = 8101;
@@ -1717,7 +1801,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 490";
 		rLen = 0;
-		rLoc = 10085;
+		rLoc = 10495;
 		rType = 0;
 		vrLen = 1329;
 		vrLoc = 9438;
@@ -1727,10 +1811,1282 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 453";
 		rLen = 0;
-		rLoc = 9225;
+		rLoc = 9635;
 		rType = 0;
 		vrLen = 1305;
 		vrLoc = 8081;
+	};
+	641B2E6C12988CC400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 450";
+		rLen = 0;
+		rLoc = 9536;
+		rType = 0;
+		vrLen = 943;
+		vrLoc = 8114;
+	};
+	641B2E6D12988CC400C2EA25 /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "Synthesized property 'sha1' must either be named the same as a compatible ivar or must explicitly name an ivar";
+		fRef = 645669BE121DB75A00F96CCD /* GitCommitObject.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 73;
+		rType = 1;
+	};
+	641B2E6E12988CC400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 645669BE121DB75A00F96CCD /* GitCommitObject.m */;
+		name = "GitCommitObject.m: 74";
+		rLen = 0;
+		rLoc = 1632;
+		rType = 0;
+		vrLen = 631;
+		vrLoc = 1495;
+	};
+	641B2E7112988E5D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 477";
+		rLen = 0;
+		rLoc = 10221;
+		rType = 0;
+		vrLen = 1622;
+		vrLoc = 7921;
+	};
+	641B2E7212988E5D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
+		name = "GitIndex.m: 194";
+		rLen = 69;
+		rLoc = 3470;
+		rType = 0;
+		vrLen = 1128;
+		vrLoc = 16161;
+	};
+	641B2E7312988E5D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
+		name = "GitIndex.m: 230";
+		rLen = 0;
+		rLoc = 4265;
+		rType = 0;
+		vrLen = 1033;
+		vrLoc = 3363;
+	};
+	641B2E7412988E5D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 453";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1303;
+		vrLoc = 8081;
+	};
+	641B2E7812988F7B00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
+		name = "GitIndex.m: 20";
+		rLen = 0;
+		rLoc = 331;
+		rType = 0;
+		vrLen = 817;
+		vrLoc = 0;
+	};
+	641B2E7912988F7B00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 453";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1303;
+		vrLoc = 8081;
+	};
+	641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {710, 811}}";
+			sepNavSelRange = "{208, 50}";
+			sepNavVisRange = "{0, 524}";
+			sepNavWindowFrame = "{{38, 224}, {983, 778}}";
+		};
+	};
+	641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {924, 1794}}";
+			sepNavSelRange = "{763, 0}";
+			sepNavVisRange = "{35, 1176}";
+		};
+	};
+	641B2E9112997B7500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
+		name = "GitIndex.m: 18";
+		rLen = 0;
+		rLoc = 330;
+		rType = 0;
+		vrLen = 853;
+		vrLoc = 0;
+	};
+	641B2E9212997B7500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 67";
+		rLen = 0;
+		rLoc = 1820;
+		rType = 0;
+		vrLen = 1575;
+		vrLoc = 0;
+	};
+	641B2E9312997B7500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 16";
+		rLen = 0;
+		rLoc = 426;
+		rType = 0;
+		vrLen = 327;
+		vrLoc = 0;
+	};
+	641B2E9412997B7500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 116";
+		rLen = 0;
+		rLoc = 2348;
+		rType = 0;
+		vrLen = 1172;
+		vrLoc = 1584;
+	};
+	641B2E9512997B7500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C2121AAA050087FB27 /* GFWorkingDirBrowserController.h */;
+		name = "GFWorkingDirBrowserController.h: 27";
+		rLen = 0;
+		rLoc = 583;
+		rType = 0;
+		vrLen = 916;
+		vrLoc = 0;
+	};
+	641B2E9612997B7500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C2121AAA050087FB27 /* GFWorkingDirBrowserController.h */;
+		name = "GFWorkingDirBrowserController.h: 30";
+		rLen = 0;
+		rLoc = 637;
+		rType = 0;
+		vrLen = 934;
+		vrLoc = 0;
+	};
+	641B2E9712997B7500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 457";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1305;
+		vrLoc = 8165;
+	};
+	641B2E9E129998CC00C2EA25 /* GFWorkingDirBrowserController.m:120 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		functionName = "-setRepo:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 120;
+		location = gitfend;
+		modificationTime = 312071060.510992;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	641B2EA4129998F100C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 64B793571216B8BF00223E14 /* GitFrontRepositories.h */;
+		name = "GitFrontRepositories.h: 54";
+		rLen = 0;
+		rLoc = 895;
+		rType = 0;
+		vrLen = 1064;
+		vrLoc = 0;
+	};
+	641B2EA5129998F100C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C2121AAA050087FB27 /* GFWorkingDirBrowserController.h */;
+		name = "GFWorkingDirBrowserController.h: 14";
+		rLen = 0;
+		rLoc = 266;
+		rType = 0;
+		vrLen = 969;
+		vrLoc = 0;
+	};
+	641B2EA6129998F100C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 40";
+		rLen = 0;
+		rLoc = 831;
+		rType = 0;
+		vrLen = 1172;
+		vrLoc = 1608;
+	};
+	641B2EA7129998F100C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 12";
+		rLen = 0;
+		rLoc = 255;
+		rType = 0;
+		vrLen = 1108;
+		vrLoc = 3;
+	};
+	641B2EA8129998F100C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 461";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1238;
+		vrLoc = 8205;
+	};
+	641B2EAC1299992700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 12";
+		rLen = 0;
+		rLoc = 255;
+		rType = 0;
+		vrLen = 1196;
+		vrLoc = 1758;
+	};
+	641B2EAD1299992700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		rLen = 0;
+		rLoc = 33;
+		rType = 1;
+	};
+	641B2EAE1299992700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 26";
+		rLen = 0;
+		rLoc = 706;
+		rType = 0;
+		vrLen = 1606;
+		vrLoc = 38;
+	};
+	641B2EAF1299992700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 461";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1238;
+		vrLoc = 8205;
+	};
+	641B2EB1129999D000C2EA25 /* GFRepoWatcher.m:131 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		functionName = "RepoWatcherStreamCallback()";
+		hitCount = 1;
+		ignoreCount = 0;
+		lineNumber = 131;
+		location = gitfend;
+		modificationTime = 312071131.819039;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	641B2EB3129999D400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 26";
+		rLen = 0;
+		rLoc = 706;
+		rType = 0;
+		vrLen = 1411;
+		vrLoc = 568;
+	};
+	641B2EB4129999D400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 26";
+		rLen = 0;
+		rLoc = 706;
+		rType = 0;
+		vrLen = 1446;
+		vrLoc = 533;
+	};
+	641B2EB5129999D400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 461";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1238;
+		vrLoc = 8205;
+	};
+	641B2EB812999B2400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 340";
+		rLen = 0;
+		rLoc = 6649;
+		rType = 0;
+		vrLen = 1388;
+		vrLoc = 6645;
+	};
+	641B2EB912999B2400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 91";
+		rLen = 0;
+		rLoc = 3144;
+		rType = 0;
+		vrLen = 1428;
+		vrLoc = 832;
+	};
+	641B2EBA12999B2400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 70";
+		rLen = 0;
+		rLoc = 2047;
+		rType = 0;
+		vrLen = 1428;
+		vrLoc = 832;
+	};
+	641B2EBB12999B2400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2EBE12999B3D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 88";
+		rLen = 0;
+		rLoc = 2856;
+		rType = 0;
+		vrLen = 1410;
+		vrLoc = 832;
+	};
+	641B2EBF12999B3D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2EC11299A39900C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 88";
+		rLen = 0;
+		rLoc = 2524;
+		rType = 0;
+		vrLen = 1102;
+		vrLoc = 1351;
+	};
+	641B2EC21299A39900C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2EC31299A4E700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 96";
+		rLen = 0;
+		rLoc = 2713;
+		rType = 0;
+		vrLen = 1273;
+		vrLoc = 1351;
+	};
+	641B2EC41299A4E700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2EC51299A50000C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 100";
+		rLen = 0;
+		rLoc = 2851;
+		rType = 0;
+		vrLen = 1273;
+		vrLoc = 1351;
+	};
+	641B2EC61299A50000C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2EC71299C0CD00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 101";
+		rLen = 0;
+		rLoc = 2743;
+		rType = 0;
+		vrLen = 1368;
+		vrLoc = 1406;
+	};
+	641B2EC81299C0CD00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2EC91299C18A00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 111";
+		rLen = 0;
+		rLoc = 3004;
+		rType = 0;
+		vrLen = 1364;
+		vrLoc = 1406;
+	};
+	641B2ECA1299C18A00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2ECB1299C23700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 28";
+		rLen = 0;
+		rLoc = 760;
+		rType = 0;
+		vrLen = 1348;
+		vrLoc = 1477;
+	};
+	641B2ECC1299C23700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 18";
+		rLen = 0;
+		rLoc = 426;
+		rType = 0;
+		vrLen = 344;
+		vrLoc = 0;
+	};
+	641B2ECD1299C23700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 18";
+		rLen = 0;
+		rLoc = 426;
+		rType = 0;
+		vrLen = 344;
+		vrLoc = 0;
+	};
+	641B2ECE1299C23700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2ECF1299C32D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 340";
+		rLen = 0;
+		rLoc = 6649;
+		rType = 0;
+		vrLen = 1383;
+		vrLoc = 6650;
+	};
+	641B2ED01299C32D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C2121AAA050087FB27 /* GFWorkingDirBrowserController.h */;
+		name = "GFWorkingDirBrowserController.h: 16";
+		rLen = 25;
+		rLoc = 329;
+		rType = 0;
+		vrLen = 969;
+		vrLoc = 0;
+	};
+	641B2ED11299C32D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 28";
+		rLen = 0;
+		rLoc = 760;
+		rType = 0;
+		vrLen = 1363;
+		vrLoc = 1461;
+	};
+	641B2ED21299C32D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 19";
+		rLen = 0;
+		rLoc = 517;
+		rType = 0;
+		vrLen = 327;
+		vrLoc = 0;
+	};
+	641B2ED31299C32D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 14";
+		rLen = 0;
+		rLoc = 321;
+		rType = 0;
+		vrLen = 351;
+		vrLoc = 0;
+	};
+	641B2ED41299C32D00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2EDB1299C3C400C2EA25 /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "'callback' undeclared (first use in this function)";
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 35;
+		rType = 1;
+	};
+	641B2EDC1299C3DC00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 24";
+		rLen = 0;
+		rLoc = 703;
+		rType = 0;
+		vrLen = 1504;
+		vrLoc = 3;
+	};
+	641B2EDD1299C3DC00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 28";
+		rLen = 46;
+		rLoc = 470;
+		rType = 0;
+		vrLen = 493;
+		vrLoc = 0;
+	};
+	641B2EDE1299C3DC00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 29";
+		rLen = 0;
+		rLoc = 517;
+		rType = 0;
+		vrLen = 496;
+		vrLoc = 0;
+	};
+	641B2EE11299C3DC00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 21";
+		rLen = 0;
+		rLoc = 581;
+		rType = 0;
+		vrLen = 1193;
+		vrLoc = 3;
+	};
+	641B2EE21299C3DC00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2EE81299C49500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 6429F69911A9BF9500FAAB90 /* NSDataExtension.h */;
+		name = "NSDataExtension.h: 11";
+		rLen = 35;
+		rLoc = 176;
+		rType = 0;
+		vrLen = 1161;
+		vrLoc = 0;
+	};
+	641B2EE91299C49500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 30";
+		rLen = 0;
+		rLoc = 615;
+		rType = 0;
+		vrLen = 1471;
+		vrLoc = 0;
+	};
+	641B2EEA1299C49500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 29";
+		rLen = 0;
+		rLoc = 517;
+		rType = 0;
+		vrLen = 496;
+		vrLoc = 0;
+	};
+	641B2EEB1299C49500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 29";
+		rLen = 0;
+		rLoc = 506;
+		rType = 0;
+		vrLen = 472;
+		vrLoc = 0;
+	};
+	641B2EEC1299C49500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 36";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1133;
+		vrLoc = 35;
+	};
+	641B2EED1299C49500C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2EF01299C55300C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 33";
+		rLen = 0;
+		rLoc = 524;
+		rType = 0;
+		vrLen = 500;
+		vrLoc = 0;
+	};
+	641B2EF11299C55300C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 30";
+		rLen = 0;
+		rLoc = 615;
+		rType = 0;
+		vrLen = 1471;
+		vrLoc = 0;
+	};
+	641B2EF21299C55300C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 127";
+		rLen = 0;
+		rLoc = 3105;
+		rType = 0;
+		vrLen = 1237;
+		vrLoc = 1764;
+	};
+	641B2EF31299C55300C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 36";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1133;
+		vrLoc = 35;
+	};
+	641B2EF41299C55300C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2EF71299C67100C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 14";
+		rLen = 20;
+		rLoc = 216;
+		rType = 0;
+		vrLen = 500;
+		vrLoc = 0;
+	};
+	641B2EF81299C67100C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 88";
+		rLen = 0;
+		rLoc = 2043;
+		rType = 0;
+		vrLen = 1377;
+		vrLoc = 1168;
+	};
+	641B2EF91299C67100C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 84";
+		rLen = 0;
+		rLoc = 1950;
+		rType = 0;
+		vrLen = 1388;
+		vrLoc = 1168;
+	};
+	641B2EFA1299C67100C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 36";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1133;
+		vrLoc = 35;
+	};
+	641B2EFB1299C67100C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2EFE1299C71700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 84";
+		rLen = 0;
+		rLoc = 1950;
+		rType = 0;
+		vrLen = 1388;
+		vrLoc = 1168;
+	};
+	641B2EFF1299C71700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 36";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1133;
+		vrLoc = 35;
+	};
+	641B2F001299C71700C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 460";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1265;
+		vrLoc = 8206;
+	};
+	641B2F0F1299CE2A00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 90";
+		rLen = 0;
+		rLoc = 2053;
+		rType = 0;
+		vrLen = 1475;
+		vrLoc = 1821;
+	};
+	641B2F101299CE2A00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */;
+		name = "GFRepoWatcher.h: 14";
+		rLen = 50;
+		rLoc = 208;
+		rType = 0;
+		vrLen = 524;
+		vrLoc = 0;
+	};
+	641B2F111299CE2A00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 64B793581216B8BF00223E14 /* GitFrontRepositories.m */;
+		name = "GitFrontRepositories.m: 19";
+		rLen = 0;
+		rLoc = 321;
+		rType = 0;
+		vrLen = 1250;
+		vrLoc = 0;
+	};
+	641B2F121299CE2A00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 456";
+		rLen = 0;
+		rLoc = 9528;
+		rType = 0;
+		vrLen = 1525;
+		vrLoc = 8691;
+	};
+	641B2F131299CE2A00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 457";
+		rLen = 0;
+		rLoc = 9381;
+		rType = 0;
+		vrLen = 1408;
+		vrLoc = 8759;
+	};
+	641B2F141299CE2A00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 37";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1176;
+		vrLoc = 35;
+	};
+	641B2F151299CE2A00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 466";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1135;
+		vrLoc = 8226;
+	};
+	641B2F1B1299CEBC00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 458";
+		rLen = 0;
+		rLoc = 9345;
+		rType = 0;
+		vrLen = 1383;
+		vrLoc = 8691;
+	};
+	641B2F1C1299CEBC00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 37";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1176;
+		vrLoc = 35;
+	};
+	641B2F1D1299CEBC00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 477";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1158;
+		vrLoc = 8226;
+	};
+	641B2F211299CF8200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 454";
+		rLen = 0;
+		rLoc = 9267;
+		rType = 0;
+		vrLen = 1383;
+		vrLoc = 8691;
+	};
+	641B2F221299CF8200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 90";
+		rLen = 0;
+		rLoc = 2053;
+		rType = 0;
+		vrLen = 1473;
+		vrLoc = 1821;
+	};
+	641B2F231299CF8200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 131";
+		rLen = 0;
+		rLoc = 3055;
+		rType = 0;
+		vrLen = 1492;
+		vrLoc = 1821;
+	};
+	641B2F241299CF8200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 37";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1176;
+		vrLoc = 35;
+	};
+	641B2F251299CF8200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 477";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1158;
+		vrLoc = 8226;
+	};
+	641B2F281299D02200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 87";
+		rLen = 0;
+		rLoc = 2037;
+		rType = 0;
+		vrLen = 1493;
+		vrLoc = 1581;
+	};
+	641B2F291299D02200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 37";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1176;
+		vrLoc = 35;
+	};
+	641B2F2A1299D02200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 477";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1158;
+		vrLoc = 8226;
+	};
+	641B2F2C1299D08400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 87";
+		rLen = 0;
+		rLoc = 2037;
+		rType = 0;
+		vrLen = 1637;
+		vrLoc = 1581;
+	};
+	641B2F2D1299D08400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 37";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1267;
+		vrLoc = 35;
+	};
+	641B2F2E1299D08400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 477";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1179;
+		vrLoc = 8226;
+	};
+	641B2F2F1299D16B00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 117";
+		rLen = 0;
+		rLoc = 2743;
+		rType = 0;
+		vrLen = 1281;
+		vrLoc = 1803;
+	};
+	641B2F301299D16B00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 37";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1267;
+		vrLoc = 35;
+	};
+	641B2F311299D16B00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 477";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1179;
+		vrLoc = 8226;
+	};
+	641B2F341299D33400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 131";
+		rLen = 0;
+		rLoc = 3130;
+		rType = 0;
+		vrLen = 1348;
+		vrLoc = 1803;
+	};
+	641B2F351299D33400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 37";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1176;
+		vrLoc = 35;
+	};
+	641B2F361299D33400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 477";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1158;
+		vrLoc = 8226;
+	};
+	641B2F381299D38C00C2EA25 /* GFWorkingDirBrowserController.m:459 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		functionName = "-modifiedDirectories:";
+		hitCount = 1;
+		ignoreCount = 0;
+		lineNumber = 459;
+		location = gitfend;
+		modificationTime = 312071072.926029;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	641B2F3A1299D39200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 98";
+		rLen = 0;
+		rLoc = 2204;
+		rType = 0;
+		vrLen = 1402;
+		vrLoc = 652;
+	};
+	641B2F3B1299D39200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 454";
+		rLen = 0;
+		rLoc = 9267;
+		rType = 0;
+		vrLen = 1383;
+		vrLoc = 8691;
+	};
+	641B2F3C1299D39200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 454";
+		rLen = 0;
+		rLoc = 9267;
+		rType = 0;
+		vrLen = 1383;
+		vrLoc = 8691;
+	};
+	641B2F3D1299D39200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 37";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1176;
+		vrLoc = 35;
+	};
+	641B2F3E1299D39200C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 477";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1158;
+		vrLoc = 8226;
+	};
+	641B2F3F1299D39400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 454";
+		rLen = 0;
+		rLoc = 9267;
+		rType = 0;
+		vrLen = 1383;
+		vrLoc = 8691;
+	};
+	641B2F401299D39400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 37";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1176;
+		vrLoc = 35;
+	};
+	641B2F411299D39400C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 477";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1158;
+		vrLoc = 8226;
+	};
+	641B2F461299D3BD00C2EA25 /* GFWorkingDirBrowserController.m:250 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		functionName = "-outlineView:numberOfChildrenOfItem:";
+		hitCount = 1;
+		ignoreCount = 0;
+		lineNumber = 250;
+		location = gitfend;
+		modificationTime = 312071110.599913;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	641B2F4D1299D47F00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 131";
+		rLen = 0;
+		rLoc = 3111;
+		rType = 0;
+		vrLen = 1291;
+		vrLoc = 1864;
+	};
+	641B2F4E1299D47F00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 379";
+		rLen = 0;
+		rLoc = 7642;
+		rType = 0;
+		vrLen = 1541;
+		vrLoc = 6122;
+	};
+	641B2F4F1299D47F00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 379";
+		rLen = 0;
+		rLoc = 7642;
+		rType = 0;
+		vrLen = 1473;
+		vrLoc = 6247;
+	};
+	641B2F501299D47F00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */;
+		name = "GFRepoWatcher.m: 37";
+		rLen = 0;
+		rLoc = 763;
+		rType = 0;
+		vrLen = 1176;
+		vrLoc = 35;
+	};
+	641B2F511299D47F00C2EA25 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
+		name = "GFWorkingDirBrowserController.m: 477";
+		rLen = 0;
+		rLoc = 9635;
+		rType = 0;
+		vrLen = 1158;
+		vrLoc = 8226;
 	};
 	641BDFC51204ADAD00D2082D /* todo.rtf */ = {
 		uiCtxt = {
@@ -1785,7 +3141,7 @@
 		fRef = 640E83C2121AAA050087FB27 /* GFWorkingDirBrowserController.h */;
 		name = "GFWorkingDirBrowserController.h: 48";
 		rLen = 10;
-		rLoc = 900;
+		rLoc = 953;
 		rType = 0;
 		vrLen = 916;
 		vrLoc = 0;
@@ -1839,24 +3195,6 @@
 		rType = 0;
 		vrLen = 2880;
 		vrLoc = 35;
-	};
-	641DF53A1272FDC9009B0DA7 /* GFWorkingDirBrowserController.m:375 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		breakpointStyle = 0;
-		continueAfterActions = 0;
-		countType = 0;
-		delayBeforeContinue = 0;
-		fileReference = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
-		functionName = "-outlineView:willDisplayCell:forTableColumn:item:";
-		hitCount = 0;
-		ignoreCount = 0;
-		lineNumber = 375;
-		location = gitfend;
-		modificationTime = 311983521.07226;
-		originalNumberOfMultipleMatches = 1;
-		state = 1;
 	};
 	641DF54812730AC3009B0DA7 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -1970,7 +3308,7 @@
 		ignoreCount = 0;
 		lineNumber = 283;
 		location = gitfend;
-		modificationTime = 311983521.017356;
+		modificationTime = 312071059.60717;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -2023,6 +3361,11 @@
 		name = NSDataExtension.h;
 		path = /Users/manuel/dev/gitfend/NSDataExtension.h;
 		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {710, 788}}";
+			sepNavSelRange = "{176, 35}";
+			sepNavVisRange = "{0, 1161}";
+		};
 	};
 	642E8E9011AF030E00DB65B9 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -2165,7 +3508,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1215, 3107}}";
 			sepNavSelRange = "{1632, 0}";
-			sepNavVisRange = "{1495, 630}";
+			sepNavVisRange = "{1495, 631}";
 		};
 	};
 	645669F9121DB96E00F96CCD /* GitObject.h */ = {
@@ -2601,7 +3944,7 @@
 		ignoreCount = 0;
 		lineNumber = 178;
 		location = gitfend;
-		modificationTime = 311983520.612142;
+		modificationTime = 312071052.379404;
 		originalNumberOfMultipleMatches = 1;
 		state = 2;
 	};
@@ -2646,7 +3989,7 @@
 		ignoreCount = 0;
 		lineNumber = 397;
 		location = gitfend;
-		modificationTime = 311983521.100403;
+		modificationTime = 312071059.782309;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -2663,7 +4006,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 133;
-		modificationTime = 311983520.612746;
+		modificationTime = 312071052.380323;
 		originalNumberOfMultipleMatches = 0;
 		state = 2;
 	};
@@ -2681,11 +4024,11 @@
 		ignoreCount = 0;
 		lineNumber = 131;
 		location = gitfend;
-		modificationTime = 311983521.387171;
+		modificationTime = 312071060.055055;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
-	6486FC5A127B6CA6007CA28A /* GitIndex.m:507 */ = {
+	6486FC5A127B6CA6007CA28A /* GitIndex.m:513 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -2697,9 +4040,9 @@
 		functionName = "-writeTreeRecur:status:treeSha1:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 507;
+		lineNumber = 513;
 		location = gitfend;
-		modificationTime = 311983521.436659;
+		modificationTime = 312071060.12939;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -2802,7 +4145,7 @@
 		fRef = 640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */;
 		name = "GFWorkingDirBrowserController.m: 153";
 		rLen = 0;
-		rLoc = 3152;
+		rLoc = 3300;
 		rType = 0;
 		vrLen = 1000;
 		vrLoc = 2620;
@@ -2812,7 +4155,7 @@
 		fRef = 64DBE2F611C3EC9B00DFB667 /* GitIndex.m */;
 		name = "GitIndex.m: 345";
 		rLen = 0;
-		rLoc = 7300;
+		rLoc = 7412;
 		rType = 0;
 		vrLen = 1244;
 		vrLoc = 6664;
@@ -2923,7 +4266,7 @@
 		vrLen = 1308;
 		vrLoc = 520;
 	};
-	64961DB2127A0D7A005EA49F /* GitIndex.m:509 */ = {
+	64961DB2127A0D7A005EA49F /* GitIndex.m:515 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -2935,9 +4278,9 @@
 		functionName = "-writeTreeRecur:status:treeSha1:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 509;
+		lineNumber = 515;
 		location = gitfend;
-		modificationTime = 311983521.155791;
+		modificationTime = 312071059.81842;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -2965,11 +4308,11 @@
 		ignoreCount = 0;
 		lineNumber = 329;
 		location = gitfend;
-		modificationTime = 311983521.192654;
+		modificationTime = 312071059.888625;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
-	64961E26127A1A5C005EA49F /* GitIndex.m:481 */ = {
+	64961E26127A1A5C005EA49F /* GitIndex.m:487 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -2981,9 +4324,9 @@
 		functionName = "-writeTreeRecur:status:treeSha1:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 481;
+		lineNumber = 487;
 		location = gitfend;
-		modificationTime = 311983521.248922;
+		modificationTime = 312071059.936769;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -3007,7 +4350,7 @@
 		vrLen = 1011;
 		vrLoc = 6498;
 	};
-	64961E5F127A1F75005EA49F /* GitIndex.m:475 */ = {
+	64961E5F127A1F75005EA49F /* GitIndex.m:481 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -3019,9 +4362,9 @@
 		functionName = "-writeTreeRecur:status:treeSha1:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 475;
+		lineNumber = 481;
 		location = gitfend;
-		modificationTime = 311983521.304311;
+		modificationTime = 312071060.008776;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -3098,7 +4441,7 @@
 		argumentStrings = (
 		);
 		autoAttachOnCrash = 1;
-		breakpointsEnabled = 0;
+		breakpointsEnabled = 1;
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
@@ -3188,7 +4531,7 @@
 		ignoreCount = 0;
 		lineNumber = 53;
 		location = gitfend;
-		modificationTime = 311983520.98828;
+		modificationTime = 312071059.565586;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -3224,16 +4567,16 @@
 	};
 	64B793571216B8BF00223E14 /* GitFrontRepositories.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {933, 1092}}";
+			sepNavIntBoundsRect = "{{0, 0}, {710, 1183}}";
 			sepNavSelRange = "{895, 0}";
-			sepNavVisRange = "{0, 1000}";
+			sepNavVisRange = "{0, 1064}";
 		};
 	};
 	64B793581216B8BF00223E14 /* GitFrontRepositories.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {935, 2444}}";
+			sepNavIntBoundsRect = "{{0, 0}, {710, 2340}}";
 			sepNavSelRange = "{321, 0}";
-			sepNavVisRange = "{3, 775}";
+			sepNavVisRange = "{0, 1250}";
 		};
 	};
 	64B7935F1216BA9C00223E14 /* GitRepo.h */ = {
@@ -3264,7 +4607,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 12;
-		modificationTime = 311983520.612079;
+		modificationTime = 312071052.379295;
 		originalNumberOfMultipleMatches = 0;
 		state = 2;
 	};
@@ -3345,9 +4688,9 @@
 	};
 	64DBE2F611C3EC9B00DFB667 /* GitIndex.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {710, 10439}}";
-			sepNavSelRange = "{3469, 69}";
-			sepNavVisRange = "{16219, 1068}";
+			sepNavIntBoundsRect = "{{0, 0}, {710, 10621}}";
+			sepNavSelRange = "{330, 0}";
+			sepNavVisRange = "{0, 853}";
 			sepNavWindowFrame = "{{15, 281}, {919, 721}}";
 		};
 	};
