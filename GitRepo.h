@@ -92,6 +92,15 @@
 
 -(NSData*) resolveReference:(NSString*) refName;
 
+/**
+	Returns a file path relative to the working directory.
+	
+	@param url An absolute path to a file.
+ 
+	@return A path relative to the working directory.
+ */
+-(NSString*) relativizeFilePath:(NSURL*) url;
+
 
 /**
 	Returns a Flattened dictionary with the tree pointed by the
@@ -116,7 +125,6 @@
 	The commit will be created as a child of the last commit in the head
 	branch. If the index does not have any data staged, the function will 
 	just return false and do nothing.
- 
  
  */
 - (BOOL) makeCommit:(NSString*) message 

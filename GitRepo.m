@@ -196,6 +196,15 @@ static BOOL createPath( NSString *basePath, NSString *dir, NSError **error );
 						name:[coder decodeObjectForKey:@"repo_name"]];
 }
 
+
+-(NSString*) relativizeFilePath:(NSURL*) _url
+{
+	NSString *filepath = 
+		[[_url path] substringFromIndex:[[workingDir path] length]+1];
+	
+	return filepath;
+}
+
 - (id) getObject:(NSData*) sha1
 {	
 	return [objectStore getObject:sha1];
