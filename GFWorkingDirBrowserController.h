@@ -7,13 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "GFRepoWatcher.h"
 
 @class GitRepo;
 @class GitFrontIcons;
 @class CCDiffViewController;
-@class GFRepoWatcher;
 
-@interface GFWorkingDirBrowserController : NSViewController <NSOutlineViewDataSource> 
+@interface GFWorkingDirBrowserController : NSViewController 
+<NSOutlineViewDataSource, GFRepoWatcherDelegate>
 {
 	IBOutlet NSOutlineView *workingDirBrowseView;
 	IBOutlet NSOutlineView *stageAreaBrowseView;

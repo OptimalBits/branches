@@ -17,18 +17,29 @@
 #import "GitIndex.h"
 #import "GitBlobObject.h"
 #import "GitFile.h"
+#import "GitIgnore.h"
 #import "GitFrontIcons.h"
 
 #import "NSDataExtension.h"
+#import "NSMutableArray+Reverse.h"
 
 #import "ImageAndTextCell.h"
 
 #include <sys/stat.h>
 
 
-static NSTreeNode *workingDirTree( GitRepo *repo,
-								   NSFileManager *fileManager, 
-								   NSError **error );
+static NSTreeNode *findTreeNode( NSTreeNode *fileTree, NSString *subPath );
+
+static NSTreeNode *createSubTree( GitRepo *repo, 
+								  NSFileManager *fileManager, 
+								  NSURL *url,
+								  NSError **error );
+
+static void updateStatus( NSTreeNode *node, GitFileStatus status );
+
+static GitIgnore *getParentIgnoreFile( NSTreeNode *node, 
+									   NSFileManager *fileManager );
+
 
 @implementation GFWorkingDirBrowserController
 
@@ -159,7 +170,10 @@ static NSTreeNode *workingDirTree( GitRepo *repo,
 	
 	NSLog( @"Creating file tree...", nil);
 	[fileTree release];
-	fileTree = workingDirTree( repo, fileManager, &error );
+	fileTree = createSubTree( repo, 
+							  fileManager,
+							  [repo workingDir], 
+							  &error );
 	[fileTree retain];
 	NSLog( @"Finished!", nil);
 	
@@ -427,16 +441,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if (isDirectory == NO)
 	{
 		NSError *error;
-		
-		NSString *filename = 
-		[[[file url] path] substringFromIndex:[[[repo workingDir] path] length]+1];
-		
+				
 		NSString *contents = [NSString stringWithContentsOfURL:[file url]
 													   encoding:NSUTF8StringEncoding
 														  error:&error];
 		GitIndex *index = [repo index];
 		if ( [file status] == kFileStatusModified )
 		{
+			NSString *filename = [repo relativizeFilePath:[file url]];
+
 			GitBlobObject *obj = 
 				[repo getObject:[index sha1ForFilename:filename]];
 				  
@@ -451,20 +464,177 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 }
 
-
+// Delegate method called everytime a directory within the current repo has
+// changed.
 -(void) modifiedDirectories:(NSArray*) directories
 {
 	NSError *error = nil;
 	
-	NSLog(@"Here we are", nil);
-	
-	// 
-	
-	[fileTree release];
-	fileTree = workingDirTree( repo, fileManager, &error );
-	[fileTree retain];
-	
-	//
+	for( NSString *path in directories )
+	{
+		GitFileStatus status;
+		
+		BOOL isDirectory;
+		
+		status = kFileStatusUntracked;
+		
+		// remove last slash. 
+		// I think NSURL are introducing a lot of ackwardness here...
+		// It is usefull to keep an ending slash as a cheap way to represent 
+		// paths to directories.
+		path = [path substringToIndex:[path length]-1];
+		
+		NSTreeNode *node = findTreeNode( fileTree, path );
+		
+		// Get Parent GitIgnore file.
+		GitIgnore *gitIgnoreFile = getParentIgnoreFile( node, fileManager );
+				
+		NSMutableArray *nodes = [node mutableChildNodes];
+		
+		NSMutableSet *childrenSet = 
+								[NSMutableSet setWithCapacity:[nodes count]];
+		
+		for ( NSTreeNode *childNode in nodes )
+		{
+			GitFile *file = [childNode representedObject];
+			[childrenSet addObject:[file filename]];
+		}
+
+		NSArray *subPaths = [fileManager contentsOfDirectoryAtPath:path 
+															 error:&error];
+		NSSet *pathsSet = [NSSet setWithArray:subPaths];
+		
+		// Intersection ( Files not renamed, deleted or added ).
+		[childrenSet intersectSet:pathsSet];
+		
+		// Release all children nodes not in intersection (deleted or renamed )
+		NSMutableArray *nodesToRemove = [[NSMutableArray alloc] init];
+		for ( NSTreeNode *childNode in nodes )
+		{
+			if ( [childrenSet containsObject:[[childNode representedObject] filename]] == NO )
+			{
+				[nodesToRemove addObject:childNode];
+			}
+		}
+		
+		[nodes removeObjectsInArray:nodesToRemove];
+		[nodesToRemove release];
+		
+		GitIndex *index = [repo index];
+		
+		// Update possibly modified files
+
+		nodesToRemove = [[NSMutableArray alloc] init];
+		for ( NSTreeNode *childNode in nodes )
+		{			
+			GitFile *file = [childNode representedObject];
+			
+			NSString *filename = [file filename];
+			NSURL *url = [file url];
+
+			if ( [childrenSet containsObject:filename] )
+			{
+				[fileManager fileExistsAtPath:[url path] 
+								  isDirectory:&isDirectory];
+				
+				if ( isDirectory == NO )
+				{					
+					[file setStatus:[index fileStatus:url 
+										   workingDir:[[repo workingDir] path]]];
+					
+					if ( ( status != kFileStatusModified ) && 
+						( [file status] != kFileStatusUntracked ) )
+					{
+						status = [file status];
+					}
+				}
+				
+				if ( ( [file status] == kFileStatusUntracked ) && 
+					   gitIgnoreFile && 
+					   [gitIgnoreFile isFileIgnored:[url	path]] )
+				{
+					// TODO: path is removing the trailing slash for directories
+					// which is not what we want...
+					// pass
+					[nodesToRemove addObject:node];
+				}
+			}
+		}
+		
+		// Create new children nodes with paths not in interesection
+		for ( NSString *subPath in subPaths )
+		{
+			GitFile *file;
+			
+			file = nil;
+			
+			if ( [childrenSet containsObject:subPath] == NO )
+			{
+				if ([subPath isEqualToString:@".git"] == NO) 
+				{
+					NSTreeNode* subTree;
+					NSString *fullPath = [path stringByAppendingPathComponent:subPath];
+					NSURL *u = [NSURL URLWithString:fullPath];
+					
+					[fileManager fileExistsAtPath:fullPath isDirectory:&isDirectory];
+					
+					if ( isDirectory )
+					{
+						node = createSubTree( repo, 
+											  fileManager, 
+										      u,
+											  &error );
+						if ( node )
+						{
+							[nodes addObject:node];
+							
+							file = [node representedObject];
+						}
+					}
+					else
+					{
+						file = [[[GitFile alloc] initWithUrl:u] autorelease];
+						
+						node = [NSTreeNode treeNodeWithRepresentedObject:file];
+						
+						[file setStatus:[index fileStatus:u 
+											   workingDir:[[repo workingDir] path]]];
+						
+						[nodes addObject:node];
+					}
+					
+					if ( file ) 
+					{
+						if ( ( status != kFileStatusModified ) && 
+							( [file status] != kFileStatusUntracked ) )
+						{
+							status = [file status];
+						}
+					}
+					
+					if ( ( [file status] == kFileStatusUntracked ) && 
+						gitIgnoreFile && 
+						[gitIgnoreFile isFileIgnored:fullPath] )
+					{
+						// TODO: path is removing the trailing slash for directories
+						// which is not what we want...
+						// pass
+						[nodesToRemove addObject:node];
+					}
+				}
+			}
+		}
+		
+		// Remove ignored files & dirs
+		for ( NSTreeNode *childNode in nodesToRemove )
+		{
+			[nodes removeObject:childNode];
+		}
+		[nodesToRemove release];
+		
+		// Update this directory status.
+		updateStatus( node, status );
+	}
 	
 	[workingDirBrowseView reloadData];
 }
@@ -472,7 +642,87 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 @end
 
+// Update the status of all the parent nodes of the given one.
+// TODO: This is a shalow operation, the correct one would need to
+// check all the nodes at every level and compute the correct status.
+static void updateStatus( NSTreeNode *node, GitFileStatus status )
+{
+	GitFile *file;
+	
+	NSTreeNode *parent = [node parentNode];
+	
+	file = [node representedObject];
+	
+	[file setStatus:status];
+				 
+	while( parent )
+	{
+		file = [parent representedObject];
+		
+		if ( status != kFileStatusUntracked )
+		{
+			[file setStatus:status];
+		}
+		else
+		{
+			break;
+		}
+
+		status = [file status];
+		
+		parent = [parent parentNode];
+	}			 
+}
+   
+static GitIgnore *getParentIgnoreFile( NSTreeNode *node, 
+									   NSFileManager *fileManager )
+{
+	NSTreeNode *parent;
+	GitIgnore *ignoreFile = nil;
+	
+	NSMutableArray *nodes = [NSMutableArray array];
+	
+	[nodes addObject:node];
+	
+	parent = [node parentNode];
+	while( parent )
+	{
+		[nodes addObject:parent];
+		parent = [parent parentNode];
+	}
+	
+	[nodes reverse];
+	
+	for ( NSTreeNode *node in nodes )
+	{
+		GitFile *file;
+		
+		file = [node representedObject];
+		
+		NSURL *gitIgnoreUrl = 
+			[[file url] URLByAppendingPathComponent:@".gitignore"];
+		
+		if ( [fileManager fileExistsAtPath:[gitIgnoreUrl path]] )
+		{
+			GitIgnore* localIgnoreFile = 
+				[[GitIgnore alloc] initWithUrl:gitIgnoreUrl];
+			
+			if ( ignoreFile )
+			{
+				[ignoreFile push:localIgnoreFile];
+			}
+			else
+			{
+				ignoreFile = localIgnoreFile;
+			}
+		}
+	}
+	
+	return ignoreFile;
+}
+
 static GitFileStatus traverseDirTree( GitIndex *index,
+									  GitIgnore *ignoreFile,
 									  NSString *workingDir,
 									  NSFileManager *fileManager, 
 									  NSURL *url,
@@ -480,98 +730,146 @@ static GitFileStatus traverseDirTree( GitIndex *index,
 									  NSError **error )
 {	
 	GitFileStatus status = kFileStatusUntracked;
+	BOOL existsLocalIgnoreFile = NO;
+
 	
 	NSMutableArray *childs = [tree mutableChildNodes];
 
 	NSArray *subPaths = 
 	[fileManager contentsOfDirectoryAtURL:url 
 			   includingPropertiesForKeys:nil 
-								  options:NSDirectoryEnumerationSkipsHiddenFiles 
+								  options:0
 									error:error];
+	
+	NSURL *gitIgnoreUrl = [url URLByAppendingPathComponent:@".gitignore"]; 
+	if ( [fileManager fileExistsAtPath:[gitIgnoreUrl path]] )
+	{
+		GitIgnore* localIgnoreFile = [[GitIgnore alloc] initWithUrl:gitIgnoreUrl];
+		existsLocalIgnoreFile = YES;
+		[ignoreFile push:localIgnoreFile];
+	}
+	
 	if ( *error != nil )
 	{
+		NSLog([*error localizedDescription], nil);
 		return 0;
 	}
 	
 	for (NSURL *u in subPaths)
 	{
-		GitFile *file = [GitFile alloc];
-		
-		NSTreeNode *node = [[NSTreeNode alloc] initWithRepresentedObject:file];
-		
-		BOOL isDirectory;
-		
-		[fileManager fileExistsAtPath:[u path] isDirectory:&isDirectory];
-		
-		if ( isDirectory )
+		if ([[u lastPathComponent] isEqualToString:@".git"] == NO) 
 		{
-			GitFileStatus dirStatus = 
-		      traverseDirTree( index, workingDir, fileManager, u, node, error );
-			if ( *error != nil )
-			{
-				return 0;
-			}
-			[file initWithUrl:u andStatus:dirStatus];
-		}
-		else
-		{
-			NSString *filename = 
-							[[u path] substringFromIndex:[workingDir length]+1];
+			GitFile *file = [[[GitFile alloc] initWithUrl:u] autorelease];
 			
-			if ( [index isFileTracked:filename] )
+			NSTreeNode *node = [NSTreeNode treeNodeWithRepresentedObject:file];
+			
+			BOOL isDirectory;
+			
+			[fileManager fileExistsAtPath:[u path] isDirectory:&isDirectory];
+			
+			if ( isDirectory )
 			{
-				if ( [index isFileModified:u filename:filename] )
+				GitFileStatus dirStatus = 
+				traverseDirTree( index, ignoreFile, workingDir, fileManager, u, node, error );
+				if ( *error != nil )
 				{
-					[file initWithUrl:u andStatus:kFileStatusModified];
+					continue; //return 0;
 				}
-				else
-				{
-					[file initWithUrl:u andStatus:kFileStatusTracked];
-				}
+				[file setStatus:dirStatus];
+			}
+			else
+			{			
+				[file setStatus:[index fileStatus:u workingDir: workingDir]];
+			}
+			
+			if ( ( status != kFileStatusModified ) && 
+				 ( [file status] != kFileStatusUntracked ) )
+			{
+				status = [file status];
+			}
+			
+			if ( ( [file status] == kFileStatusUntracked ) && 
+				ignoreFile && 
+				[ignoreFile isFileIgnored:[u path]] )
+			{
+				// TODO: path is removing the trailing slash for directories
+				// which is not what we want...
+				// pass
 			}
 			else
 			{
-				[file initWithUrl:u andStatus:kFileStatusUntracked];
-			}			
-		}		
-		[childs addObject:node];
-		[node release];
-		[file release];
-		
-		if ( ( status != kFileStatusModified ) && 
-			 ( [file status] != kFileStatusUntracked ) )
-		{
-			status = [file status];
+				[childs addObject:node];
+			}
 		}
+	}
+	
+	if ( existsLocalIgnoreFile ) 
+	{
+		[ignoreFile pop];
 	}
 	
 	return status;
 }
 
-static NSTreeNode *workingDirTree( GitRepo *repo,
-								   NSFileManager *fileManager, 
-								   NSError **error )
+static NSTreeNode *createSubTree( GitRepo *repo, 
+								 NSFileManager *fileManager, 
+								 NSURL *url,
+								 NSError **error )
 {
-	// TODO: Add support for .gitignore files.
-	
 	NSTreeNode *tree;
-
-	tree = [[NSTreeNode alloc] initWithRepresentedObject:nil];
-	[tree autorelease];
+	GitIgnore *ignoreFile;
+		
+	GitFile *file = [[[GitFile alloc] initWithUrl:url] autorelease];
 	
-	traverseDirTree( [repo index], 
-					 [[repo workingDir] path], 
-					 fileManager, 
-					 [repo workingDir], 
-					 tree, 
-					 error );
+	ignoreFile = [[GitIgnore alloc] init];
 	
+	tree = [NSTreeNode treeNodeWithRepresentedObject:file];
+	
+	GitFileStatus dirStatus = traverseDirTree( [repo index], 
+											   ignoreFile,
+											   [[repo workingDir] path], 
+											   fileManager, 
+											   url,
+											   tree, 
+											   error );
 	if ( *error != nil )
 	{
-		return nil;
+		tree = nil;
 	}
 	
-	return tree;
+	[file setStatus:dirStatus];
+	
+	[ignoreFile release];
+	
+	return tree;	
+}
+
+static NSTreeNode *findTreeNode( NSTreeNode *fileTree, NSString *subPath )
+{	
+	GitFile *gitFile;
+	
+	gitFile = [fileTree representedObject];
+	
+	NSString *path = [[gitFile url] path];
+	
+	if ( [path isEqualToString:subPath] )
+	{
+		return fileTree;
+	}
+	else
+	{
+		NSMutableArray *children = [fileTree mutableChildNodes];
+		
+		for ( NSTreeNode *child in children )
+		{
+			NSTreeNode *node = findTreeNode( child, subPath );
+			if ( node )
+			{
+				return node;
+			}
+		}
+	}
+	return nil;
 }
 
 
