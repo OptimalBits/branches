@@ -10,6 +10,7 @@
 
 typedef enum
 {
+	kFileStatusUnknown		= 0,
 	kFileStatusUpdated		= 1,
 	kFileStatusAdded		= 2,
 	kFileStatusRemoved		= 4,
@@ -32,6 +33,7 @@ typedef enum
 @property (readwrite, copy)		NSURL *url;
 
 -(id) initWithUrl:(NSURL*) url andStatus:(GitFileStatus) status;
+-(id) initWithUrl:(NSURL*) url;
 -(id) initWithName:(NSString*) filename andStatus:(GitFileStatus) status;
 -(void) dealloc;
 

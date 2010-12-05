@@ -15,13 +15,23 @@
 @synthesize status;
 @synthesize url;
 
+
+-(id) initWithUrl:(NSURL*) _url
+{
+	return [self initWithUrl:_url andStatus:kFileStatusUnknown];
+}
+
+
 -(id) initWithUrl:(NSURL*) _url andStatus:(GitFileStatus) _status
 {
 	if ( self = [super init] )
 	{
 		[self setUrl:_url];
 		[self setFilename:[_url lastPathComponent]];
-		[self setStatus:_status];
+		if ( _status )
+		{
+			[self setStatus:_status];
+		}
 	}
 	return self;
 }
