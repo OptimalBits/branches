@@ -67,17 +67,19 @@ static uint32 modeToInt( NSString* str );
 								[data subdataWithRange:NSMakeRange(start,len)] 
 													 encoding:NSUTF8StringEncoding] 
 							   autorelease];
+				if ( modeAndName )
+				{
+					sha1 = [data subdataWithRange:NSMakeRange(start+len+1, 20)];
+					i +=21;
 				
-				sha1 = [data subdataWithRange:NSMakeRange(start+len+1, 20)];
-				i +=21;
+					NSArray *modeAndNameArray = [modeAndName componentsSeparatedByString:@" "];
 				
-				NSArray *modeAndNameArray = [modeAndName componentsSeparatedByString:@" "];
+					GitTreeNode *node = [[[GitTreeNode alloc] init] autorelease];
+					[node setMode:modeToInt([modeAndNameArray objectAtIndex:0])];
+					[node setSha1:sha1];
 				
-				GitTreeNode *node = [[[GitTreeNode alloc] init] autorelease];
-				[node setMode:modeToInt([modeAndNameArray objectAtIndex:0])];
-				[node setSha1:sha1];
-				
-				[tree setObject:node forKey:[modeAndNameArray objectAtIndex:1]];
+					[tree setObject:node forKey:[modeAndNameArray objectAtIndex:1]];
+				}
 			}
 		}
 	}
