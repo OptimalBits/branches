@@ -81,7 +81,7 @@ NSData *patch_delta( NSData *src, NSData *delta );
 				[[file readDataOfLength:20] getBytes:&packIndexChecksum];
 			}
 		}
-		
+		[file closeFile];
 	}
 	return self;
 }

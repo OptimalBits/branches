@@ -112,7 +112,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-static GitPackFile *readPackFile( NSURL *url );
+static NSArray *readPackFiles(NSURL *url);
 static GitObject *parseObject( NSData* data, NSData* key );
 
 static BOOL writeObject( NSData *sha1,
@@ -130,16 +130,16 @@ static BOOL writeObject( NSData *sha1,
 		url = _url;
 		
 		objectsUrl = [[url URLByAppendingPathComponent:@"objects"] retain];
-	
-		packFile = readPackFile( url );
-		[packFile retain];
+        
+		packFiles = readPackFiles( url );
+		[packFiles retain];
 	}
 	return self;
 }
 
 -(void) dealloc
 {
-	[packFile release];
+	[packFiles release];
 	[objectsUrl release];
 	[url release];
 	[super dealloc];
@@ -152,15 +152,16 @@ static BOOL writeObject( NSData *sha1,
 	NSURL *objectsPath;
 	NSFileManager *fileManager;
 	
-	if ( packFile != nil )
-	{
-		id obj = [packFile getObject:sha1];
-		if ( obj != nil )
-		{
-			return obj;
-		}
-	}
-	
+    {
+        for (GitPackFile *pf in packFiles) {
+            id obj = [pf getObject:sha1];
+            if ( obj != nil )
+            {
+                return obj;
+            }
+        }
+    }
+
 	fileManager = [NSFileManager defaultManager];
 	
 	objectsPath = [url URLByAppendingPathComponent:@"objects"];
@@ -536,42 +537,42 @@ static BOOL writeObject( NSData *sha1,
 // Helpers
 //
 
-static GitPackFile *readPackFile( NSURL *url )
-{
-	GitPackFile *packFile = nil;
-	NSError *error;
-	NSFileManager *fileManager;
-	NSURL* objectsPath = [url URLByAppendingPathComponent:@"objects"];
+static NSArray *readPackFiles(NSURL *url) {
+    NSMutableArray *packFiles = [[[NSMutableArray alloc] init] autorelease];
+    NSURL* objectsPath = [url URLByAppendingPathComponent:@"objects"];
 	NSURL* packPath = [objectsPath URLByAppendingPathComponent:@"pack"];
-	
+	NSError *error;
+    
 	if ([packPath checkResourceIsReachableAndReturnError:&error] == YES)
 	{
-		fileManager = [NSFileManager defaultManager];
-		NSArray *urls = [fileManager 
-						 contentsOfDirectoryAtURL:packPath 
-						 includingPropertiesForKeys:nil 
-						 options:NSDirectoryEnumerationSkipsHiddenFiles error:&error];
+        NSFileManager *fm = [NSFileManager defaultManager];
+		NSArray *urls = [fm contentsOfDirectoryAtURL:packPath                                    
+                          includingPropertiesForKeys:nil
+                                             options:0
+                                               error:&error];
 		
 		NSMutableDictionary *packSet = [[NSMutableDictionary alloc] init];
 		for(NSURL *u in urls)
 		{
-			NSURL *baseURL = [u URLByDeletingPathExtension];
-			[packSet setObject:u forKey:baseURL];
+			[packSet setObject:u forKey:[u URLByDeletingPathExtension]];
 		}
-		
+        
 		for ( NSURL *key in packSet )
 		{
+            GitPackFile *packFile;
+            
 			NSURL *indexURL= [key URLByAppendingPathExtension:@"idx"];
 			NSURL *packURL = [key URLByAppendingPathExtension:@"pack"];
 			
-			packFile = 
-				[[[GitPackFile alloc] initWithIndexURL:indexURL andPackURL:packURL] autorelease];
+			packFile = [[[GitPackFile alloc] initWithIndexURL:indexURL 
+                                                   andPackURL:packURL] autorelease];
+            [packFiles addObject:packFile];
 		}
 		
 		[packSet release];
-	}
-	
-	return packFile;
+    }
+    
+    return packFiles;
 }
 
 static GitObject *parseObject( NSData* data, NSData* key )

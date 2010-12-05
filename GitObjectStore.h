@@ -19,9 +19,7 @@
 @interface GitObjectStore : NSObject {
 	NSURL *url;
 	NSURL *objectsUrl;
-	GitPackFile *packFile;
-	NSMutableArray *packFiles; // There can be more than one, so we need to 
-							   // have an array.	
+	NSArray *packFiles; // NSArray of GitPackFile
 }
 
 /**
