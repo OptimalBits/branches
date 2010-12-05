@@ -7,11 +7,13 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "GitFile.h"
 
 @class GitObjectStore;
 @class GitBlobObject;
 @class GitIgnore;
 @class GitTreeObject;
+
 
 typedef struct
 {
@@ -117,11 +119,10 @@ typedef struct
 -(NSDictionary*) status:(NSDictionary*) flattenedTree;
 
 /**
-	Returns the status of the given filename.
-	The 
+	Returns the status of the given file.
  
  */
-//-(GitFileStatus) fileStatus:(NSString*) filename;
+-(GitFileStatus) fileStatus:(NSURL*) fileUrl workingDir:(NSString*) workingDir;
 
 
 /**

@@ -162,6 +162,29 @@ static void writeStatInfo( EntryInfo *entryInfo, NSMutableData *outputData );
 	[outputData writeToURL:url atomically:YES];
 }
 
+
+-(GitFileStatus) fileStatus:(NSURL*) fileUrl workingDir:(NSString*) workingDir
+{
+	NSString *filename = 
+		[[fileUrl path] substringFromIndex:[workingDir length]+1];
+
+	if ( [self isFileTracked:filename] )
+	{
+		if ( [self isFileModified:fileUrl filename:filename] )
+		{
+			return kFileStatusModified;
+		}
+		else
+		{
+			return kFileStatusTracked;
+		}
+	}
+	else
+	{
+		return kFileStatusUntracked;
+	}	
+}
+
 /**
 	Returns a set with all the files in the working directory that have been
 	modified.
