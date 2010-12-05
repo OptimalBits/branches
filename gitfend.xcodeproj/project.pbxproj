@@ -69,6 +69,8 @@
 		64A5E7631205AA1100DDB5C9 /* RepoConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A5E7621205AA1100DDB5C9 /* RepoConfig.xib */; };
 		64A5E7671205F7F300DDB5C9 /* GitConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E7661205F7F300DDB5C9 /* GitConfig.m */; };
 		64A5E76A1205FFFB00DDB5C9 /* GitConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E7691205FFFB00DDB5C9 /* GitConfigParser.m */; };
+		64B1056812A44BB000C516FB /* GitIgnore.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B1056712A44BB000C516FB /* GitIgnore.m */; };
+		64B1075612AAF1AE00C516FB /* NSMutableArray+Reverse.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B1075512AAF1AE00C516FB /* NSMutableArray+Reverse.m */; };
 		64B768F311A45ECB00DEDF82 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B768F211A45ECB00DEDF82 /* ImageAndTextCell.m */; };
 		64B790EC1212053E00223E14 /* credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 64B790EB1212053E00223E14 /* credits.rtf */; };
 		64B792441215492500223E14 /* arrow_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 64B792431215492500223E14 /* arrow_up.png */; };
@@ -208,6 +210,10 @@
 		64A5E7661205F7F300DDB5C9 /* GitConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitConfig.m; sourceTree = "<group>"; };
 		64A5E7681205FFFB00DDB5C9 /* GitConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitConfigParser.h; sourceTree = "<group>"; };
 		64A5E7691205FFFB00DDB5C9 /* GitConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitConfigParser.m; sourceTree = "<group>"; };
+		64B1056612A44BB000C516FB /* GitIgnore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitIgnore.h; sourceTree = "<group>"; };
+		64B1056712A44BB000C516FB /* GitIgnore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitIgnore.m; sourceTree = "<group>"; };
+		64B1075412AAF1AE00C516FB /* NSMutableArray+Reverse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Reverse.h"; sourceTree = "<group>"; };
+		64B1075512AAF1AE00C516FB /* NSMutableArray+Reverse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Reverse.m"; sourceTree = "<group>"; };
 		64B768F111A45ECB00DEDF82 /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
 		64B768F211A45ECB00DEDF82 /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
 		64B790EB1212053E00223E14 /* credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = credits.rtf; sourceTree = "<group>"; };
@@ -328,6 +334,7 @@
 		29B97314FDCFA39411CA2CEA /* gitfend */ = {
 			isa = PBXGroup;
 			children = (
+				64B1075312AAF18800C516FB /* Extensions */,
 				641BDFC51204ADAD00D2082D /* todo.rtf */,
 				64F1C5C4121FD4C700321FEB /* features.rtf */,
 				E218E8C012835CF600897826 /* UnitTest */,
@@ -482,6 +489,7 @@
 		6422352E11B5A578003E944D /* GitLib */ = {
 			isa = PBXGroup;
 			children = (
+				64B1056512A44B9400C516FB /* Working Copy */,
 				64197F8E12109BCA00AA687A /* References */,
 				64197F8612109B4400AA687A /* Objects */,
 				64197F8512109AF100AA687A /* Object Storage */,
@@ -505,6 +513,24 @@
 				64566A8B121DE5CA00F96CCD /* CCDiff.m */,
 			);
 			name = DiffMerge;
+			sourceTree = "<group>";
+		};
+		64B1056512A44B9400C516FB /* Working Copy */ = {
+			isa = PBXGroup;
+			children = (
+				64B1056612A44BB000C516FB /* GitIgnore.h */,
+				64B1056712A44BB000C516FB /* GitIgnore.m */,
+			);
+			name = "Working Copy";
+			sourceTree = "<group>";
+		};
+		64B1075312AAF18800C516FB /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				64B1075412AAF1AE00C516FB /* NSMutableArray+Reverse.h */,
+				64B1075512AAF1AE00C516FB /* NSMutableArray+Reverse.m */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 		E218E8C012835CF600897826 /* UnitTest */ = {
@@ -673,6 +699,8 @@
 				6486FEE1127CBD32007CA28A /* NoodleLineNumberMarker.m in Sources */,
 				6486FEE2127CBD32007CA28A /* NoodleLineNumberView.m in Sources */,
 				641B2E7E1299200F00C2EA25 /* GFRepoWatcher.m in Sources */,
+				64B1056812A44BB000C516FB /* GitIgnore.m in Sources */,
+				64B1075612AAF1AE00C516FB /* NSMutableArray+Reverse.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
