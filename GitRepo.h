@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "GitObjectStore.h"
 
+@class GitObjectStore;
 @class GitReference;
 @class GitReferenceStorage;
 @class GitRefLog;
@@ -27,7 +28,14 @@
 
 @end
 
-
+/**
+	This class represents a Git Repository.
+ 
+	It provides methods that are similar to what git porcelain commands do.
+ 
+ 
+ 
+ */
 @interface GitRepo : NSObject <NSCoding> {
 	NSString *name;
 	NSURL* url;
