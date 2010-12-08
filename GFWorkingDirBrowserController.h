@@ -10,6 +10,7 @@
 #import "GFRepoWatcher.h"
 
 @class GitRepo;
+@class GitWorkingDir;
 @class GitFrontIcons;
 @class CCDiffViewController;
 
@@ -22,6 +23,8 @@
 	CCDiffViewController *diffView;
 	
 	GitRepo *repo;
+	GitWorkingDir *workingDir;
+	
 	NSFileManager *fileManager;
 	
 	NSSet *modifiedFiles;
