@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class GitFile;
+
 /**
 	Represents a .gitignore file.
  
@@ -41,12 +43,11 @@
 
 /**
 	Tells if a file should be ignored or not.
- 
-	The filename should be relative the .ignore file.
-	If the filename represents a directory, then it must end with a slash.
- 
  */
--(BOOL) isFileIgnored:(NSString*) filename;
+-(BOOL) isFileIgnored:(NSString*) filename isDirectory:(BOOL) isDirectory;
+
+
+-(BOOL) shouldIgnoreFile:(GitFile*) filename isDirectory:(BOOL) isDirectory;
 
 /**
 	Pushes a GitIgnore so that its patterns will override the ones 

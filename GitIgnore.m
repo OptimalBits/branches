@@ -6,14 +6,17 @@
 //  Copyright 2010 CodeTonic. All rights reserved.
 //
 
-#import  "GitIgnore.h"
+#import "GitIgnore.h"
+#import "GitFile.h"
 #include "fnmatch.h"
 #include "glob.h"
 
 
 @interface GitIgnore(Private)
 
--(BOOL) ignoreCheck:(NSString*) filename beingIgnored:(BOOL) ignored;
+-(BOOL) ignoreCheck:(NSString*) filename 
+	   beingIgnored:(BOOL) ignored
+		isDirectory:(BOOL) isDirectory;
 
 @end
 
@@ -29,27 +32,30 @@
 {
 	if ( self = [super init] )
 	{
-		NSError *error;
-		
 		if ( _url )
 		{
-			url = _url;
-			[url retain];
-		
-			path = [[url URLByDeletingLastPathComponent] path];
-			[path retain];
-		}
-		
-		patterns = [[NSMutableArray alloc] init];
-		stack = [[NSMutableArray alloc] init];
-		
-		NSCharacterSet *newLineCharSet = [NSCharacterSet newlineCharacterSet];
-		
-		if ( url )
-		{
-			NSString *content = [NSString stringWithContentsOfURL:url 
+			NSError *error = nil;
+			
+			NSString *content = [NSString stringWithContentsOfURL:_url 
 														 encoding:NSUTF8StringEncoding
 															error:&error];
+			if ( error )
+			{
+				return 0;
+			}
+			
+			[_url retain];
+			url = _url;
+			
+			path = [[url URLByDeletingLastPathComponent] path];
+			[path retain];
+			
+			patterns = [[NSMutableArray alloc] init];
+			stack = [[NSMutableArray alloc] init];
+			
+			NSCharacterSet *newLineCharSet = 
+				[NSCharacterSet newlineCharacterSet];
+			
 			NSArray *lines = 
 			[content componentsSeparatedByCharactersInSet:newLineCharSet];
 			
@@ -66,6 +72,11 @@
 					[patterns addObject:s];
 				}
 			}
+		}
+		else
+		{
+			patterns = [[NSMutableArray alloc] init];
+			stack = [[NSMutableArray alloc] init];
 		}
 	}
 
@@ -113,22 +124,53 @@
   
  */
 
--(BOOL) isFileIgnored:(NSString*) filename
+-(BOOL) isFileIgnored:(NSString*) filename isDirectory:(BOOL) isDirectory
 {
 	BOOL ignored = NO;
 
 	if ( [patterns count] )
 	{
-		ignored = [self ignoreCheck:filename beingIgnored:NO];
+		ignored = [self ignoreCheck:filename 
+					   beingIgnored:NO 
+						isDirectory:isDirectory];
 	}
 	
 	for ( GitIgnore *ignoreFile in stack )
 	{
-		ignored = [ignoreFile ignoreCheck:filename beingIgnored:ignored];
+		ignored = [ignoreFile ignoreCheck:filename 
+							 beingIgnored:ignored
+							  isDirectory:isDirectory];
 	}
 	
 	return ignored;
 }
+
+-(BOOL) shouldIgnoreFile:(GitFile*) file isDirectory:(BOOL) isDirectory
+{
+	BOOL ignored = NO;
+	
+	if ( [file status] == kFileStatusUntracked )
+	{
+		NSString *filename = [[file url] path];
+		
+		if ( [patterns count] )
+		{
+			ignored = [self ignoreCheck:filename 
+						   beingIgnored:NO 
+							isDirectory:isDirectory];
+		}
+		
+		for ( GitIgnore *ignoreFile in stack )
+		{
+			ignored = [ignoreFile ignoreCheck:filename 
+								 beingIgnored:ignored
+								  isDirectory:isDirectory];
+		}
+	}
+	
+	return ignored;
+}
+
 
 /**
 	Checks if given filename should be ignored. 
@@ -137,24 +179,15 @@
 	@param ignored If the file has already been ignored or not.
  
  */
--(BOOL) ignoreCheck:(NSString*) filename beingIgnored:(BOOL) ignored
+-(BOOL) ignoreCheck:(NSString*) filename 
+	   beingIgnored:(BOOL) ignored
+		isDirectory:(BOOL) isDirectory
 {
-	BOOL isDirectory;
 	const char* pathNameString;
 	const char* nameString;
 	
 	uint32_t start = [path length]+1;
 	uint32_t length= [filename length] - start;
-	
-	if ( [filename hasSuffix:@"/"] )
-	{
-		isDirectory = YES;
-		length --;
-	}
-	else
-	{
-		isDirectory = NO;
-	}
 	
 	NSString *pathname = [filename substringWithRange:NSMakeRange(start, length)];
 	pathNameString = [pathname UTF8String];
