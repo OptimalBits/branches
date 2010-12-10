@@ -119,7 +119,7 @@ static uint32 modeToInt( NSString* str );
 
 -(NSData*) data
 {
-	NSMutableData *result = [[NSMutableData alloc] init];
+	NSMutableData *result = [[[NSMutableData alloc] init] autorelease];
 	
 	NSArray* sortedKeys = 
 		[[tree allKeys] sortedArrayUsingSelector:@selector(compare:)];
