@@ -99,7 +99,7 @@ typedef struct
 
 
 /**
-	Writes the index as as a tree object into the object storage,
+	Writes the index as a tree object into the object storage,
 	as well as all the blob objects that have been added.
 	
 	Returns the Sha1 key of the resulting tree. 
@@ -116,10 +116,10 @@ typedef struct
 	returns the status of the working directory files.
  
  */
--(NSDictionary*) status:(NSDictionary*) flattenedTree;
+-(NSDictionary*) stageStatus:(NSDictionary*) flattenedTree;
 
 /**
-	Returns the status of the given file.
+	Returns the status of the given file in the working directory.
  
  */
 -(GitFileStatus) fileStatus:(NSURL*) fileUrl workingDir:(NSString*) workingDir;

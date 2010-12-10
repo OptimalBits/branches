@@ -370,7 +370,7 @@ static void writeStatInfo( EntryInfo *entryInfo, NSMutableData *outputData );
  has been renamed, and having a separate NSSet for checking adds and deletes.
  
  */
--(NSDictionary*) status:(NSDictionary*) flattenedTree
+-(NSDictionary*) stageStatus:(NSDictionary*) flattenedTree
 {	
 	GitFile *file;
 	
@@ -549,7 +549,7 @@ static void writeStatInfo( EntryInfo *entryInfo, NSMutableData *outputData );
 	GitTreeObject *tree = [objectStore getObject:treeSha1];
 	
 	NSDictionary *flattenedTree = [objectStore flattenTree:tree];
-	NSDictionary *status = [self status:flattenedTree];
+	NSDictionary *status = [self stageStatus:flattenedTree];
 	
 	if ( [status count] > 0 )
 	{

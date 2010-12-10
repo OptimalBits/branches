@@ -189,7 +189,7 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 	NSDictionary *headTree = [[repo objectStore] flattenTree:tree];
 	
 	[statusTree release];
-	statusTree = [self treeFromStatus:[[repo index] status:headTree] 
+	statusTree = [self treeFromStatus:[[repo index] stageStatus:headTree] 
 							   object:nil];
 	[statusTree retain];
 	
