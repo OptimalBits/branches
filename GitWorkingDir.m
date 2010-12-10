@@ -166,7 +166,8 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 			NSString *filename = [file filename];
 			
 			if ( [pathsSet containsObject:filename] == NO )
-			{
+			{	
+				// Deleted or Renamed file or directory.
 				[nodesToRemove addObject:childNode];
 			}
 			else
@@ -177,13 +178,13 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 								  isDirectory:&isDirectory];
 				
 				if ( ( isDirectory == NO ) && 
-					 ( [[childNode childNodes] count] ) )
+					 ( ( [[childNode childNodes] count] ) == 0) )
 				{					
 					[file setStatus:[index fileStatus:url 
 										   workingDir:workingDirPath]];
 					
 					if ( ( status != kFileStatusModified ) && 
-						( [file status] != kFileStatusUntracked ) )
+						 ( [file status] != kFileStatusUntracked ) )
 					{
 						status = [file status];
 					}
@@ -197,16 +198,16 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 				if ( [gitIgnoreFile shouldIgnoreFile:file 
 										 isDirectory:isDirectory] )
 				{
-					[nodesToRemove addObject:node];
+					[nodesToRemove addObject:childNode];
 				}
 			}
 		}
 		
 		NSMutableSet *childrenSet = 
 			[[NSMutableSet alloc] initWithCapacity:[nodes count]];
-		for ( NSTreeNode *node in nodes )
+		for ( NSTreeNode *childNode in nodes )
 		{
-			[childrenSet addObject:[[node representedObject] filename]];
+			[childrenSet addObject:[[childNode representedObject] filename]];
 		}
 		
 		// Create new children nodes with paths not in interesection
@@ -218,6 +219,8 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 			{
 				if ([subPath isEqualToString:@".git"] == NO) 
 				{
+					NSTreeNode *childNode;
+					
 					NSString *fullPath = 
 						[path stringByAppendingPathComponent:subPath];
 					
@@ -228,22 +231,21 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 					
 					if ( isDirectory )
 					{
-						node = [self createFileSubTree:u 
+						childNode = [self createFileSubTree:u 
 												 error:&error];
-						if ( node )
+						if ( childNode )
 						{
-							file = [node representedObject];
+							file = [childNode representedObject];
 						}
 					}
 					else
 					{
-						file = [[GitFile alloc] initWithUrl:u];
+						file = [[[GitFile alloc] initWithUrl:u] autorelease];
 						
-						node = [NSTreeNode treeNodeWithRepresentedObject:file];
+						childNode = [NSTreeNode treeNodeWithRepresentedObject:file];
 						
 						[file setStatus:[index fileStatus:u 
 											   workingDir:workingDirPath]];
-						[file release];
 					}
 					
 					if ( file ) 
@@ -257,7 +259,7 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 						if ( [gitIgnoreFile shouldIgnoreFile:file 
 												 isDirectory:isDirectory] == NO)
 						{
-							[nodes addObject:node];
+							[nodes addObject:childNode];
 						}
 					}
 				}
@@ -330,6 +332,7 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 	{
 		existsLocalIgnoreFile = YES;
 		[ignoreFile push:localIgnoreFile];
+		[localIgnoreFile release];
 	}		
 	
 	for (NSURL *u in subPaths)
@@ -355,7 +358,7 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 											error:error];
 				if ( *error != nil )
 				{
-					return 0;
+					NSLog(@"Error %@", [*error localizedDescription]);
 				}
 			}
 			else
@@ -392,7 +395,6 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 	if ( existsLocalIgnoreFile ) 
 	{
 		[ignoreFile pop];
-		[localIgnoreFile release];
 	}
 	
 	return status;
@@ -412,7 +414,7 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 	file = [node representedObject];
 	
 	// Force re-reading of this node's ignore file.
-	[self cacheIgnoreFile:[file url]]; 
+	[self cacheIgnoreFile:[file url]];
 	
 	[nodes addObject:node];
 	
