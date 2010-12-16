@@ -26,15 +26,25 @@ typedef enum
 	GitFileStatus status;
 	NSURL	 *url;
 	NSString *filename;
+	uint32_t mode;
+	NSDate *lastModification;
 }
 
 @property (readwrite, assign)	GitFileStatus status;
 @property (readwrite, copy)		NSString *filename;
 @property (readwrite, copy)		NSURL *url;
+@property (readonly)			uint32_t mode;
+
+-(id) initWithUrl:(NSURL*) url 
+		   status:(GitFileStatus) status 
+		  andMode:(uint32_t) mode;
 
 -(id) initWithUrl:(NSURL*) url andStatus:(GitFileStatus) status;
 -(id) initWithUrl:(NSURL*) url;
 -(id) initWithName:(NSString*) filename andStatus:(GitFileStatus) status;
+
+-(void) updateMode;
+
 -(void) dealloc;
 
 @end
