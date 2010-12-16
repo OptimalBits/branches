@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "GitFile.h"
+#import "GitFile.h" // GitFileStatus
 
 @class GitObjectStore;
 @class GitBlobObject;
