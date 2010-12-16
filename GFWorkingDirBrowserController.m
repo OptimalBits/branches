@@ -26,9 +26,6 @@
 
 #import "ImageAndTextCell.h"
 
-#include <sys/stat.h>
-
-
 static NSTreeNode *findTreeNode( NSTreeNode *fileTree, NSString *subPath );
 
 static NSTreeNode *createSubTree( GitRepo *repo, 
@@ -136,12 +133,15 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 	[workingDir release];
 	workingDir = [[GitWorkingDir alloc] initWithRepo:repo fileTree:nil];
 	
-	fileTree = [workingDir fileTree];
+	if ( workingDir )
+	{
+		fileTree = [workingDir fileTree];
 		
-	[repoWatcher release];
-	repoWatcher = [[GFRepoWatcher alloc] initWithRepo:repo delegate:self];
+		[repoWatcher release];
+		repoWatcher = [[GFRepoWatcher alloc] initWithRepo:repo delegate:self];
 	
-	[self updateView];
+		[self updateView];
+	}
 }
 
 - (GitRepo*) repo
@@ -179,9 +179,12 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 
 -(void) updateView
 {	
-	[fileTree release];
-	fileTree = [workingDir fileTree];
-	[fileTree retain];
+	if ( workingDir )
+	{
+		[fileTree release];
+		fileTree = [workingDir fileTree];
+		[fileTree retain];
+	}
 	
 	NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
 	GitTreeObject *tree = [[repo objectStore] getTreeFromCommit:headSha1];
@@ -221,7 +224,14 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 		
 		if ( outlineView == workingDirBrowseView )
 		{
-			tree = fileTree;
+			if ( fileTree )
+			{
+				tree = fileTree;
+			}
+			else
+			{
+				return nil;
+			}
 		}
 		else if( outlineView == stageAreaBrowseView )
 		{
@@ -249,7 +259,14 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 		
 		if ( outlineView == workingDirBrowseView )
 		{
-			tree = fileTree;
+			if ( fileTree )
+			{
+				tree = fileTree;
+			}
+			else
+			{
+				return 0;
+			}
 		}
 		else if( outlineView == stageAreaBrowseView )
 		{
@@ -282,7 +299,14 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 
 		if ( outlineView == workingDirBrowseView )
 		{
-			tree = fileTree;
+			if ( fileTree )
+			{
+				tree = fileTree;
+			}
+			else
+			{
+				return 0;
+			}
 		}
 		else if( outlineView == stageAreaBrowseView )
 		{
@@ -379,26 +403,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 
 		}
-		
 		else if ([[[tableColumn headerCell] stringValue] compare:@"Mode"] == NSOrderedSame) 
 		{
-			// TODO: move mode to GitFile to avoid this extra fstat.
-			NSError *error;
 			char modeStr[8];
-			struct stat fileStat;
 			
-			NSFileHandle *fileHandle = 
-				[NSFileHandle fileHandleForReadingFromURL:[file url]
-													error:&error];
-			if ( fileHandle )
-			{
-				if ( fstat([fileHandle fileDescriptor], &fileStat ) == 0 )
-				{
-					strmode(fileStat.st_mode, modeStr);
-					return [NSString stringWithUTF8String:modeStr];
-				}
-			}
-			return nil;
+			strmode([file mode], modeStr);
+			return [NSString stringWithUTF8String:modeStr];
 		}
 	}
 	else if( outlineView == stageAreaBrowseView )
@@ -474,7 +484,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 // changed.
 -(void) modifiedDirectories:(NSArray*) directories
 {
-	[workingDir updateFileTree:directories];
+	if ( workingDir )
+	{
+		[workingDir updateFileTree:directories];
 	
-	[workingDirBrowseView reloadData];
+		[workingDirBrowseView reloadData];
+	}
 }
+
+
+@end
