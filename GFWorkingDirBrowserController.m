@@ -18,13 +18,51 @@
 #import "GitIndex.h"
 #import "GitBlobObject.h"
 #import "GitFile.h"
-#import "GitIgnore.h"
+
 #import "GitFrontIcons.h"
 
 #import "NSDataExtension.h"
 #import "NSMutableArray+Reverse.h"
 
 #import "ImageAndTextCell.h"
+
+
+/**
+	A Category adding support for filtering tree nodes.
+ 
+ */
+@interface NSTreeNode (Filter)
+
+-(NSArray*) childNodesFiltered:(GitFileStatus) statusMask;
+
+@end
+
+@implementation NSTreeNode (Filter)
+
+-(NSArray*) childNodesFiltered:(GitFileStatus) statusMask
+{
+	if ( statusMask )
+	{
+		NSMutableArray *array = [NSMutableArray array];
+		
+		for ( NSTreeNode *node in [self childNodes] ) 
+		{
+			if ( [[node representedObject] status] & statusMask )
+			{
+				[array addObject:node];
+			}
+		}
+		return array;
+	}
+	else
+	{
+		return [self childNodes];
+	}
+}
+
+@end
+
+
 
 static NSTreeNode *findTreeNode( NSTreeNode *fileTree, NSString *subPath );
 
@@ -34,9 +72,6 @@ static NSTreeNode *createSubTree( GitRepo *repo,
 								  NSError **error );
 
 static void updateStatus( NSTreeNode *node, GitFileStatus status );
-
-static GitIgnore *getParentIgnoreFile( NSTreeNode *node, 
-									   NSFileManager *fileManager );
 
 
 @implementation GFWorkingDirBrowserController
@@ -149,6 +184,33 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 	return repo;
 }
 
+-(BOOL) commitButtonEnabled
+{
+	// if ( staged files > 0 )
+	// return YES;
+	// else
+	// return NO;
+	
+	return YES;
+}
+
+- (IBAction) commit:(id) sender
+{
+	
+}
+
+- (IBAction) modifiedFilesFilter:(id) sender
+{
+	status_mask ^= kFileStatusModified;
+	[workingDirBrowseView reloadData];
+}
+
+- (IBAction) untrackedFilesFilter:(id) sender
+{
+	status_mask ^= kFileStatusUntracked;
+	[workingDirBrowseView reloadData];
+}
+
 - (IBAction) addFile:(id) sender
 {
     int row = [workingDirBrowseView selectedRow];
@@ -202,7 +264,7 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 
 
 //
-// OutlineView datasource.
+// OutlineView Datasource. (TODO: use Bindings )
 //
 
 - (id)outlineView:(NSOutlineView *)outlineView 
@@ -216,7 +278,7 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 	
 	if ( item != nil )
 	{
-		return [[item childNodes] objectAtIndex:index];
+		return [[item childNodesFiltered:status_mask] objectAtIndex:index];
 	}
 	else
 	{
@@ -242,7 +304,7 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 			return nil;
 		}
 
-		return [[tree childNodes] objectAtIndex:index];
+		return [[tree childNodesFiltered:status_mask] objectAtIndex:index];
 	}
 }
 
@@ -251,7 +313,7 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 {
 	if ( item != nil )
 	{
-		return [[item childNodes] count] > 0;
+		return [[item childNodesFiltered:status_mask] count] > 0;
 	}
 	else
 	{
@@ -277,7 +339,7 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 			return 0;
 		}
 
-		return [[tree childNodes] count] > 0;
+		return [[tree childNodesFiltered:status_mask] count] > 0;
 	}
 }
 
@@ -291,7 +353,7 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 	
 	if ( item != nil )
 	{
-		return [[item childNodes] count];
+		return [[item childNodesFiltered:status_mask] count];
 	}
 	else
 	{
@@ -317,7 +379,7 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 			return 0;
 		}
 
-		return [[tree childNodes] count];
+		return [[tree childNodesFiltered:status_mask] count];
 	}
 }
 
@@ -333,12 +395,26 @@ static GitIgnore *getParentIgnoreFile( NSTreeNode *node,
 		if ([[[tableColumn headerCell] stringValue] compare:@"Status"] == NSOrderedSame) 
 		{
 			GitFile *file = [item representedObject];
-						
-			if ( [file status] == kFileStatusModified )
+			GitFileStatus maskedStatus;
+			
+			if ( status_mask )
+			{
+				maskedStatus = [file status] & status_mask;
+			}
+			else
+			{
+				maskedStatus = [file status];
+			}
+
+			if ( maskedStatus & kFileStatusModified )
 			{
 				[iconCell setImage:[icons objectForKey:@"exclamation"]];
 			}
-			else if ( [file status] == kFileStatusTracked )
+			else if ( maskedStatus & kFileStatusUntracked )
+			{
+				[iconCell setImage:[icons objectForKey:@"question"]];
+			}
+			else if ( maskedStatus & kFileStatusTracked )
 			{
 				[iconCell setImage:[icons objectForKey:@"tick"]];
 			}

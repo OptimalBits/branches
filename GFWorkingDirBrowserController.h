@@ -8,11 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "GFRepoWatcher.h"
+#import "GitFile.h"
 
-@class GitRepo;
-@class GitWorkingDir;
-@class GitFrontIcons;
-@class CCDiffViewController;
+@class GitRepo, GitWorkingDir, GitFrontIcons, CCDiffViewController;
 
 @interface GFWorkingDirBrowserController : NSViewController 
 <NSOutlineViewDataSource, GFRepoWatcherDelegate>
@@ -34,20 +32,25 @@
 	
 	GFRepoWatcher *repoWatcher;
 	
-	
 	NSDictionary *icons;
+	
+	GitFileStatus status_mask;
 }
+
+- (IBAction) commit:(id) sender;
+- (IBAction) modifiedFilesFilter:(id) sender;
+- (IBAction) untrackedFilesFilter:(id) sender;
+- (IBAction) ignoredFilesFilter:(id) sender;
 
 - (IBAction) addFile:(id) sender;
 - (IBAction) removeFile:(id) sender;
 - (IBAction) renameFile:(id) sender;
 
-
-- (id) init;
+- (id)   init;
 - (void) awakeFromNib;
 - (void) dealloc;
 
-- (void) setRepo:(GitRepo*) _repo;
+- (void)     setRepo:(GitRepo*) _repo;
 - (GitRepo*) repo;
 
 - (void) setDiffView:(CCDiffViewController*) diffView;
