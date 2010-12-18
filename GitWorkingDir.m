@@ -357,7 +357,7 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 							node:(NSTreeNode*) node
 					  ignoreFile:(GitIgnore*) ignoreFile
 {
-	GitFileStatus status = kFileStatusUntracked;
+	GitFileStatus status = kFileStatusUnknown;
 	BOOL existsLocalIgnoreFile = NO;
 	GitIgnore* localIgnoreFile = nil;
 	NSMutableArray *subPaths;
@@ -403,16 +403,11 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 		
 		[file setStatus:newStatus];
 		
-		if ( ( status != kFileStatusModified ) && 
-			 ( [file status] != kFileStatusUntracked ) )
-		{
-			status = [file status];
-		}
-		
-		if ( ( [file status] != kFileStatusUntracked ) ||
-			   [ignoreFile isFileIgnored:[u path] isDirectory:YES] == NO)
+		if ( (newStatus && (newStatus != kFileStatusUntracked ) ) ||
+			 [ignoreFile isFileIgnored:[u path] isDirectory:YES] == NO)
 		{
 			[childs addObject:node];
+			status |= newStatus;
 		}
 		
 		[node release];
