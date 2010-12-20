@@ -74,19 +74,11 @@
 
 -(void) updateMode
 {
-	NSError *error;
 	struct stat fileStat;
 	
-	NSFileHandle *fileHandle =
-		[NSFileHandle fileHandleForReadingFromURL:url
-											error:&error];
-	if ( fileHandle )
+	if ( stat([[url path] UTF8String], &fileStat ) == 0 )
 	{
-		if ( fstat([fileHandle fileDescriptor], &fileStat ) == 0 )
-		{
-			mode = fileStat.st_mode;
-		}
-		[fileHandle closeFile];
+		mode = fileStat.st_mode;
 	}
 }
 
