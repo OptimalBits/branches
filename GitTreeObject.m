@@ -133,12 +133,9 @@ static uint32 modeToInt( NSString* str );
 		treeEntry = [NSString stringWithFormat:@"%06o %@", [node mode], key];
 
 		const char* cString = [treeEntry UTF8String];
-		
-		// note, the length is not in bytes, so it is wrong!. 
-		// you have to use the length of the UTF8string by searching the
-		// trailing zero.
+				
 		[result appendData:[NSData dataWithBytes:cString
-										  length:[treeEntry length] + 1]];
+										  length:strlen(cString) + 1]];
 		[result appendData:[node sha1]];
 	}
 	

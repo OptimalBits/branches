@@ -43,12 +43,12 @@
 		[NSString stringWithFormat:@"%@ %d", type, [content length]];
 	
 	const char* cString = [header UTF8String];
+	uint32_t header_length = strlen( cString );
 	
 	NSMutableData *data = [NSMutableData dataWithCapacity:
-						   [header length] + [content length] + 1];
+						  header_length + [content length] + 1];
 	
-	// length is wrong here, it is characters not number of bytes!
-	[data appendData:[NSData dataWithBytes:cString length:[header length] + 1]];
+	[data appendData:[NSData dataWithBytes:cString length:header_length + 1]];
 	[data appendData:content];
 	
 	return data;
