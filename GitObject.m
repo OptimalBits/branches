@@ -34,12 +34,6 @@
 {
 	return nil;
 }
-/*
--(NSData*) sha1
-{
-	return nil;
-}
- */
 
 -(NSData*) encode
 {
