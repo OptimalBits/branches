@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class GitTreeObject;
+
 typedef enum
 {
 	kFileStatusUnknown		= 0,
@@ -18,16 +20,17 @@ typedef enum
 	kFileStatusModified		= 16,
 	kFileStatusStaged		= 32,
 	kFileStatusTracked		= 64,
-	kFileStatusUntracked	= 128
+	kFileStatusUntracked	= 128,
+	kFileStatusMissing		= 256
 } GitFileStatus;
 
 @interface GitFile : NSObject {
 	
 	GitFileStatus status;
-	NSURL	 *url;
-	NSString *filename;
-	uint32_t mode;
-	NSDate *lastModification;
+	NSURL		  *url;
+	NSString	  *filename;
+	uint32_t	  mode;
+	GitTreeObject *tree;
 }
 
 @property (readwrite, assign)	GitFileStatus status;
