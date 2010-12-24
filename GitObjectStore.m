@@ -254,27 +254,38 @@ static BOOL writeObject( NSData *sha1,
 	[branches release];
 }
 */
-/*
-- (void) walk: (NSData*) commitSha with:(id) visitor
+
+/**
+	Ordered by Date Walk.
+ 
+	The commits are traversed ordered by date.
+ */
+
+- (void) orderedByDateWalk:(NSData*) commitSha 
+					  with:(BOOL (^)(GitCommitObject *prevObj, GitCommitObject *obj ))block
 {
+	GitCommitObject *commitObj;
+	GitCommitObject *prevCommitObj = nil;;
+
 	NSMutableSet *branches = [[NSMutableSet alloc] init];
 	
-	[branches addObject:[self getObject: commitSha]];
+	commitObj = [self getObject: commitSha];
+	[branches addObject:commitObj];
 	
 	while ( [branches count] > 0 )
 	{
 		NSArray *sortedBranches = [[branches allObjects] 
 								   sortedArrayUsingSelector:@selector(compareDate:)];
 		
-		// ( sort in descent order )
-		GitCommitObject *obj = [sortedBranches lastObject];
-		[branches removeObject:obj];
+		// Pick newest commit object.
+		prevCommitObj = commitObj;
+		commitObj = [sortedBranches lastObject];
 		
-		if ( [obj isKindOfClass:[GitCommitObject class]] )
+		if ( [commitObj isKindOfClass:[GitCommitObject class]] )
 		{
-			if ( [visitor visit:obj] )
+			if ( block(prevCommitObj, commitObj) )
 			{
-				for (NSData *parent in [obj parents])
+				for (NSData *parent in [commitObj parents])
 				{
 					id parentObject = [self getObject:parent];
 					if ( parentObject != nil) 						
@@ -284,11 +295,13 @@ static BOOL writeObject( NSData *sha1,
 				}
 			}
 		}
+		
+		[branches removeObject:commitObj];
 	}
 	
 	[branches release];
 }
-*/
+
 
 /**
 	Depth First Traversing.
@@ -339,36 +352,6 @@ static BOOL writeObject( NSData *sha1,
 }
 
 /*
-- (void) walk: (NSData*) commitSha with:(id) visitor
-{
-	NSMutableSet *visited = [[NSMutableSet alloc] init];
-	
-	[self walk_recur:commitSha with:visitor visited:visited];
-
-	[visited release];
-}
-
-- (void) walk_recur: (NSData*) commitSha with:(id) visitor visited:(NSMutableSet*) visited
-{
-	GitCommitObject *obj = [self getObject: commitSha];
-	if ( [obj isKindOfClass:[GitCommitObject class]] )
-	{
-		if ( [visited member:obj] == nil )
-		{
-			if ( [visitor visit:obj] )
-			{
-				[visited addObject:obj];
-		
-				for (NSData *parent in [obj parents])
-				{
-					[self walk_recur:parent with:visitor visited:visited];
-				}
-			}
-		}
-	}
-}
-*/
-/*
  function visit(node n)
 	if n has not been visited yet then
 		mark n as visited
@@ -411,30 +394,96 @@ static BOOL writeObject( NSData *sha1,
 	return nil;
 }
 
-
 /**
-	This function is more effective than calling fileHistory for every file in the
-	tree, since it traverses the history just once.
+	Returns a dictionary where every key represents a file ( or a directory )
+	present in the given tree object, and the value is the modification date.
  
+	This method can take quite long time if one of the entries have not been
+	modified in a long time, therefore a maxDate argument is available in order
+	to constraint the computing time.
  */
-/*
-- (NSDictionary*) lastModifiedCommits:(GitTreeObject*) tree sha1: (NSData*) sha1
+- (NSDictionary*) lastModifiedTree:(GitTreeObject*) tree 
+						commitSha1:(NSData*) sha1
+							 until:(NSDate*) maxDate
 {
+	NSUInteger maxNumCommits = 1000;
+
 	NSMutableSet *remainingFiles;
-	GitTreeObject *prevTree;
+	NSMutableDictionary *lastModificationTree;
 	
-	// walk throught the commits and for every commit check what files in the tree 
-	// have been modified.
-	while ( [remainingFiles count] > 0 ) 
+	remainingFiles = [NSMutableSet setWithArray:[[tree tree] allKeys]];
+	
+	lastModificationTree = 
+		[NSMutableDictionary dictionaryWithCapacity:[remainingFiles count]];
+	
+	numCommit = 0;
+	
+	[self orderedByDateWalk:sha1
+					   with:^(GitCommitObject *prevObj, GitCommitObject *obj)
 	{
-	//	prevTree = [self getTreeFromCommit:[self getParent:sha1]];
-		NSArray *changedFiles = [tree treeDiff: prevTree];		
-	}
+		NSSet *filesSet = [NSSet setWithSet:remainingFiles];
+		
+		GitTreeObject *newTree = [self getObject:[obj tree]];
+		
+		NSDate *commitDate = [[prevObj committer] time];
+	 
+		for ( NSString *key in filesSet )
+		{
+			GitTreeNode *newNode;
+			
+			BOOL modified = NO;
+			
+			newNode = [[newTree tree] objectForKey:key];
+			if ( newNode )
+			{
+				GitTreeNode *node = [[tree tree] objectForKey:key];
+				
+				if  ( ([node mode] != [newNode mode]) ||
+					  ([[node sha1] isEqualToData:[newNode sha1]] == NO) )
+				{
+					modified = YES;
+				}
+			}
+			else
+			{
+				// File was created in previous commit.
+				modified = YES;
+			}
+			
+			if ( modified )
+			{
+				[lastModificationTree setObject:commitDate forKey:key];
+				[remainingFiles removeObject:key];
+			}
+		}
+		
+		if ( [remainingFiles count] )
+		{
+			numCommit ++;
+			
+			if ( numCommit >= maxNumCommits )
+			{
+				return NO;
+			} 
+			else if ( maxDate )
+			{
+				if ( [maxDate compare:commitDate] == NSOrderedAscending )
+				{
+					return YES;
+				}
+			}
+			else
+			{
+				return YES;
+			}
+		}
 	
-	// Note, use also walk with proper visitor object.
+		return NO;
+	}];
+	
+	return lastModificationTree;
 }
-*/
- 
+
 -(NSArray*) fileHistory:(NSString*) filename 
 			 fromCommit:(NSData*) sha1 
 			   maxItems:(uint32_t) max
@@ -523,7 +572,7 @@ static BOOL writeObject( NSData *sha1,
 	
 	flattenedTree = [[[NSMutableDictionary alloc] init] autorelease];
 	
-	[self flattenTreeRecursive:tree 
+	[self flattenTreeRecursive:tree
 						  path:nil 
 						result:flattenedTree];
 	

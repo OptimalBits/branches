@@ -20,6 +20,9 @@
 	NSURL *url;
 	NSURL *objectsUrl;
 	NSArray *packFiles; // NSArray of GitPackFile
+
+	NSUInteger numCommit; // Ugly, since a block cannot write on variables
+	// allocated on the stack.
 }
 
 /**
@@ -78,11 +81,11 @@
  
  @param tree the tree with files.
  @param sha1 a sha1 key associated to the "head" commit for the operation.
- 
- TODO: Move to a dedicated class GitCommits
- */
-- (NSDictionary*) lastModifiedCommits:(GitTreeObject*) tree 
-								 sha1:(NSData*) sha1;
+
+*/
+- (NSDictionary*) lastModifiedTree:(GitTreeObject*) tree 
+						commitSha1:(NSData*) sha1
+							 until:(NSDate*) maxDate;
 
 /**
 	Adds the given object to the object store.
