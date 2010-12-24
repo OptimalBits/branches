@@ -64,6 +64,7 @@
 		6486FCD0127C6F25007CA28A /* question.png in Resources */ = {isa = PBXBuildFile; fileRef = 6486FCCF127C6F25007CA28A /* question.png */; };
 		6486FEE1127CBD32007CA28A /* NoodleLineNumberMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6486FEDE127CBD32007CA28A /* NoodleLineNumberMarker.m */; };
 		6486FEE2127CBD32007CA28A /* NoodleLineNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6486FEE0127CBD32007CA28A /* NoodleLineNumberView.m */; };
+		648F072D12C2325A00381094 /* GitModificationDateResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 648F072C12C2325A00381094 /* GitModificationDateResolver.m */; };
 		6491C2C2119B2F6500D2662B /* gitfendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6491C2C1119B2F6500D2662B /* gitfendController.m */; };
 		64A5E7601204D3E700DDB5C9 /* GitClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E75F1204D3E700DDB5C9 /* GitClient.m */; };
 		64A5E7631205AA1100DDB5C9 /* RepoConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A5E7621205AA1100DDB5C9 /* RepoConfig.xib */; };
@@ -223,6 +224,8 @@
 		6486FEDE127CBD32007CA28A /* NoodleLineNumberMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleLineNumberMarker.m; path = "Third Party/NoodleLineNumberMarker.m"; sourceTree = "<group>"; };
 		6486FEDF127CBD32007CA28A /* NoodleLineNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleLineNumberView.h; path = "Third Party/NoodleLineNumberView.h"; sourceTree = "<group>"; };
 		6486FEE0127CBD32007CA28A /* NoodleLineNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleLineNumberView.m; path = "Third Party/NoodleLineNumberView.m"; sourceTree = "<group>"; };
+		648F072B12C2325A00381094 /* GitModificationDateResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitModificationDateResolver.h; sourceTree = "<group>"; };
+		648F072C12C2325A00381094 /* GitModificationDateResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitModificationDateResolver.m; sourceTree = "<group>"; };
 		6491C2C0119B2F6500D2662B /* gitfendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gitfendController.h; sourceTree = "<group>"; };
 		6491C2C1119B2F6500D2662B /* gitfendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gitfendController.m; sourceTree = "<group>"; };
 		64A5E75E1204D3E700DDB5C9 /* GitClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitClient.h; sourceTree = "<group>"; };
@@ -547,6 +550,8 @@
 				64B1056712A44BB000C516FB /* GitIgnore.m */,
 				64B1085012AC11FA00C516FB /* GitWorkingDir.h */,
 				64B1085112AC11FA00C516FB /* GitWorkingDir.m */,
+				648F072B12C2325A00381094 /* GitModificationDateResolver.h */,
+				648F072C12C2325A00381094 /* GitModificationDateResolver.m */,
 			);
 			name = "Working Copy";
 			sourceTree = "<group>";
@@ -729,6 +734,7 @@
 				64B1056812A44BB000C516FB /* GitIgnore.m in Sources */,
 				64B1075612AAF1AE00C516FB /* NSMutableArray+Reverse.m in Sources */,
 				64B1085212AC11FA00C516FB /* GitWorkingDir.m in Sources */,
+				648F072D12C2325A00381094 /* GitModificationDateResolver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

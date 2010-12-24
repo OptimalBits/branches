@@ -71,7 +71,8 @@
 		browseController = vc;
 		
 		// tag 2
-		vc = [[[GFWorkingDirBrowserController alloc] init] autorelease];
+		vc = [[[GFWorkingDirBrowserController alloc] 
+			   initWithController:self] autorelease];
 		[viewControllers addObject:vc];
 		workingDirBrowseController = vc;
 	}
@@ -325,55 +326,6 @@
 	[self saveDataToDisk];
 }
 
-- (IBAction) showCommitSheet:(id) sender
-{
-	NSWindow *window = [NSApp mainWindow];
-	
-	[NSApp beginSheet:commitSheet 
-	   modalForWindow:window
-		modalDelegate:nil
-	   didEndSelector:NULL
-		  contextInfo:NULL];
-	
-}
-
-- (IBAction) endCommitSheet:(id) sender
-{
-	if ( [sender tag] == COMMIT_TAG )
-	{
-		GitAuthor *author;
-		
-		author = [[GitAuthor alloc] initWithName:@"pepe" 
-										   email:@"mymail@casa.se"
-										 andTime:@"1234"];
-		
-		NSString *commitMessage = [[commitMessageView textStorage] string];
-		
-		if ( [commitMessage length] == 0 )
-		{
-			// Show Alarm
-		}
-		
-		[[workingDirBrowseController repo] makeCommit:commitMessage
-											   author:author
-											 commiter:author];
-		
-		[workingDirBrowseController updateView];
-		
-		NSAttributedString *emptyString = 
-			[[[NSAttributedString alloc] initWithString:@""] autorelease];
-		
-		
-		[[commitMessageView textStorage] setAttributedString:emptyString];
-		 
-		// update the commit window (window showing the commits not yet pushed)
-		// and also increase the number in the repo browser.
-	}
-	
-	[NSApp endSheet:commitSheet];
-	[commitSheet orderOut:sender];
-}
-
 -(void) displayViewController:(NSViewController*) vc
 {
 	NSWindow *w = [box window];
@@ -387,7 +339,6 @@
 	NSView *v = [vc view];
 	[box setContentView:v];
 }
-
 
 - (void) addRepoFromUrl:(NSURL*) repoUrl
 {
@@ -548,7 +499,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	 forTableColumn:(NSTableColumn *)tableColumn 
 			 byItem:(id)item
 {
-	[item setName:object];
+	GitFrontRepositories *r = item;
+	[r setName:object];
 	[self saveDataToDisk];
 }
 

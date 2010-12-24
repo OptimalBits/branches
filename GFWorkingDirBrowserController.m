@@ -7,10 +7,9 @@
 //
 
 #import "GFWorkingDirBrowserController.h"
+#import "gitfendController.h"
 #import "CCDiffViewController.h"
-
 #import "GFRepoWatcher.h"
-
 #import "GitRepo.h"
 #import "GitWorkingDir.h"
 #import "GitReference.h"
@@ -18,14 +17,17 @@
 #import "GitIndex.h"
 #import "GitBlobObject.h"
 #import "GitFile.h"
-
+#import "GitModificationDateResolver.h"
+#import "GitCommitObject.h"
 #import "GitFrontIcons.h"
-
 #import "NSDataExtension.h"
 #import "NSMutableArray+Reverse.h"
-
 #import "ImageAndTextCell.h"
 
+
+#include <sys/stat.h>
+
+#define COMMIT_TAG 1
 
 /**
 	A Category adding support for filtering tree nodes.
@@ -76,20 +78,27 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 
 @implementation GFWorkingDirBrowserController
 
-- (id) init
+- (id) initWithController:(gitfendRepositoryController*) _controller
 {
 	if ( self = [super initWithNibName:@"WorkingDirBrowser" bundle:nil] )
     {
-		fileTree = nil;
-		statusTree = nil;
+		controller = _controller;
+		[controller retain];
 		
-		repo = nil;
-		
-		workingDir = nil;
-		
+		fileTree	= nil;
+		statusTree	= nil;
+		repo		= nil;
+		workingDir	= nil;
 		repoWatcher = nil;
+		dateResolver = nil;
 		
 		fileManager = [[NSFileManager alloc] init];
+		
+		dateFormatter = [[NSDateFormatter alloc] init];
+		
+		[dateFormatter setDoesRelativeDateFormatting:YES];
+		[dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+		[dateFormatter setDateStyle:NSDateFormatterMediumStyle];
 
 		[self setTitle:@"GitFront - Browser"];
 		
@@ -100,9 +109,14 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 
 - (void) dealloc
 {
-	[fileManager release];
-	[modifiedFiles release];
+	[fileTree release];
+	[statusTree release];
 	[repo release];
+	[workingDir release];
+	[repoWatcher release];
+	[fileManager release];
+	[dateResolver release];
+	[controller release];
 	[super dealloc];
 }
 
@@ -130,7 +144,7 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 {
 	if ( object == nil )
 	{
-		object = @"furls";
+		NSLog(@"treeFromStatus received nil object", nil);
 	}
 	
 	NSTreeNode *result = [NSTreeNode treeNodeWithRepresentedObject:object];
@@ -184,19 +198,21 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 	return repo;
 }
 
--(BOOL) commitButtonEnabled
+-(void) updateCommitButton
 {
-	// if ( staged files > 0 )
-	// return YES;
-	// else
-	// return NO;
-	
-	return YES;
+	if ( [[statusTree childNodes] count] )
+	{
+		[commitButton setEnabled:YES];
+	}
+	else
+	{
+		[commitButton setEnabled:NO];		
+	}
 }
 
 - (IBAction) commit:(id) sender
 {
-	
+	[self showCommitSheet];
 }
 
 - (IBAction) modifiedFilesFilter:(id) sender
@@ -219,19 +235,16 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
     NSURL *url = [file url];
 	
 	NSString *filename = 
-		[[url path] substringFromIndex:[[[repo workingDir] path] length]+1];
+	[[url path] substringFromIndex:[[[repo workingDir] path] length]+1];
 	
-//	if ( [modifiedFiles containsObject:filename] )
-	{
-		NSData *fileContents = [NSData dataWithContentsOfURL:url];
+	NSData *fileContents = [NSData dataWithContentsOfURL:url];
 	
-		GitBlobObject *object = 
-			[[[GitBlobObject alloc] initWithData:fileContents] autorelease];
-		
-		[[repo index] addFile:filename blob:object];
+	GitBlobObject *object = 
+	[[[GitBlobObject alloc] initWithData:fileContents] autorelease];
 	
-		[self updateView];
-	}
+	[[repo index] addFile:filename blob:object];
+	
+	[self updateView];
 }
 
 - (void) setDiffView:(CCDiffViewController*) _diffView
@@ -248,23 +261,82 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 		[fileTree retain];
 	}
 	
-	NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
-	GitTreeObject *tree = [[repo objectStore] getTreeFromCommit:headSha1];
+	GitObjectStore *objectStore = [repo objectStore];
 	
-	NSDictionary *headTree = [[repo objectStore] flattenTree:tree];
+	NSData *headSha1 = [[[repo refs] head] resolve:[repo refs]];
+	
+	GitTreeObject *tree = [objectStore getTreeFromCommit:headSha1];
+	
+	NSDictionary *headTree = [objectStore flattenTree:tree];
 	
 	[statusTree release];
 	statusTree = [self treeFromStatus:[[repo index] stageStatus:headTree] 
 							   object:nil];
 	[statusTree retain];
 	
+	[self updateCommitButton];
+	
+	[dateResolver release];
+	dateResolver = [[GitModificationDateResolver alloc] 
+					initWithObjectStore:[repo objectStore]
+							 commitSha1:headSha1];
+	
 	[workingDirBrowseView reloadData];
 	[stageAreaBrowseView reloadData];
 }
 
+- (void) showCommitSheet
+{
+	NSWindow *window = [NSApp mainWindow];
+	
+	[NSApp beginSheet:commitSheet 
+	   modalForWindow:window
+		modalDelegate:nil
+	   didEndSelector:NULL
+		  contextInfo:NULL];
+	
+}
+
+- (IBAction) endCommitSheet:(id) sender
+{
+	if ( [sender tag] == COMMIT_TAG )
+	{
+		GitAuthor *author;
+		
+		author = [[GitAuthor alloc] initWithName:@"pepe" 
+										   email:@"mymail@casa.se"
+										 andTime:@"1234"];
+		
+		NSString *commitMessage = [[commitMessageView textStorage] string];
+		
+		if ( [commitMessage length] == 0 )
+		{
+			// Show Alarm
+		}
+		
+		[repo makeCommit:commitMessage
+				  author:author
+				commiter:author];
+		
+		[self updateView];
+		
+		NSAttributedString *emptyString = 
+		[[[NSAttributedString alloc] initWithString:@""] autorelease];
+		
+		
+		[[commitMessageView textStorage] setAttributedString:emptyString];
+		
+		// update the commit window (window showing the commits not yet pushed)
+		// and also increase the number in the repo browser.
+	}
+	
+	[NSApp endSheet:commitSheet];
+	[commitSheet orderOut:sender];
+}
+
 
 //
-// OutlineView Datasource. (TODO: use Bindings )
+// OutlineView Datasource. (TODO: use Bindings if possible )
 //
 
 - (id)outlineView:(NSOutlineView *)outlineView 
@@ -470,21 +542,43 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		GitFile *file = [item representedObject];
 		
-		if ([[[tableColumn headerCell] stringValue] compare:@"Name"] == NSOrderedSame) 
+		if ([[tableColumn identifier] isEqualToString:@"Name"]) 
 		{
 			return [file filename];
 		}
-		
-		else if ([[[tableColumn headerCell] stringValue] compare:@"Status"] == NSOrderedSame) 
+		else if ([[tableColumn identifier] isEqualToString:@"Status"]) 
 		{
 
 		}
-		else if ([[[tableColumn headerCell] stringValue] compare:@"Mode"] == NSOrderedSame) 
+		else if ([[tableColumn identifier] isEqualToString:@"Mode"]) 
 		{
 			char modeStr[8];
 			
 			strmode([file mode], modeStr);
 			return [NSString stringWithUTF8String:modeStr];
+		}
+		else if ([[tableColumn identifier] isEqualToString:@"ModificationDate"])  
+		{
+			NSDate *date;
+			
+			if ( ( [file status] & kFileStatusModified ) || 
+			     ( [file status] & kFileStatusUntracked ) )
+			{
+				struct stat fileStat;
+				
+				if ( stat([[[file url] path] UTF8String], &fileStat ) == 0 )
+				{
+					float t = fileStat.st_mtimespec.tv_sec;
+					date = [NSDate dateWithTimeIntervalSince1970:t];
+				}
+			}
+			else 
+			{
+				NSString *pathname = [repo relativizeFilePath:[file url]];
+				date = [dateResolver resolveDate:pathname];
+			}
+
+			return [dateFormatter stringFromDate:date];
 		}
 	}
 	else if( outlineView == stageAreaBrowseView )

@@ -11,22 +11,30 @@
 #import "GitFile.h"
 
 @class GitRepo, GitWorkingDir, GitFrontIcons, CCDiffViewController;
+@class GitModificationDateResolver, gitfendRepositoryController;
 
 @interface GFWorkingDirBrowserController : NSViewController 
 <NSOutlineViewDataSource, GFRepoWatcherDelegate>
 {
 	IBOutlet NSOutlineView *workingDirBrowseView;
 	IBOutlet NSOutlineView *stageAreaBrowseView;
+	IBOutlet NSButton *commitButton;
+	
+	IBOutlet NSWindow *commitSheet;
+	IBOutlet NSTextView *commitMessageView;
+	
+	gitfendRepositoryController *controller;
 	
 	CCDiffViewController *diffView;
 	
 	GitRepo *repo;
 	GitWorkingDir *workingDir;
 	
+	GitModificationDateResolver *dateResolver;
+	NSDateFormatter *dateFormatter;
+	
 	NSFileManager *fileManager;
 	
-	NSSet *modifiedFiles;
-
 	NSTreeNode *statusTree;
 	NSTreeNode *fileTree;
 	
@@ -35,9 +43,11 @@
 	NSDictionary *icons;
 	
 	GitFileStatus status_mask;
+	
 }
 
 - (IBAction) commit:(id) sender;
+
 - (IBAction) modifiedFilesFilter:(id) sender;
 - (IBAction) untrackedFilesFilter:(id) sender;
 - (IBAction) ignoredFilesFilter:(id) sender;
@@ -46,7 +56,10 @@
 - (IBAction) removeFile:(id) sender;
 - (IBAction) renameFile:(id) sender;
 
-- (id)   init;
+- (void) showCommitSheet;	
+- (IBAction) endCommitSheet:(id) sender;
+
+- (id) initWithController:(gitfendRepositoryController*) _controller;
 - (void) awakeFromNib;
 - (void) dealloc;
 
@@ -58,3 +71,4 @@
 -(void) updateView;
 
 @end
+
