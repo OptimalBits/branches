@@ -82,8 +82,7 @@ static void readEntry( NSMutableDictionary *entries,
 					   NSFileHandle *file );
 
 static void setStat( struct stat *fileStat, GitIndexEntry* entry );
-static int checkStat( struct stat *fileStat, GitIndexEntry* entry );
-static BOOL isEntryStaged( GitIndexEntry *entry );
+static int  checkStat( struct stat *fileStat, GitIndexEntry* entry );
 
 static void writeHeader( uint32_t numEntries, NSMutableData *output );
 static void writeEntry( GitIndexEntry *entry, NSMutableData *outputData );
@@ -204,10 +203,6 @@ static void writeStatInfo( EntryInfo *entryInfo, NSMutableData *outputData );
 		if ( [self isFileModified:fileUrl filename:filename] )
 		{
 			[fileSet addObject:filename];
-		}
-		else
-		{
-			// File is missing...
 		}
 	}
 	
@@ -821,9 +816,4 @@ static int checkStat( struct stat *fileStat, GitIndexEntry* entry )
 	}
 	
 	return 0;
-}
-
-static BOOL isEntryStaged( GitIndexEntry *entry )
-{
-	return [entry entryInfo]->stat.ctime == 0;
 }
