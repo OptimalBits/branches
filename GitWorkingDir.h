@@ -47,9 +47,9 @@
 	@params fileTree A file tree object as returned by this class property.
 	Can be nil if not available.
  
-	Note: The reason of acepting an initial fileTree is in order to be able
-	to serialize the file tree to reduce the time needed to update it later on.
- 
+	Note: A fileTree argument is optionally accepted. In this case, this function
+	will try to only update the modified subtrees if any, reducing the time
+	needed to return a valid and updated file tree.
  */
 -(id) initWithRepo:(GitRepo*) repo fileTree:(NSTreeNode*) fileTree;
 
