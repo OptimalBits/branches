@@ -120,13 +120,9 @@
 	
 	// Diff View
 	diffViewController = [[CCDiffViewController alloc] init];
-	//[bottomView addSubview:[vc view]];
-	//[bottomView setNeedsDisplay:YES];
-	
-	NSView *v = [diffViewController view];
-	[bottomBox setContentView:v];
-	[bottomBox setNeedsDisplay:YES];
-	
+
+	[self displayViewController:diffViewController onBox:bottomBox];
+	 
 	[workingDirBrowseController setDiffView:diffViewController];
 }
 
@@ -161,7 +157,7 @@
 	[self updateViews]; // TODO: This should be a NSOperation in order 
 						// not to block.
 	
-	[self displayViewController:currentController];
+	[self displayViewController:currentController onBox:mainBox];
 }
 
 - (IBAction) addRepo: sender
@@ -326,7 +322,7 @@
 	[self saveDataToDisk];
 }
 
--(void) displayViewController:(NSViewController*) vc
+-(void) displayViewController:(NSViewController*) vc onBox:(NSBox*) box
 {
 	NSWindow *w = [box window];
 	BOOL ended = [w makeFirstResponder:w];

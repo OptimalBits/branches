@@ -17,16 +17,14 @@
 @interface gitfendRepositoryController : NSObject <NSOutlineViewDelegate, 
 												   NSOutlineViewDataSource> 
 {
-	IBOutlet NSBox *box;
+	IBOutlet NSBox *mainBox;
+	IBOutlet NSBox *bottomBox;
 	
 	IBOutlet NSOutlineView *_outlineView;	// Repo view
 	
 	IBOutlet NSMenu *repositoryMgmtMenu;
 	IBOutlet NSMenuItem *removeRepoMenuItem;
-													   
-	IBOutlet NSView *bottomView;
-	IBOutlet NSBox *bottomBox;
-													   
+
 	IBOutlet NSWindow *commitSheet;
 	IBOutlet NSTextView *commitMessageView;
 													   
@@ -47,7 +45,7 @@
 - (void) dealloc;
 - (void) awakeFromNib;
 
-- (void) displayViewController:(NSViewController*) vc;
+- (void) displayViewController:(NSViewController*) vc onBox:(NSBox*) box;
 
 - (IBAction) changeMainView:(id) sender;
 - (IBAction) addRepo:(id) sender;
