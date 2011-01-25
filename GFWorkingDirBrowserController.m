@@ -227,6 +227,16 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 	[workingDirBrowseView reloadData];
 }
 
+- (IBAction) expandFilesTree:(id) sender
+{
+	[workingDirBrowseView expandItem:nil expandChildren:YES];
+}
+
+- (IBAction) collapseFilesTree:(id) sender
+{
+	[workingDirBrowseView collapseItem:nil collapseChildren:YES];
+}
+
 - (IBAction) addFile:(id) sender
 {
     int row = [workingDirBrowseView selectedRow];

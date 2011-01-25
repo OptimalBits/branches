@@ -52,6 +52,9 @@
 - (IBAction) untrackedFilesFilter:(id) sender;
 - (IBAction) ignoredFilesFilter:(id) sender;
 
+- (IBAction) expandFilesTree:(id) sender;
+- (IBAction) collapseFilesTree:(id) sender;
+
 - (IBAction) addFile:(id) sender;
 - (IBAction) removeFile:(id) sender;
 - (IBAction) renameFile:(id) sender;
