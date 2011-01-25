@@ -10,6 +10,10 @@
 
 #include "CCDiff.h"
 
+@class CCDiffViewController;
+@class OBSScrollViewAnimation, OBSGenericAnimation, OBSDiffScroller;
+
+
 typedef enum CCDiffViewLineMask
 {
 	CCDiffViewLineAdded = 1,
@@ -18,20 +22,13 @@ typedef enum CCDiffViewLineMask
 }CCDiffViewLineMask;
 
 
-typedef struct CCDiffHunk
-{
-	NSUInteger startLine;
-	NSUInteger endLine;
-	NSUInteger startCharIndex;
-	NSUInteger endCharIndex;
-	
-	LineDiffStatus	status;
-} CCDiffHunk;
-
-
 @interface CCDiffView : NSTextView {
-	NSMutableArray *lines;
+	NSRect prevBounds;
+	
+	NSArray *lines;
 	NSMutableArray *hunks;
+	NSMutableArray *hunkMarkers;
+	NSInteger selectedHunkMarker;
 	
 	NSUInteger selectedHunk;
 	
@@ -39,19 +36,47 @@ typedef struct CCDiffHunk
 	NSRect fontBoundingRect;
 	
 	NSScrollView *scrollView;
+	
+	NSColor *currentSelectorColor;
+	NSColor *currentSelectorStroke;
+	OBSGenericAnimation *selectorAnimator;
+	
+	OBSDiffScroller *diffScroller;
+	
+	
+	CCDiffViewController *controller;
+	
+	IBOutlet NSButton *prevButton;
+	IBOutlet NSButton *nextButton;
+	IBOutlet NSButton *stageButton;
 }
-
-@property (readwrite, nonatomic) NSUInteger selectedHunk;
-
-//- (id) initWithScrollView:(NSScrollView*) view;
 
 - (id) initWithScrollView:(NSScrollView*) view 
 					 font:(NSFont*) font
 					lines:(NSArray*) lines
-					 mask:(CCDiffViewLineMask) mask;
+					 mask:(CCDiffViewLineMask) mask
+			   controller:(CCDiffViewController*) controller;
+
+
+- (NSUInteger) selectedHunkIndex;
+- (CCDiffHunk*) selectedHunk;
+
 
 - (void) moveToNextDiff;
 - (void) moveToPreviousDiff;
+
+- (void) moveToDiff;
+
+
+/**
+	Returns the origin point of the hunk indexed by index.
+ 
+ */
+-(NSPoint) hunkOrigin:(NSUInteger) index;
+
+
+-(void) removeHunk:(CCDiffHunk*) hunk;
+-(void) removeSelectedHunk:(NSInteger) bias;
 
 @end
 
