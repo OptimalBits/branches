@@ -16,6 +16,9 @@
 		641B2D241298071500C2EA25 /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 641B2CE41298062A00C2EA25 /* BWToolkitFramework.framework */; };
 		641B2E7E1299200F00C2EA25 /* GFRepoWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */; };
 		641BDFC61204ADAD00D2082D /* todo.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 641BDFC51204ADAD00D2082D /* todo.rtf */; };
+		641CBF2A12DFAC4800C5FB5B /* OBSDiffScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 641CBF2912DFAC4800C5FB5B /* OBSDiffScroller.m */; };
+		641CBFC312E1B8F400C5FB5B /* NSColor+OBSDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = 641CBFC212E1B8F400C5FB5B /* NSColor+OBSDiff.m */; };
+		641CC2CD12E6407600C5FB5B /* NSColor+OBSInterpolation.m in Sources */ = {isa = PBXBuildFile; fileRef = 641CC2CC12E6407600C5FB5B /* NSColor+OBSInterpolation.m */; };
 		642234D211B451AB003E944D /* gitfrontHistoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 642234D111B451AB003E944D /* gitfrontHistoryController.m */; };
 		6422354111B5A5A0003E944D /* CocoaCryptoHashing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422353011B5A5A0003E944D /* CocoaCryptoHashing.m */; };
 		6422354211B5A5A0003E944D /* GitBlobObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6422353211B5A5A0003E944D /* GitBlobObject.m */; };
@@ -34,7 +37,8 @@
 		645669FD121DB96E00F96CCD /* GitObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 645669FA121DB96E00F96CCD /* GitObject.m */; };
 		645669FE121DB96E00F96CCD /* GitTreeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 645669FC121DB96E00F96CCD /* GitTreeObject.m */; };
 		64566A02121DBD1800F96CCD /* GitTagObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 64566A01121DBD1800F96CCD /* GitTagObject.m */; };
-		64566A8C121DE5CA00F96CCD /* CCDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = 64566A8B121DE5CA00F96CCD /* CCDiff.m */; };
+		645FC51E12D90A0400C61FB7 /* OBSScrollViewAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 645FC51D12D90A0400C61FB7 /* OBSScrollViewAnimation.m */; };
+		645FC5E512DA01B800C61FB7 /* OBSGenericAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 645FC5E412DA01B800C61FB7 /* OBSGenericAnimation.m */; };
 		6466147811C7CCEE00289206 /* GitFrontBrowseTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 6466147711C7CCEE00289206 /* GitFrontBrowseTree.m */; };
 		646CA742126CDCE500B33102 /* GitReferenceStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 646CA741126CDCE500B33102 /* GitReferenceStorage.m */; };
 		64708292127CBEF40051F688 /* bullet_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 64708291127CBEF40051F688 /* bullet_error.png */; };
@@ -66,9 +70,17 @@
 		6486FEE2127CBD32007CA28A /* NoodleLineNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6486FEE0127CBD32007CA28A /* NoodleLineNumberView.m */; };
 		648F072D12C2325A00381094 /* GitModificationDateResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 648F072C12C2325A00381094 /* GitModificationDateResolver.m */; };
 		6491C2C2119B2F6500D2662B /* gitfendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6491C2C1119B2F6500D2662B /* gitfendController.m */; };
+		649CA06612D48C28002C5DB8 /* CCDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = 649CA06512D48C27002C5DB8 /* CCDiff.m */; };
+		649CA10E12D4D2BC002C5DB8 /* trentasette.gif in Resources */ = {isa = PBXBuildFile; fileRef = 649CA10D12D4D2BC002C5DB8 /* trentasette.gif */; };
+		649CA11C12D4D424002C5DB8 /* ventisei.gif in Resources */ = {isa = PBXBuildFile; fileRef = 649CA11B12D4D424002C5DB8 /* ventisei.gif */; };
+		649CA12012D4E847002C5DB8 /* ventisette.gif in Resources */ = {isa = PBXBuildFile; fileRef = 649CA11F12D4E847002C5DB8 /* ventisette.gif */; };
+		649CA13212D4EAE7002C5DB8 /* stripe.gif in Resources */ = {isa = PBXBuildFile; fileRef = 649CA13112D4EAE7002C5DB8 /* stripe.gif */; };
+		649CA13E12D4EEDA002C5DB8 /* pattern.gif in Resources */ = {isa = PBXBuildFile; fileRef = 649CA13D12D4EEDA002C5DB8 /* pattern.gif */; };
+		649CA15712D4F336002C5DB8 /* shizoo46.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 649CA15612D4F336002C5DB8 /* shizoo46.jpg */; };
 		64A5E7601204D3E700DDB5C9 /* GitClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E75F1204D3E700DDB5C9 /* GitClient.m */; };
 		64A5E7631205AA1100DDB5C9 /* RepoConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A5E7621205AA1100DDB5C9 /* RepoConfig.xib */; };
 		64A5E76A1205FFFB00DDB5C9 /* GitConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 64A5E7691205FFFB00DDB5C9 /* GitConfigParser.m */; };
+		64AA26E412D13851001A869A /* CCDiffViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 64AA26E312D13851001A869A /* CCDiffViewModel.m */; };
 		64B1056812A44BB000C516FB /* GitIgnore.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B1056712A44BB000C516FB /* GitIgnore.m */; };
 		64B1075612AAF1AE00C516FB /* NSMutableArray+Reverse.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B1075512AAF1AE00C516FB /* NSMutableArray+Reverse.m */; };
 		64B1085212AC11FA00C516FB /* GitWorkingDir.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B1085112AC11FA00C516FB /* GitWorkingDir.m */; };
@@ -158,6 +170,12 @@
 		641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GFRepoWatcher.h; sourceTree = "<group>"; };
 		641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GFRepoWatcher.m; sourceTree = "<group>"; };
 		641BDFC51204ADAD00D2082D /* todo.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = todo.rtf; sourceTree = "<group>"; };
+		641CBF2812DFAC4800C5FB5B /* OBSDiffScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSDiffScroller.h; sourceTree = "<group>"; };
+		641CBF2912DFAC4800C5FB5B /* OBSDiffScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSDiffScroller.m; sourceTree = "<group>"; };
+		641CBFC112E1B8F400C5FB5B /* NSColor+OBSDiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+OBSDiff.h"; sourceTree = "<group>"; };
+		641CBFC212E1B8F400C5FB5B /* NSColor+OBSDiff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+OBSDiff.m"; sourceTree = "<group>"; };
+		641CC2CB12E6407600C5FB5B /* NSColor+OBSInterpolation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+OBSInterpolation.h"; sourceTree = "<group>"; };
+		641CC2CC12E6407600C5FB5B /* NSColor+OBSInterpolation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+OBSInterpolation.m"; sourceTree = "<group>"; };
 		642234D011B451AB003E944D /* gitfrontHistoryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gitfrontHistoryController.h; sourceTree = "<group>"; };
 		642234D111B451AB003E944D /* gitfrontHistoryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gitfrontHistoryController.m; sourceTree = "<group>"; };
 		6422352F11B5A5A0003E944D /* CocoaCryptoHashing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaCryptoHashing.h; sourceTree = "<group>"; };
@@ -190,7 +208,10 @@
 		64566A00121DBD1800F96CCD /* GitTagObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitTagObject.h; sourceTree = "<group>"; };
 		64566A01121DBD1800F96CCD /* GitTagObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitTagObject.m; sourceTree = "<group>"; };
 		64566A8A121DE5CA00F96CCD /* CCDiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDiff.h; sourceTree = "<group>"; };
-		64566A8B121DE5CA00F96CCD /* CCDiff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCDiff.m; sourceTree = "<group>"; };
+		645FC51C12D90A0400C61FB7 /* OBSScrollViewAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSScrollViewAnimation.h; sourceTree = "<group>"; };
+		645FC51D12D90A0400C61FB7 /* OBSScrollViewAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSScrollViewAnimation.m; sourceTree = "<group>"; };
+		645FC5E312DA01B800C61FB7 /* OBSGenericAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSGenericAnimation.h; sourceTree = "<group>"; };
+		645FC5E412DA01B800C61FB7 /* OBSGenericAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSGenericAnimation.m; sourceTree = "<group>"; };
 		6466147611C7CCEE00289206 /* GitFrontBrowseTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitFrontBrowseTree.h; sourceTree = "<group>"; };
 		6466147711C7CCEE00289206 /* GitFrontBrowseTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitFrontBrowseTree.m; sourceTree = "<group>"; };
 		646CA740126CDCE500B33102 /* GitReferenceStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitReferenceStorage.h; sourceTree = "<group>"; };
@@ -228,12 +249,21 @@
 		648F072C12C2325A00381094 /* GitModificationDateResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitModificationDateResolver.m; sourceTree = "<group>"; };
 		6491C2C0119B2F6500D2662B /* gitfendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gitfendController.h; sourceTree = "<group>"; };
 		6491C2C1119B2F6500D2662B /* gitfendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gitfendController.m; sourceTree = "<group>"; };
+		649CA06512D48C27002C5DB8 /* CCDiff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCDiff.m; sourceTree = "<group>"; };
+		649CA10D12D4D2BC002C5DB8 /* trentasette.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = trentasette.gif; path = Resources/patterns/trentasette.gif; sourceTree = "<group>"; };
+		649CA11B12D4D424002C5DB8 /* ventisei.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ventisei.gif; path = Resources/patterns/ventisei.gif; sourceTree = "<group>"; };
+		649CA11F12D4E847002C5DB8 /* ventisette.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ventisette.gif; path = Resources/patterns/ventisette.gif; sourceTree = "<group>"; };
+		649CA13112D4EAE7002C5DB8 /* stripe.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = stripe.gif; path = Resources/patterns/stripe.gif; sourceTree = "<group>"; };
+		649CA13D12D4EEDA002C5DB8 /* pattern.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = pattern.gif; path = Resources/patterns/pattern.gif; sourceTree = "<group>"; };
+		649CA15612D4F336002C5DB8 /* shizoo46.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = shizoo46.jpg; path = Resources/patterns/shizoo46.jpg; sourceTree = "<group>"; };
 		64A5E75E1204D3E700DDB5C9 /* GitClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitClient.h; sourceTree = "<group>"; };
 		64A5E75F1204D3E700DDB5C9 /* GitClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitClient.m; sourceTree = "<group>"; };
 		64A5E7621205AA1100DDB5C9 /* RepoConfig.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RepoConfig.xib; sourceTree = "<group>"; };
 		64A5E7651205F7F300DDB5C9 /* GitConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitConfig.h; sourceTree = "<group>"; };
 		64A5E7681205FFFB00DDB5C9 /* GitConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitConfigParser.h; sourceTree = "<group>"; };
 		64A5E7691205FFFB00DDB5C9 /* GitConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitConfigParser.m; sourceTree = "<group>"; };
+		64AA26E212D13851001A869A /* CCDiffViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDiffViewModel.h; sourceTree = "<group>"; };
+		64AA26E312D13851001A869A /* CCDiffViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCDiffViewModel.m; sourceTree = "<group>"; };
 		64B1056612A44BB000C516FB /* GitIgnore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitIgnore.h; sourceTree = "<group>"; };
 		64B1056712A44BB000C516FB /* GitIgnore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitIgnore.m; sourceTree = "<group>"; };
 		64B1075412AAF1AE00C516FB /* NSMutableArray+Reverse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Reverse.h"; sourceTree = "<group>"; };
@@ -298,6 +328,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				641CBF2612DFA93C00C5FB5B /* DiffView */,
 				256AC3D80F4B6AC300CF3369 /* gitfendAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* gitfendAppDelegate.m */,
 				6491C2C0119B2F6500D2662B /* gitfendController.h */,
@@ -318,10 +349,6 @@
 				64267FAF12189CDC0044FD96 /* GitFrontIcons.m */,
 				640E83C2121AAA050087FB27 /* GFWorkingDirBrowserController.h */,
 				640E83C3121AAA050087FB27 /* GFWorkingDirBrowserController.m */,
-				64337E7F123ABC45006CA968 /* CCDiffViewController.h */,
-				64337E80123ABC45006CA968 /* CCDiffViewController.m */,
-				6433841A1244E2E1006CA968 /* CCDiffView.h */,
-				6433841B1244E2E1006CA968 /* CCDiffView.m */,
 				641B2E7C1299200F00C2EA25 /* GFRepoWatcher.h */,
 				641B2E7D1299200F00C2EA25 /* GFRepoWatcher.m */,
 			);
@@ -399,6 +426,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				649CA10C12D4D2A7002C5DB8 /* patterns */,
 				64197FE9121180C600AA687A /* icons */,
 				8D1107310486CEB800E47090 /* gitfend-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -515,6 +543,23 @@
 			name = icons;
 			sourceTree = "<group>";
 		};
+		641CBF2612DFA93C00C5FB5B /* DiffView */ = {
+			isa = PBXGroup;
+			children = (
+				64AA26E212D13851001A869A /* CCDiffViewModel.h */,
+				64AA26E312D13851001A869A /* CCDiffViewModel.m */,
+				64337E7F123ABC45006CA968 /* CCDiffViewController.h */,
+				64337E80123ABC45006CA968 /* CCDiffViewController.m */,
+				6433841A1244E2E1006CA968 /* CCDiffView.h */,
+				6433841B1244E2E1006CA968 /* CCDiffView.m */,
+				641CBF2812DFAC4800C5FB5B /* OBSDiffScroller.h */,
+				641CBF2912DFAC4800C5FB5B /* OBSDiffScroller.m */,
+				641CBFC112E1B8F400C5FB5B /* NSColor+OBSDiff.h */,
+				641CBFC212E1B8F400C5FB5B /* NSColor+OBSDiff.m */,
+			);
+			name = DiffView;
+			sourceTree = "<group>";
+		};
 		6422352E11B5A578003E944D /* GitLib */ = {
 			isa = PBXGroup;
 			children = (
@@ -538,9 +583,22 @@
 			isa = PBXGroup;
 			children = (
 				64566A8A121DE5CA00F96CCD /* CCDiff.h */,
-				64566A8B121DE5CA00F96CCD /* CCDiff.m */,
+				649CA06512D48C27002C5DB8 /* CCDiff.m */,
 			);
 			name = DiffMerge;
+			sourceTree = "<group>";
+		};
+		649CA10C12D4D2A7002C5DB8 /* patterns */ = {
+			isa = PBXGroup;
+			children = (
+				649CA15612D4F336002C5DB8 /* shizoo46.jpg */,
+				649CA13D12D4EEDA002C5DB8 /* pattern.gif */,
+				649CA13112D4EAE7002C5DB8 /* stripe.gif */,
+				649CA11F12D4E847002C5DB8 /* ventisette.gif */,
+				649CA11B12D4D424002C5DB8 /* ventisei.gif */,
+				649CA10D12D4D2BC002C5DB8 /* trentasette.gif */,
+			);
+			name = patterns;
 			sourceTree = "<group>";
 		};
 		64B1056512A44B9400C516FB /* Working Copy */ = {
@@ -561,6 +619,12 @@
 			children = (
 				64B1075412AAF1AE00C516FB /* NSMutableArray+Reverse.h */,
 				64B1075512AAF1AE00C516FB /* NSMutableArray+Reverse.m */,
+				645FC51C12D90A0400C61FB7 /* OBSScrollViewAnimation.h */,
+				645FC51D12D90A0400C61FB7 /* OBSScrollViewAnimation.m */,
+				645FC5E312DA01B800C61FB7 /* OBSGenericAnimation.h */,
+				645FC5E412DA01B800C61FB7 /* OBSGenericAnimation.m */,
+				641CC2CB12E6407600C5FB5B /* NSColor+OBSInterpolation.h */,
+				641CC2CC12E6407600C5FB5B /* NSColor+OBSInterpolation.m */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -622,6 +686,7 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "gitfend" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -680,6 +745,12 @@
 				6486FCCE127C6F1C007CA28A /* blue-folders-stack.png in Resources */,
 				6486FCD0127C6F25007CA28A /* question.png in Resources */,
 				64708292127CBEF40051F688 /* bullet_error.png in Resources */,
+				649CA10E12D4D2BC002C5DB8 /* trentasette.gif in Resources */,
+				649CA11C12D4D424002C5DB8 /* ventisei.gif in Resources */,
+				649CA12012D4E847002C5DB8 /* ventisette.gif in Resources */,
+				649CA13212D4EAE7002C5DB8 /* stripe.gif in Resources */,
+				649CA13E12D4EEDA002C5DB8 /* pattern.gif in Resources */,
+				649CA15712D4F336002C5DB8 /* shizoo46.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -724,7 +795,6 @@
 				645669FD121DB96E00F96CCD /* GitObject.m in Sources */,
 				645669FE121DB96E00F96CCD /* GitTreeObject.m in Sources */,
 				64566A02121DBD1800F96CCD /* GitTagObject.m in Sources */,
-				64566A8C121DE5CA00F96CCD /* CCDiff.m in Sources */,
 				64337E81123ABC45006CA968 /* CCDiffViewController.m in Sources */,
 				6433841C1244E2E1006CA968 /* CCDiffView.m in Sources */,
 				646CA742126CDCE500B33102 /* GitReferenceStorage.m in Sources */,
@@ -735,6 +805,13 @@
 				64B1075612AAF1AE00C516FB /* NSMutableArray+Reverse.m in Sources */,
 				64B1085212AC11FA00C516FB /* GitWorkingDir.m in Sources */,
 				648F072D12C2325A00381094 /* GitModificationDateResolver.m in Sources */,
+				64AA26E412D13851001A869A /* CCDiffViewModel.m in Sources */,
+				649CA06612D48C28002C5DB8 /* CCDiff.m in Sources */,
+				645FC51E12D90A0400C61FB7 /* OBSScrollViewAnimation.m in Sources */,
+				645FC5E512DA01B800C61FB7 /* OBSGenericAnimation.m in Sources */,
+				641CBF2A12DFAC4800C5FB5B /* OBSDiffScroller.m in Sources */,
+				641CBFC312E1B8F400C5FB5B /* NSColor+OBSDiff.m in Sources */,
+				641CC2CD12E6407600C5FB5B /* NSColor+OBSInterpolation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
