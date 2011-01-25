@@ -1,4 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf320
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf350
 {\fonttbl\f0\fnil\fcharset0 Monaco;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
@@ -10,7 +10,7 @@ Repository View\
 ---------------\
 \
 * Sort the contens of the dicts, so that all repos look homogenous.\
-x Use BOLD for every repo name, this will help visualizing where a repo starts and ends.\
+- Use BOLD for every repo name, this will help visualizing where a repo starts and ends.\
 - Use softer gray for the REPOSITORIES root.\
 * Add Drag & Drop for adding, deleting and changing repos place.\
 - Do not allow to add a repo that is already added.\
@@ -92,12 +92,6 @@ Searching Capabilities:\
 - Search for orfan git objects ( finds trees, commits, blobs that are orfan ).\
 - Context Menu on search result page, to for example delete an object, or find branch where the object belongs, etc.\
 \
-\
-Diff/Merge View:\
-----------------\
-- Allow comparing two arbitrary revisions, even support comparing revisions from different repositories.\
-\
-\
 Twitter/Facebook/Github/Gitourious other social media support\
 -------------------------------------------------------------\
 \
@@ -139,7 +133,7 @@ x Show following states for every file:\
 	- Add diff hunks.\
 	- Apply patches.\
 	\
-- FSEvent support.\
+x FSEvent support.\
 	Detect when the working directory has been changed and update the view.\
 	\
 - Sorting capabilities: \
@@ -162,12 +156,28 @@ Staging and commiting:\
 Diff View:\
 ----------\
 * Before and After view.\
+\
+- Allow comparing two arbitrary revisions, even support comparing revisions from different repositories.\
+\
+- Start diff session on the first difference.\
+- Render diffs on the scroller.\
+\
+- Rollover functionality on the diff hunks.\
+	a) soft animation when the mouse moves on top of the hunk.\
+	b) detects mouse press on the hunk that will activate that hunk.\
+	\
+- Allow selecting an arbitrary hunk using the mouse pointer.\
+	\
+- Undo functionality.\
+\
+- Editing support.\
+\
 - Interface similar to winmerge ( alt left, right for moving changes from one side to the other ).\
+\
 - Show metrics such as:\
 	- Kb file size.\
 	- Lines.\
 	- SLOC ( source lines of code )\
-	\
 \
 \
 Push / Pull Functionality:\
