@@ -1,0 +1,402 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		256AC3DA0F4B6AC300CF3369 /* UnifyAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 256AC3D90F4B6AC300CF3369 /* UnifyAppDelegate.m */; };
+		6457613A12F56FB30077F1A9 /* OBSTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6457613912F56FB30077F1A9 /* OBSTextCell.m */; };
+		645761F612F5D3CF0077F1A9 /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = 645761F512F5D3CF0077F1A9 /* add.png */; };
+		645761F812F5D3EC0077F1A9 /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 645761F712F5D3EC0077F1A9 /* delete.png */; };
+		645761FA12F5D4130077F1A9 /* pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = 645761F912F5D4130077F1A9 /* pencil.png */; };
+		645762AA12F5FEFC0077F1A9 /* NSColor+OBSDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = 645762A912F5FEFC0077F1A9 /* NSColor+OBSDiff.m */; };
+		64F1F9BD12EEDB4400E95C29 /* UnifyAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F1F9BC12EEDB4400E95C29 /* UnifyAppController.m */; };
+		64F1FA6B12EF1DC100E95C29 /* FileDiffView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64F1FA6A12EF1DC100E95C29 /* FileDiffView.xib */; };
+		64F1FA6F12EF1E2900E95C29 /* UnifyFileDiffController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F1FA6E12EF1E2900E95C29 /* UnifyFileDiffController.m */; };
+		64F1FA7312EF271C00E95C29 /* FolderDiffView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64F1FA7212EF271C00E95C29 /* FolderDiffView.xib */; };
+		64F1FA7912EF2A4C00E95C29 /* UnifyFolderDiffController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F1FA7812EF2A4C00E95C29 /* UnifyFolderDiffController.m */; };
+		64F1FA9F12EF6D7900E95C29 /* NSBox+OBSDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F1FA9E12EF6D7900E95C29 /* NSBox+OBSDisplay.m */; };
+		64F1FBA812EF7AF600E95C29 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F1FBA712EF7AF600E95C29 /* BWToolkitFramework.framework */; };
+		64F1FBC812EF7BEE00E95C29 /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 64F1FBA712EF7AF600E95C29 /* BWToolkitFramework.framework */; };
+		64F1FC4012F0142D00E95C29 /* OBSDirectory.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F1FC3F12F0142D00E95C29 /* OBSDirectory.m */; };
+		64F1FCAB12F04BCE00E95C29 /* CCDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F1FCAA12F04BCE00E95C29 /* CCDiff.m */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		64F1FBC512EF7BC800E95C29 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				64F1FBC812EF7BEE00E95C29 /* BWToolkitFramework.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		256AC3D80F4B6AC300CF3369 /* UnifyAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifyAppDelegate.h; sourceTree = "<group>"; };
+		256AC3D90F4B6AC300CF3369 /* UnifyAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifyAppDelegate.m; sourceTree = "<group>"; };
+		256AC3F00F4B6AF500CF3369 /* Unify_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Unify_Prefix.pch; sourceTree = "<group>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		6457613812F56FB20077F1A9 /* OBSTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSTextCell.h; sourceTree = "<group>"; };
+		6457613912F56FB30077F1A9 /* OBSTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSTextCell.m; sourceTree = "<group>"; };
+		645761F512F5D3CF0077F1A9 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add.png; path = ../Resources/Icons/add.png; sourceTree = SOURCE_ROOT; };
+		645761F712F5D3EC0077F1A9 /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = ../Resources/Icons/delete.png; sourceTree = SOURCE_ROOT; };
+		645761F912F5D4130077F1A9 /* pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pencil.png; path = ../Resources/Icons/pencil.png; sourceTree = SOURCE_ROOT; };
+		645762A812F5FEFC0077F1A9 /* NSColor+OBSDiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSColor+OBSDiff.h"; path = "../NSColor+OBSDiff.h"; sourceTree = SOURCE_ROOT; };
+		645762A912F5FEFC0077F1A9 /* NSColor+OBSDiff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSColor+OBSDiff.m"; path = "../NSColor+OBSDiff.m"; sourceTree = SOURCE_ROOT; };
+		64F1F9BB12EEDB4400E95C29 /* UnifyAppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifyAppController.h; sourceTree = "<group>"; };
+		64F1F9BC12EEDB4400E95C29 /* UnifyAppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifyAppController.m; sourceTree = "<group>"; };
+		64F1FA6A12EF1DC100E95C29 /* FileDiffView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FileDiffView.xib; sourceTree = "<group>"; };
+		64F1FA6D12EF1E2900E95C29 /* UnifyFileDiffController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifyFileDiffController.h; sourceTree = "<group>"; };
+		64F1FA6E12EF1E2900E95C29 /* UnifyFileDiffController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifyFileDiffController.m; sourceTree = "<group>"; };
+		64F1FA7212EF271C00E95C29 /* FolderDiffView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FolderDiffView.xib; sourceTree = "<group>"; };
+		64F1FA7712EF2A4C00E95C29 /* UnifyFolderDiffController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifyFolderDiffController.h; sourceTree = "<group>"; };
+		64F1FA7812EF2A4C00E95C29 /* UnifyFolderDiffController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifyFolderDiffController.m; sourceTree = "<group>"; };
+		64F1FA9D12EF6D7900E95C29 /* NSBox+OBSDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBox+OBSDisplay.h"; sourceTree = "<group>"; };
+		64F1FA9E12EF6D7900E95C29 /* NSBox+OBSDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBox+OBSDisplay.m"; sourceTree = "<group>"; };
+		64F1FBA712EF7AF600E95C29 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = ../BWToolkit/BWToolkitFramework.framework; sourceTree = SOURCE_ROOT; };
+		64F1FC3E12F0142D00E95C29 /* OBSDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSDirectory.h; sourceTree = "<group>"; };
+		64F1FC3F12F0142D00E95C29 /* OBSDirectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSDirectory.m; sourceTree = "<group>"; };
+		64F1FCA912F04BCE00E95C29 /* CCDiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCDiff.h; path = ../CCDiff.h; sourceTree = SOURCE_ROOT; };
+		64F1FCAA12F04BCE00E95C29 /* CCDiff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCDiff.m; path = ../CCDiff.m; sourceTree = SOURCE_ROOT; };
+		8D1107310486CEB800E47090 /* Unify-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Unify-Info.plist"; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* Unify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unify.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				64F1FBA812EF7AF600E95C29 /* BWToolkitFramework.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				256AC3D80F4B6AC300CF3369 /* UnifyAppDelegate.h */,
+				256AC3D90F4B6AC300CF3369 /* UnifyAppDelegate.m */,
+				64F1F9BB12EEDB4400E95C29 /* UnifyAppController.h */,
+				64F1F9BC12EEDB4400E95C29 /* UnifyAppController.m */,
+				64F1FA6D12EF1E2900E95C29 /* UnifyFileDiffController.h */,
+				64F1FA6E12EF1E2900E95C29 /* UnifyFileDiffController.m */,
+				64F1FA7712EF2A4C00E95C29 /* UnifyFolderDiffController.h */,
+				64F1FA7812EF2A4C00E95C29 /* UnifyFolderDiffController.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				64F1FBA712EF7AF600E95C29 /* BWToolkitFramework.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* Unify.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* Unify */ = {
+			isa = PBXGroup;
+			children = (
+				64F1FA9C12EF6D5100E95C29 /* OBS */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+				64F1FA6A12EF1DC100E95C29 /* FileDiffView.xib */,
+				64F1FA7212EF271C00E95C29 /* FolderDiffView.xib */,
+			);
+			name = Unify;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				256AC3F00F4B6AF500CF3369 /* Unify_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				645761F412F5D39E0077F1A9 /* icons */,
+				8D1107310486CEB800E47090 /* Unify-Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		645761F412F5D39E0077F1A9 /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				645761F912F5D4130077F1A9 /* pencil.png */,
+				645761F712F5D3EC0077F1A9 /* delete.png */,
+				645761F512F5D3CF0077F1A9 /* add.png */,
+			);
+			name = icons;
+			sourceTree = "<group>";
+		};
+		64F1FA9C12EF6D5100E95C29 /* OBS */ = {
+			isa = PBXGroup;
+			children = (
+				645762A812F5FEFC0077F1A9 /* NSColor+OBSDiff.h */,
+				645762A912F5FEFC0077F1A9 /* NSColor+OBSDiff.m */,
+				64F1FCA912F04BCE00E95C29 /* CCDiff.h */,
+				64F1FCAA12F04BCE00E95C29 /* CCDiff.m */,
+				64F1FA9D12EF6D7900E95C29 /* NSBox+OBSDisplay.h */,
+				64F1FA9E12EF6D7900E95C29 /* NSBox+OBSDisplay.m */,
+				64F1FC3E12F0142D00E95C29 /* OBSDirectory.h */,
+				64F1FC3F12F0142D00E95C29 /* OBSDirectory.m */,
+				6457613812F56FB20077F1A9 /* OBSTextCell.h */,
+				6457613912F56FB30077F1A9 /* OBSTextCell.m */,
+			);
+			name = OBS;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* Unify */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Unify" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				64F1FBC512EF7BC800E95C29 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Unify;
+			productInstallPath = "$(HOME)/Applications";
+			productName = Unify;
+			productReference = 8D1107320486CEB800E47090 /* Unify.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Unify" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* Unify */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* Unify */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+				64F1FA6B12EF1DC100E95C29 /* FileDiffView.xib in Resources */,
+				64F1FA7312EF271C00E95C29 /* FolderDiffView.xib in Resources */,
+				645761F612F5D3CF0077F1A9 /* add.png in Resources */,
+				645761F812F5D3EC0077F1A9 /* delete.png in Resources */,
+				645761FA12F5D4130077F1A9 /* pencil.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				256AC3DA0F4B6AC300CF3369 /* UnifyAppDelegate.m in Sources */,
+				64F1F9BD12EEDB4400E95C29 /* UnifyAppController.m in Sources */,
+				64F1FA6F12EF1E2900E95C29 /* UnifyFileDiffController.m in Sources */,
+				64F1FA7912EF2A4C00E95C29 /* UnifyFolderDiffController.m in Sources */,
+				64F1FA9F12EF6D7900E95C29 /* NSBox+OBSDisplay.m in Sources */,
+				64F1FC4012F0142D00E95C29 /* OBSDirectory.m in Sources */,
+				64F1FCAB12F04BCE00E95C29 /* CCDiff.m in Sources */,
+				6457613A12F56FB30077F1A9 /* OBSTextCell.m in Sources */,
+				645762AA12F5FEFC0077F1A9 /* NSColor+OBSDiff.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1DDD58140DA1D0A300B32029 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DDD58150DA1D0A300B32029 /* English */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../BWToolkit\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Unify_Prefix.pch;
+				INFOPLIST_FILE = "Unify-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = Unify;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../BWToolkit\"",
+				);
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Unify_Prefix.pch;
+				INFOPLIST_FILE = "Unify-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = Unify;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Unify" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Unify" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
