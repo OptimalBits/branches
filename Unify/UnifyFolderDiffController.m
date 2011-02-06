@@ -10,6 +10,7 @@
 #import "UnifyFileDiffController.h"
 #import "NSBox+OBSDisplay.h"
 #import "OBSDirectory.h"
+#import "OBSDiffSession.h"
 #import "OBSTextCell.h"
 #import "NSColor+OBSDiff.h"
 
@@ -115,29 +116,33 @@ NSString *stringFromFileSize( int theSize );
 	
 	// TEST
 	/// 8<----------------------------------------8<----------------------------
-	leftDirectory = [[OBSDirectory alloc] initWithPath:@"/Users/manuel/dev/docpad"];
+/*	leftDirectory = [[OBSDirectory alloc] initWithPath:@"/Users/manuel/dev/docpad"];
 	rightDirectory = [[OBSDirectory alloc] initWithPath:@"/Users/manuel/dev/docpad_new"];
 
 	diffTree = [leftDirectory compareDirectory:rightDirectory];
 	[diffTree retain];
-	
+*/	
 /*	[filesView setHighlightedTableColumn:nameColumn];
 
 	[filesView setIndicatorImage:[NSImage imageNamed:@"NSAscendingSortIndicator"] 
 				   inTableColumn:nameColumn];
 */
-	
+	/// 8<----------------------------------------8<----------------------------
 	OBSTextCell *textCell = [[[OBSTextCell alloc] init] autorelease];
 	[[filesView tableColumnWithIdentifier:@"Name"] setDataCell:textCell];
 	[[filesView tableColumnWithIdentifier:@"Name2"] setDataCell:textCell];
 		
 	[filesView setDataSource:self];
 	[filesView setDelegate:self];
-	[filesView reloadData];
-
-	/// 8<----------------------------------------8<----------------------------
-	
 }
+
+-(void) setDiffSession:(OBSDiffSession*) session
+{
+	diffTree = [session diffTree];
+	[diffTree retain];
+	[filesView reloadData];
+}
+
 
 -(IBAction) startDiffSession:(id) sender
 {

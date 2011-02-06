@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class UnifyFileDiffController, OBSDirectory;
+@class UnifyFileDiffController, OBSDirectory, OBSDiffSession;
 
 @interface UnifyFolderDiffController : NSViewController 
 <NSOutlineViewDataSource, NSOutlineViewDelegate> 
@@ -40,7 +40,8 @@
 	
 }
 
--(IBAction) startDiffSession:(id) sender;
+-(void) setDiffSession:(OBSDiffSession*) session;
+
 
 @end
 
