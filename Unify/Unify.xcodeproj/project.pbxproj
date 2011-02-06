@@ -14,6 +14,12 @@
 		645761F812F5D3EC0077F1A9 /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 645761F712F5D3EC0077F1A9 /* delete.png */; };
 		645761FA12F5D4130077F1A9 /* pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = 645761F912F5D4130077F1A9 /* pencil.png */; };
 		645762AA12F5FEFC0077F1A9 /* NSColor+OBSDiff.m in Sources */ = {isa = PBXBuildFile; fileRef = 645762A912F5FEFC0077F1A9 /* NSColor+OBSDiff.m */; };
+		649600F712F75C9700A11CEC /* OBSDiffSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 649600F612F75C9700A11CEC /* OBSDiffSession.m */; };
+		649600FD12F7662000A11CEC /* OBSDirectoryWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 649600FC12F7662000A11CEC /* OBSDirectoryWatcher.m */; };
+		6496010112F7696700A11CEC /* UnifyBookmarksTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 6496010012F7696700A11CEC /* UnifyBookmarksTree.m */; };
+		6496012912F8442900A11CEC /* UnifyBookmarksController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6496012812F8442900A11CEC /* UnifyBookmarksController.m */; };
+		6496016D12F8513900A11CEC /* OpenFilesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6496016C12F8513900A11CEC /* OpenFilesWindow.xib */; };
+		64DF9C6112FDFB9100416001 /* NSFileManager+DirectoryLocations.m in Sources */ = {isa = PBXBuildFile; fileRef = 64DF9C6012FDFB9100416001 /* NSFileManager+DirectoryLocations.m */; };
 		64F1F9BD12EEDB4400E95C29 /* UnifyAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F1F9BC12EEDB4400E95C29 /* UnifyAppController.m */; };
 		64F1FA6B12EF1DC100E95C29 /* FileDiffView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64F1FA6A12EF1DC100E95C29 /* FileDiffView.xib */; };
 		64F1FA6F12EF1E2900E95C29 /* UnifyFileDiffController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F1FA6E12EF1E2900E95C29 /* UnifyFileDiffController.m */; };
@@ -60,6 +66,17 @@
 		645761F912F5D4130077F1A9 /* pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pencil.png; path = ../Resources/Icons/pencil.png; sourceTree = SOURCE_ROOT; };
 		645762A812F5FEFC0077F1A9 /* NSColor+OBSDiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSColor+OBSDiff.h"; path = "../NSColor+OBSDiff.h"; sourceTree = SOURCE_ROOT; };
 		645762A912F5FEFC0077F1A9 /* NSColor+OBSDiff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSColor+OBSDiff.m"; path = "../NSColor+OBSDiff.m"; sourceTree = SOURCE_ROOT; };
+		649600F512F75C9700A11CEC /* OBSDiffSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSDiffSession.h; sourceTree = "<group>"; };
+		649600F612F75C9700A11CEC /* OBSDiffSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSDiffSession.m; sourceTree = "<group>"; };
+		649600FB12F7662000A11CEC /* OBSDirectoryWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBSDirectoryWatcher.h; sourceTree = "<group>"; };
+		649600FC12F7662000A11CEC /* OBSDirectoryWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBSDirectoryWatcher.m; sourceTree = "<group>"; };
+		649600FF12F7696700A11CEC /* UnifyBookmarksTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifyBookmarksTree.h; sourceTree = "<group>"; };
+		6496010012F7696700A11CEC /* UnifyBookmarksTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifyBookmarksTree.m; sourceTree = "<group>"; };
+		6496012712F8442900A11CEC /* UnifyBookmarksController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifyBookmarksController.h; sourceTree = "<group>"; };
+		6496012812F8442900A11CEC /* UnifyBookmarksController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifyBookmarksController.m; sourceTree = "<group>"; };
+		6496016C12F8513900A11CEC /* OpenFilesWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpenFilesWindow.xib; sourceTree = "<group>"; };
+		64DF9C5F12FDFB9100416001 /* NSFileManager+DirectoryLocations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+DirectoryLocations.h"; path = "../NSFileManager+DirectoryLocations.h"; sourceTree = SOURCE_ROOT; };
+		64DF9C6012FDFB9100416001 /* NSFileManager+DirectoryLocations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSFileManager+DirectoryLocations.m"; path = "../NSFileManager+DirectoryLocations.m"; sourceTree = SOURCE_ROOT; };
 		64F1F9BB12EEDB4400E95C29 /* UnifyAppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifyAppController.h; sourceTree = "<group>"; };
 		64F1F9BC12EEDB4400E95C29 /* UnifyAppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifyAppController.m; sourceTree = "<group>"; };
 		64F1FA6A12EF1DC100E95C29 /* FileDiffView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FileDiffView.xib; sourceTree = "<group>"; };
@@ -103,6 +120,12 @@
 				64F1FA6E12EF1E2900E95C29 /* UnifyFileDiffController.m */,
 				64F1FA7712EF2A4C00E95C29 /* UnifyFolderDiffController.h */,
 				64F1FA7812EF2A4C00E95C29 /* UnifyFolderDiffController.m */,
+				649600F512F75C9700A11CEC /* OBSDiffSession.h */,
+				649600F612F75C9700A11CEC /* OBSDiffSession.m */,
+				649600FF12F7696700A11CEC /* UnifyBookmarksTree.h */,
+				6496010012F7696700A11CEC /* UnifyBookmarksTree.m */,
+				6496012712F8442900A11CEC /* UnifyBookmarksController.h */,
+				6496012812F8442900A11CEC /* UnifyBookmarksController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -137,6 +160,7 @@
 		29B97314FDCFA39411CA2CEA /* Unify */ = {
 			isa = PBXGroup;
 			children = (
+				64DF9C5E12FDFB6400416001 /* Third party */,
 				64F1FA9C12EF6D5100E95C29 /* OBS */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -145,6 +169,7 @@
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				64F1FA6A12EF1DC100E95C29 /* FileDiffView.xib */,
 				64F1FA7212EF271C00E95C29 /* FolderDiffView.xib */,
+				6496016C12F8513900A11CEC /* OpenFilesWindow.xib */,
 			);
 			name = Unify;
 			sourceTree = "<group>";
@@ -188,6 +213,15 @@
 			name = icons;
 			sourceTree = "<group>";
 		};
+		64DF9C5E12FDFB6400416001 /* Third party */ = {
+			isa = PBXGroup;
+			children = (
+				64DF9C5F12FDFB9100416001 /* NSFileManager+DirectoryLocations.h */,
+				64DF9C6012FDFB9100416001 /* NSFileManager+DirectoryLocations.m */,
+			);
+			name = "Third party";
+			sourceTree = "<group>";
+		};
 		64F1FA9C12EF6D5100E95C29 /* OBS */ = {
 			isa = PBXGroup;
 			children = (
@@ -201,6 +235,8 @@
 				64F1FC3F12F0142D00E95C29 /* OBSDirectory.m */,
 				6457613812F56FB20077F1A9 /* OBSTextCell.h */,
 				6457613912F56FB30077F1A9 /* OBSTextCell.m */,
+				649600FB12F7662000A11CEC /* OBSDirectoryWatcher.h */,
+				649600FC12F7662000A11CEC /* OBSDirectoryWatcher.m */,
 			);
 			name = OBS;
 			sourceTree = "<group>";
@@ -263,6 +299,7 @@
 				645761F612F5D3CF0077F1A9 /* add.png in Resources */,
 				645761F812F5D3EC0077F1A9 /* delete.png in Resources */,
 				645761FA12F5D4130077F1A9 /* pencil.png in Resources */,
+				6496016D12F8513900A11CEC /* OpenFilesWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +320,11 @@
 				64F1FCAB12F04BCE00E95C29 /* CCDiff.m in Sources */,
 				6457613A12F56FB30077F1A9 /* OBSTextCell.m in Sources */,
 				645762AA12F5FEFC0077F1A9 /* NSColor+OBSDiff.m in Sources */,
+				649600F712F75C9700A11CEC /* OBSDiffSession.m in Sources */,
+				649600FD12F7662000A11CEC /* OBSDirectoryWatcher.m in Sources */,
+				6496010112F7696700A11CEC /* UnifyBookmarksTree.m in Sources */,
+				6496012912F8442900A11CEC /* UnifyBookmarksController.m in Sources */,
+				64DF9C6112FDFB9100416001 /* NSFileManager+DirectoryLocations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
