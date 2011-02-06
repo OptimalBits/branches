@@ -36,7 +36,6 @@
 
 @end
 
-
 typedef enum
 {
 	kOBSFileOriginal,
@@ -69,7 +68,7 @@ typedef enum
 	TODO: Add support for ignoring given directories and files
 	( Using git ignore syntax ).
  */
-@interface OBSDirectory : NSObject {
+@interface OBSDirectory : NSObject <NSCoding> {
 	OBSDirectoryEntry *root;
 }
 

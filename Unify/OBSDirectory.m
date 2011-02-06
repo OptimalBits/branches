@@ -154,6 +154,18 @@
 	[super dealloc];	
 }
 
+- (id)initWithCoder:(NSCoder *)decoder
+{ 
+	NSString *path = [decoder decodeObjectForKey:@"path"];
+	return [self initWithPath:path];
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	[encoder encodeObject:[root path] forKey:@"path"];
+}
+
+
 -(NSTreeNode*) compareDirectory:(OBSDirectory*) directory
 {
 	NSTreeNode *tree;
@@ -241,6 +253,7 @@
 							   with:rightEntryChild 
 							onArray:[treeNode mutableChildNodes]];
 		
+		[comparedNode release];
 		[mutableChildNodes addObject:treeNode];
 	}
 }
@@ -278,6 +291,8 @@
 												   children:children 
 													   stat:file_status];
 			[entries setObject:entry forKey:[p lastPathComponent]];
+			
+			[entry release];
 		}
 	}
 	
