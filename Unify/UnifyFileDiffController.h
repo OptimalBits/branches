@@ -10,7 +10,9 @@
 
 
 @interface UnifyFileDiffController : NSViewController {
-
+	NSArray *diff;
 }
+
+-(void) setDiff:(NSArray*) diff;
 
 @end

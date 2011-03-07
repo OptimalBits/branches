@@ -32,5 +32,16 @@
 	
 }
 
+-(void) setDiff:(NSArray*) _diff
+{
+	if ( diff != _diff )
+	{
+		diff = _diff;
+		[diff retain];
+	}
+	
+	
+	
+}
 
 @end
