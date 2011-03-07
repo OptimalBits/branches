@@ -8,16 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class UnifyFileDiffController, OBSDirectory, OBSDiffSession;
+@class CCDiffViewController, OBSDirectory, OBSDiffSession;
 
 @interface UnifyFolderDiffController : NSViewController 
 <NSOutlineViewDataSource, NSOutlineViewDelegate> 
 {	
-	UnifyFileDiffController   *fileDiffController;
+	CCDiffViewController *fileDiffController;
 	
-	OBSDirectory *leftDirectory;
-	OBSDirectory *rightDirectory;
-	
+	OBSDiffSession *diffSession;
+		
 	NSDateFormatter *dateFormatter;
 	
 	NSFont *cellMainFont;
@@ -28,7 +27,6 @@
 	NSImage *addIcon;
 	NSImage *removeIcon;
 	
-	
 	NSTreeNode *diffTree;
 	
 	IBOutlet NSBox *diffContainer;
@@ -38,11 +36,21 @@
 	IBOutlet NSOutlineView *filesView;
 	IBOutlet NSTableColumn *nameColumn;
 	
+	IBOutlet NSPathControl *leftPathControl;
+	IBOutlet NSPathControl *rightPathControl;
+	
+	NSOperationQueue *operationQueue;
 }
 
--(void) setDiffSession:(OBSDiffSession*) session;
+@property (readonly) CCDiffViewController *fileDiffController;
 
+-(void) setDiffSession:(OBSDiffSession*) session;
+-(void) setDiffTree:(NSTreeNode*) diffTree;
+
+- (IBAction) nextDiff:(NSToolbarItem*) item;
+- (IBAction) prevDiff:(NSToolbarItem*) item;
+- (IBAction) mergeRight:(NSToolbarItem*) item;
+- (IBAction) mergeLeft:(NSToolbarItem*) item;
+- (IBAction) saveChanges:(NSToolbarItem*) item;
 
 @end
-
-

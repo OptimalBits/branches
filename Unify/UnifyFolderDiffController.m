@@ -7,18 +7,18 @@
 //
 
 #import "UnifyFolderDiffController.h"
-#import "UnifyFileDiffController.h"
+#import "CCDiffViewController.h"
 #import "NSBox+OBSDisplay.h"
 #import "OBSDirectory.h"
 #import "OBSDiffSession.h"
 #import "OBSTextCell.h"
 #import "NSColor+OBSDiff.h"
 
-
 NSString *stringFromFileSize( int theSize );
 
-
 @implementation UnifyFolderDiffController
+
+@synthesize fileDiffController;
 
 - (id) init
 {
@@ -93,12 +93,19 @@ NSString *stringFromFileSize( int theSize );
 		removeIcon = [[NSImage alloc] initWithContentsOfFile:removeIconPath];
 
 		[self setTitle:@"FolderDiffView"];
+	
+		//
+		// Operations
+		//
+		
+		operationQueue = [[NSOperationQueue alloc] init];
 	}
 	return self;
 }
 
 - (void) dealloc
 {
+	[operationQueue release];
 	[removeIcon release];
 	[addIcon release];
 	[modifyIcon release];
@@ -112,23 +119,10 @@ NSString *stringFromFileSize( int theSize );
 
 - (void) awakeFromNib
 {	
-	fileDiffController = [[UnifyFileDiffController alloc] init];
+	fileDiffController = [[CCDiffViewController alloc] init];
 	
-	// TEST
-	/// 8<----------------------------------------8<----------------------------
-/*	leftDirectory = [[OBSDirectory alloc] initWithPath:@"/Users/manuel/dev/docpad"];
-	rightDirectory = [[OBSDirectory alloc] initWithPath:@"/Users/manuel/dev/docpad_new"];
-
-	diffTree = [leftDirectory compareDirectory:rightDirectory];
-	[diffTree retain];
-*/	
-/*	[filesView setHighlightedTableColumn:nameColumn];
-
-	[filesView setIndicatorImage:[NSImage imageNamed:@"NSAscendingSortIndicator"] 
-				   inTableColumn:nameColumn];
-*/
-	/// 8<----------------------------------------8<----------------------------
 	OBSTextCell *textCell = [[[OBSTextCell alloc] init] autorelease];
+
 	[[filesView tableColumnWithIdentifier:@"Name"] setDataCell:textCell];
 	[[filesView tableColumnWithIdentifier:@"Name2"] setDataCell:textCell];
 		
@@ -136,17 +130,65 @@ NSString *stringFromFileSize( int theSize );
 	[filesView setDelegate:self];
 }
 
--(void) setDiffSession:(OBSDiffSession*) session
+- (void)forwardInvocation:(NSInvocation *) invocation
 {
-	diffTree = [session diffTree];
-	[diffTree retain];
-	[filesView reloadData];
+    if ([fileDiffController respondsToSelector:[invocation selector]])
+	{
+        [invocation invokeWithTarget:fileDiffController];
+	}
 }
 
-
--(IBAction) startDiffSession:(id) sender
+-(BOOL)validateToolbarItem:(NSToolbarItem *)toolbarItem
 {
-	[diffContainer displayViewController:fileDiffController];
+	return [fileDiffController validateToolbarItem:toolbarItem];
+}
+
+-(void) setDiffTree:(NSTreeNode*) _diffTree
+{
+@synchronized(self)
+	{
+		[diffTree release];
+		diffTree = _diffTree;
+		[diffTree retain];
+		[filesView reloadData];
+	}
+}
+
+-(void) setDiffSession:(OBSDiffSession*) session
+{
+	[session retain];
+	[diffSession release];
+	diffSession = session;
+	
+	[leftPathControl setURL:[NSURL fileURLWithPath:
+							 [[[diffSession leftSource] root] path]]];
+	[rightPathControl setURL:[NSURL fileURLWithPath:
+							 [[[diffSession rightSource] root] path]]];
+}
+
+- (IBAction) nextDiff:(NSToolbarItem*) item
+{
+	[fileDiffController nextDiff:item];
+}
+
+- (IBAction) prevDiff:(NSToolbarItem*) item
+{
+	[fileDiffController prevDiff:item];
+}
+
+- (IBAction) mergeRight:(NSToolbarItem*) item
+{
+	[fileDiffController mergeRight:item];
+}
+
+- (IBAction) mergeLeft:(NSToolbarItem*) item
+{
+	[fileDiffController mergeLeft:item];
+}
+
+- (IBAction) saveChanges:(NSToolbarItem*) item
+{
+	
 }
 
 
@@ -236,7 +278,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{ 
 		if ( [node status] !=  kOBSFileRemoved )
 		{
-			return stringFromFileSize( [[node leftEntry] fileStatus].st_size );
+			return stringFromFileSize( [[node rightEntry] fileStatus].st_size );
 		}
 	}
 	
@@ -272,6 +314,85 @@ sortDescriptorsDidChange:(NSArray *)oldDescriptors
 
 // --------------------- OutlineView Delegate Start ----------------------------
 
+-(void) startDiffSession:(OBSDirectoryComparedNode*) comparedNode
+{
+	if ( [comparedNode status] == kOBSFileModified )
+	{
+		NSError *error;
+		
+		NSString *leftFilePath = [[comparedNode leftEntry] path];
+		NSString *rightFilePath = [[comparedNode rightEntry] path];
+		
+		NSString *leftFile = [NSString stringWithContentsOfFile:leftFilePath 
+													   encoding:NSUTF8StringEncoding 
+														  error:&error];
+		
+		NSString *rightFile = [NSString stringWithContentsOfFile:rightFilePath 
+														encoding:NSUTF8StringEncoding 
+														   error:&error];
+		if ( rightFile && leftFile )
+		{		
+			[diffContainer displayViewController:fileDiffController];
+			[fileDiffController setStringsBefore:leftFile 
+										andAfter:rightFile];
+		}
+		else
+		{
+			// Binary file?
+		}
+		
+		//CCDiff *diff = 
+		//	[[CCDiff alloc] initWithBefore:[leftFile andAfter:rightFile]];
+		
+		//NSArray *diffArray = [diff diff];
+	}
+	else 
+	{
+		// Set a standard file viewer.
+	}
+	
+	/*
+	OBSCompareDirectories *compareDirectories;
+	
+	[folderDiffProgressIndicator startAnimation:self];
+	
+	[mainContainer setContentView:folderDiffProgressIndicator];
+	
+	currentSession = session;
+	
+	[operationQueue cancelAllOperations];
+	
+	compareDirectories = [[OBSCompareDirectories alloc] 
+						  initWithLeftDirectory:[currentSession leftSource]
+						  rightDirectory:[currentSession rightSource]];
+	
+	[compareDirectories setCompletionBlock:^void (void)
+	 {
+		 if ([compareDirectories isFinished])
+		 {
+			 [folderDiffController setDiffTree:[compareDirectories resultTree]];
+			 [folderDiffProgressIndicator startAnimation:self];
+			 [mainContainer displayViewController:folderDiffController];
+			 [folderDiffController setDiffSession:currentSession];
+		 }
+	 }
+	 ];
+	
+	[compareDirectories setThreadPriority:1.0];
+	
+	[operationQueue addOperation:compareDirectories];
+	 */
+	}
+
+- (void)outlineViewSelectionDidChange:(NSNotification *)notification
+{
+	NSTreeNode *treeNode = (NSTreeNode*)[filesView itemAtRow:[filesView selectedRow]];
+	
+	OBSDirectoryComparedNode *comparedNode = [treeNode representedObject];
+	
+	[self startDiffSession:comparedNode];
+}
+
 - (void)outlineView:(NSOutlineView *)outlineView 
 didClickTableColumn:(NSTableColumn *)tableColumn
 {
@@ -291,9 +412,15 @@ didClickTableColumn:(NSTableColumn *)tableColumn
 	NSFont *font = cellMainFont;
 	NSImage *icon;
 	
-	if ( [node status] == kOBSFileModified )
+	if ( ( [node status] == kOBSFileModified ) ||
+		 ( [node status] == kOBSFileAdded )    ||
+		 ( [node status] == kOBSFileRemoved ) )
 	{
 		font = cellBoldFont;
+	}
+	else
+	{
+		font = cellItalicFont;
 	}
 	
 	if ([[tableColumn identifier] isEqualToString:@"Name"])
@@ -321,42 +448,15 @@ didClickTableColumn:(NSTableColumn *)tableColumn
 		
 		if ( [node status] == kOBSFileModified )
 		{
-			[icon lockFocus];
-			
-			NSBezierPath *path = 
-				[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(0, 0, 24, 24)];
-			[[NSColor modifiedLineColor] set];
-			
-			[path fill];
-			
-			[modifyIcon drawAtPoint:NSMakePoint(2, 2) 
-						   fromRect:NSMakeRect(0, 0, 20, 20) 
-						  operation:NSCompositeSourceAtop
-						   fraction:1.0];
-		
-			[icon unlockFocus];
+			[textCell setTextColor:[NSColor blackColor]];
 	    }
 		else if ( [node status] == kOBSFileAdded )
 		{
-			[icon lockFocus];
-						
-			[addIcon drawAtPoint:NSMakePoint(2, 2) 
-						   fromRect:NSMakeRect(0, 0, 48, 48) 
-						  operation:NSCompositeSourceAtop
-						   fraction:1];
-			
-			[icon unlockFocus];
+			[textCell setTextColor:[NSColor addedLineColor]];
 		}
 		else if ( [node status] == kOBSFileRemoved )
 		{
-			[icon lockFocus];
-			
-			[removeIcon drawAtPoint:NSMakePoint(2, 2) 
-						fromRect:NSMakeRect(0, 0, 48, 48) 
-					   operation:NSCompositeSourceAtop
-						fraction:1];
-			
-			[icon unlockFocus];
+			[textCell setTextColor:[NSColor removedLineColor]];
 		}
 		
 		[textCell setImage:icon];
@@ -366,10 +466,10 @@ didClickTableColumn:(NSTableColumn *)tableColumn
 	{
 		[textCell setTextColor:[NSColor grayColor]];
 	}
-	else
+	/*else
 	{
 		[textCell setTextColor:[NSColor blackColor]];
-	}
+	}*/
 
 	[textCell setFont:font];
 }
@@ -380,12 +480,17 @@ didClickTableColumn:(NSTableColumn *)tableColumn
 
 @end
 
-NSString *stringFromFileSize( int theSize )
+NSString *stringFromFileSize( int size )
 {
-	float floatSize = theSize;
+	float floatSize = size;
 	
-	if (theSize < 1023)
-		return([NSString stringWithFormat:@"%i bytes",theSize]);
+	if ( size < 0 )
+	{
+		size = 0;
+	}
+	
+	if (size < 1023)
+		return([NSString stringWithFormat:@"%i bytes",size]);
 	floatSize = floatSize / 1024;
 	if (floatSize<1023)
 		return([NSString stringWithFormat:@"%1.1f KB",floatSize]);
@@ -393,8 +498,6 @@ NSString *stringFromFileSize( int theSize )
 	if (floatSize<1023)
 		return([NSString stringWithFormat:@"%1.1f MB",floatSize]);
 	floatSize = floatSize / 1024;
-	
-	// Add as many as you like
 	
 	return([NSString stringWithFormat:@"%1.1f GB",floatSize]);
 }
