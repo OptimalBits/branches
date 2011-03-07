@@ -15,6 +15,7 @@
 +(NSColor*) addedLineColor;
 +(NSColor*) removedLineColor;
 +(NSColor*) selectedLineColor;
++(NSColor*) charDiffColor;
 +(NSColor*) emptyLineColor;
 
 @end

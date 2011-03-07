@@ -89,19 +89,39 @@
 								   withExtension:@"jpg"];
 		
 		NSImage *image = [[NSImage alloc] initWithContentsOfURL:imageUrl];
+		
+		if ( image )
+		{
+			_emptyLineColor = [NSColor colorWithPatternImage:image];
 	
-		_emptyLineColor = [NSColor colorWithPatternImage:image];
-	
-		[image release];
-	
+			[image release];
+		}
+		else
+		{
+			_emptyLineColor = [NSColor lightGrayColor];
+		}
+		 
 		[_emptyLineColor retain];				   
 	}
 	
 	return _emptyLineColor;
 }
 
-
-
++(NSColor*) charDiffColor
+{
+	static NSColor*  _charDiffColor = nil;
+	
+	if( _charDiffColor == nil )
+	{
+		_charDiffColor = [NSColor colorWithCalibratedRed:0.901
+													   green:0.901
+														blue:0.98
+													   alpha:1.0];
+		[_charDiffColor retain];
+	}
+	
+	return _charDiffColor;
+}
 
 
 @end
