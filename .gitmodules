@@ -7,3 +7,9 @@
 [submodule "gh-unit"]
 	path = gh-unit
 	url = http://github.com/gabriel/gh-unit.git
+[submodule "PXSourceList"]
+	path = PXSourceList
+	url = https://github.com/Perspx/PXSourceList.git
+[submodule "Sparkle"]
+	path = Sparkle
+	url = https://github.com/andymatuschak/Sparkle.git

@@ -3,7 +3,7 @@
 //  gitfend
 //
 //  Created by Manuel Astudillo on 9/18/10.
-//  Copyright 2010 Optimal Bits Software AB. All rights reserved.
+//  Copyright 2010 Optimal Bits Sweden AB. All rights reserved.
 //
 
 #import "CCDiffView.h"
@@ -39,7 +39,8 @@
 @interface HunkMarker : NSObject
 {
 	NSRect  rect;
-	LineDiffStatus status;
+	
+	CCDiffHunk *diffHunk;
 	
 	NSColor *fillColor;
 	NSColor *strokeColor;
@@ -58,7 +59,7 @@
 @property (readonly) NSRect rect;
 
 
--(id) initWithRect:(NSRect) rect status:(LineDiffStatus) status;
+-(id) initWithRect:(NSRect) rect hunk:(CCDiffHunk*) hunk;
 
 -(void) startRollOver:(NSView*) targetView targetColor:(NSColor*) targetColor;
 -(void) endRollOver:(NSView*) targetView;
@@ -73,14 +74,14 @@
 
 @synthesize rect;
 
--(id) initWithRect:(NSRect) _rect status:(LineDiffStatus) _status
+-(id) initWithRect:(NSRect) _rect hunk:(CCDiffHunk*) hunk
 {
 	if ( self = [super init] )
 	{
 		rect = _rect;
-		status = _status;
+		diffHunk = hunk;
 		
-		switch ( status )
+		switch ( [hunk status] )
 		{
 			case kLineAdded:
 				fillColor = [NSColor addedLineColor];
@@ -109,7 +110,6 @@
 		selectorColor = nil;
 		startColor = nil;
 		endColor = nil;
-		
 	}
 	return self;
 }
@@ -208,12 +208,12 @@
 	animationProgress = progress;
 	
 	alpha = rollingIn ? progress : 1 - progress;
-
+#if 1
 	[selectorColor release];
 	selectorColor = [NSColor interpolateAlpha:[NSColor selectedLineColor]
 									   factor:alpha];
-	[selectorColor retain];
-	
+	[selectorColor retain];	
+#endif
 }
 
 -(void) draw
@@ -222,39 +222,56 @@
 	
 	[[self fillColor] set];
 	[path fill];
-		
+	
 	// Draw Selection Marker on top
 	if ( selectorColor )
 	{
 		[selectorColor set];
 		[path fill];
 	}
-	
-	
-	[NSBezierPath setDefaultLineWidth:0.0];
-	[strokeColor set];
-	
-	CGFloat x1, y1, x2, y2;
-	
-	x1 = rect.origin.x;
-	y1 = floor(rect.origin.y) + 0.5;
-	x2 = x1 + rect.size.width;
-	y2 = y1 + rect.size.height;
-	
-	// Upper line
-	path = [NSBezierPath bezierPath];
-	[path moveToPoint:NSMakePoint( x1, y1 )];
-	[path lineToPoint:NSMakePoint( x2, y1 )];
-	[path stroke];
-	
-	// Lower line
-	path = [NSBezierPath bezierPath];
-	[path moveToPoint:NSMakePoint( x1, y2 )];
-	[path lineToPoint:NSMakePoint( x2, y2 )];
-	[path stroke];
 }
 
 @end
+
+/*
+NSRect rectForCharacterIndex( NSUInteger charIndex, 
+							  NSTextView *textView )
+{
+	NSLayoutManager *layoutManager = [textView
+									  layoutManager];
+	NSPoint containerOrigin = [textView
+							   textContainerOrigin];
+	NSRect r;
+	
+	int glyphIndex = [layoutManager
+					  glyphRangeForCharacterRange:NSMakeRange(charIndex,0)
+					  actualCharacterRange:nil].location;
+	
+	// If there is no valid character at the index we
+	// must be at the beginning of the text view,
+	// and there must be no text in the text view
+	//(because we adjust for this in textDidChange:)
+	if ([layoutManager isValidGlyphIndex:glyphIndex])
+	{
+		// First get the rect of the line the character is
+		// in
+		r = [layoutManager
+			 lineFragmentUsedRectForGlyphAtIndex:glyphIndex
+			 effectiveRange:nil];
+		
+		// Then get the place of the character in the line
+		r.origin.x = [layoutManager
+					  locationForGlyphAtIndex:glyphIndex].x;
+	}
+	else
+		r = NSZeroRect; // No characters
+		
+		// NEED to convert to allow for textContainer origin
+		//here...
+		r = [self convertRect:r fromView:textView];
+		return r;
+}
+*/
 
 
 @interface HunkSelectorAnimation : NSAnimation
@@ -296,28 +313,32 @@
 @end
 
 
-
 @interface CCDiffView ( Private )
 
 -(void) drawHunkMarker:(NSRect) rect 
 			 fillColor:(NSColor*) fillColor
-		   strokeColor:(NSColor*) strokeColor;
-
--(void) updateStorage:(NSTextStorage*) storage;
+		   strokeColor:(NSColor*) strokeColor
+			 drawLines:(BOOL) drawLines;
 
 -(void) generateHunks;
--(void) updateButtonsStates;
 -(void) generateTrackingAreas;
+
+-(void) updateLinesIndexes:(NSUInteger) firstLineIndex;
+
+
+- (void) scrollToHunk:(NSUInteger) hunkIndex;
 
 @end
 
 @implementation CCDiffView
 
-//@synthesize selectedHunk;
+@synthesize lines;
+@synthesize selectedHunkIndex;
+@synthesize selectedHunkMarker;
 
 - (id) initWithScrollView:(NSScrollView*) view 
 					 font:(NSFont*) _font
-					lines:(NSArray*) _lines
+					lines:(NSMutableArray*) _lines
 					 mask:(CCDiffViewLineMask) mask
 			   controller:(CCDiffViewController*) _controller
 {
@@ -331,9 +352,7 @@
 		lines = _lines;
 		[lines retain];
 		
-		hunks = [[NSMutableArray alloc] init];
-		
-		selectedHunk = 0;
+		selectedHunkIndex = 0;
 		selectedHunkMarker = -1;
 		
 		scrollView = view;
@@ -345,12 +364,19 @@
 		controller = _controller;
 		[controller retain];
 		
+		lineIndexes = nil;
+		
 		[self setMinSize:NSMakeSize(0.0, contentSize.height)];
 		[self setMaxSize:NSMakeSize(FLT_MAX, FLT_MAX)];
 		
 		[self setVerticallyResizable:YES];
+
+		[self setEditable:YES];
+		[self setSelectable:YES];
 		
-		[view setDocumentView:self];
+		[self setAllowsUndo:YES];
+		
+		[self setDelegate:self];
 		
 		//
 		// Disable word wrap
@@ -365,26 +391,23 @@
 		[[self textContainer] setContainerSize:bigSize];
 		[[self textContainer] setWidthTracksTextView:NO];
 		
+		[self setUsesRuler:NO];
+		
 		//
 		// Line numbering
 		//
-		
+#if 0	
 		NoodleLineNumberView *lineNumberView = 
 		   [[[NoodleLineNumberView alloc] initWithScrollView:view] autorelease];
 		
 		[scrollView setVerticalRulerView:lineNumberView];
 		[scrollView setRulersVisible:YES];
-		
-		
-		// Compute all the following rect arrays:
-		fontBoundingRect = [font boundingRectForFont];
-				
-		NSTextStorage *storage = [self textStorage];
-		
-		[self updateStorage:storage];
+#endif	
+
+		[self updateStorage:[self textStorage]];
 		[self generateHunks];
-	//	[self generateTrackingAreas];
-		[self updateButtonsStates];
+		[self generateTrackingAreas];
+		[self updateLinesIndexes:0];
 		
 		diffScroller = [[OBSDiffScroller alloc] initWithHunks:hunks
 													 numLines:[lines count]];
@@ -407,8 +430,9 @@
 													  green:0.592
 													   blue:0.867
 													  alpha:1.0] retain];
-		
 		prevBounds = NSMakeRect( 0, 0, 0, 0 );
+		
+		[view setDocumentView:self];
 		
 		[self scrollToHunk:0];
 	}
@@ -426,47 +450,290 @@
 	[lines release];
 	[scrollView release];
 	[font release];
+	[lineIndexes release];
 	[super dealloc];
 }
 
+
+
 -(void) updateStorage:(NSTextStorage*) storage
 {
+	NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+	[style setDefaultTabInterval:24.];
+	[style setTabStops:[NSArray array]];
+
 	NSDictionary *textAttr = 
-		[NSDictionary dictionaryWithObjectsAndKeys: font, NSFontAttributeName, 
+		[NSDictionary dictionaryWithObjectsAndKeys: 
+			font, NSFontAttributeName, 
+			style, NSParagraphStyleAttributeName,
 		 nil];
+
+	[style release];
+	
+	NSDictionary *charModifiedAttrs = 
+		[NSDictionary dictionaryWithObject:[NSColor charDiffColor]
+									forKey:NSBackgroundColorAttributeName];
 	
 	NSAttributedString *newLine = 
 		[[NSAttributedString alloc] initWithString:@"\n" attributes:textAttr];
-		[newLine autorelease];
+	[newLine autorelease];
+	
+	NSAttributedString *emptyString =
+	[[NSAttributedString alloc] initWithString:@""];
+	[emptyString autorelease];
+	
+	[storage replaceCharactersInRange:NSMakeRange(0, [storage length]) 
+				 withAttributedString:emptyString];
 	
 	if ( [lines count] > 0 )
-	{		
+	{
 		for( CCDiffLine *line in lines )
-		{			
+		{
+			NSMutableAttributedString *attributedString;
+			
 			LineDiffStatus status = [line status];
-			switch (status) 
+			switch (status)
 			{
 				case kLineAdded:
 				case kLineModified:
 				case kLineRemoved:
 				case kLineOriginal:
-				{
-					NSAttributedString *attributedString;
+					attributedString =
+					[[[NSMutableAttributedString alloc] initWithString:[line line] 
+															attributes:textAttr] autorelease];
 					
-					attributedString = 
-					[[[NSAttributedString alloc] initWithString:[line line] 
-													 attributes:textAttr] autorelease];
+					if ( status == kLineModified )
+					{
+						for ( CCDiffChar *c in [line charDiffs] )
+						{
+							[attributedString addAttributes:charModifiedAttrs
+													  range:NSMakeRange([c charIndex], 1)];
+						}
+					}
 					
 					[storage appendAttributedString:attributedString];
-				}
 					break;
 				case kLineEmpty:
+				default:
 					break;
 			}
-	
+			
 			[storage appendAttributedString:newLine];
 		}
 	}
+}
+
+-(void) updateStorage:(NSRange) charRange
+		 newLineRange:(NSRange) newLineRange
+{
+	NSMutableAttributedString *newString;
+	
+	NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+	[style setDefaultTabInterval:24.];
+	[style setTabStops:[NSArray array]];
+	
+	NSDictionary *textAttr = 
+	[NSDictionary dictionaryWithObjectsAndKeys: 
+	 font, NSFontAttributeName, 
+	 style, NSParagraphStyleAttributeName,
+	 nil];
+	
+	[style release];
+	
+	NSDictionary *charModifiedAttrs = 
+	[NSDictionary dictionaryWithObject:[NSColor charDiffColor]
+								forKey:NSBackgroundColorAttributeName];
+	
+	NSAttributedString *newLine = 
+	[[NSAttributedString alloc] initWithString:@"\n" attributes:textAttr];
+	[newLine autorelease];
+	
+	newString = [[[NSMutableAttributedString alloc] init] autorelease];
+	
+	if ( [lines count] > 0 )
+	{
+		for( CCDiffLine *line in [lines subarrayWithRange:newLineRange] )
+		{
+			NSMutableAttributedString *attributedString;
+			
+			LineDiffStatus status = [line status];
+			switch (status)
+			{
+				case kLineAdded:
+				case kLineModified:
+				case kLineRemoved:
+				case kLineOriginal:
+					attributedString =
+					[[[NSMutableAttributedString alloc] initWithString:[line line] 
+															attributes:textAttr] autorelease];
+					if ( status == kLineModified )
+					{
+						for ( CCDiffChar *c in [line charDiffs] )
+						{
+							[attributedString addAttributes:charModifiedAttrs
+													  range:NSMakeRange([c charIndex], 1)];
+						}
+					}
+					
+					[newString appendAttributedString:attributedString];
+					break;
+				case kLineEmpty:
+				default:
+					break;
+			}
+			
+			[newString appendAttributedString:newLine];
+		}
+	}
+	
+	[[self textStorage] replaceCharactersInRange:charRange
+							withAttributedString:newString];
+	
+	NSUInteger startIndex = newLineRange.location > 0? newLineRange.location:0;
+	[self updateLinesIndexes:startIndex];
+}
+
+
+-(void) mergeTo:(CCDiffView*) dstView
+{
+	NSRange dstCharRange;
+	NSRange srcCharRange;
+	
+	NSInteger dstBias;
+	NSInteger srcBias;
+	
+	CCDiffHunk *dstHunk = [dstView selectedHunk];
+	CCDiffHunk *srcHunk = [self selectedHunk];
+	
+	NSTextStorage *dstStorage = [dstView textStorage];
+	NSTextStorage *srcStorage = [self textStorage];
+	
+	srcCharRange = [srcHunk charRange];
+	dstCharRange = [dstHunk charRange];
+	
+	if ( [srcHunk status] == kLineEmpty )
+	{		
+		[srcStorage deleteCharactersInRange:srcCharRange];
+		[dstStorage deleteCharactersInRange:dstCharRange];
+		
+		srcBias = -srcCharRange.length;
+		dstBias = -dstCharRange.length;
+	}
+	else
+	{
+		/// --------------- 8< ------------- 8< -------------------------------
+		NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+		[style setDefaultTabInterval:24.];
+		[style setTabStops:[NSArray array]];
+		
+		NSDictionary *textAttr = 
+		[NSDictionary dictionaryWithObjectsAndKeys: 
+		 font, NSFontAttributeName, 
+		 style, NSParagraphStyleAttributeName,
+		 nil];
+		
+		[style release];
+		/// --------------- 8< ------------- 8< -------------------------------
+		
+		NSAttributedString *string;
+		
+		string = [srcStorage attributedSubstringFromRange:srcCharRange];
+		[dstStorage replaceCharactersInRange:dstCharRange
+						withAttributedString:string];
+		
+		[srcStorage setAttributes:textAttr range:srcCharRange];
+		[dstStorage setAttributes:textAttr range:dstCharRange];
+		
+		srcBias = 0;
+		dstBias = srcCharRange.length - dstCharRange.length;
+	}
+	
+	[dstView removeSelectedHunk:dstBias];
+	[self removeSelectedHunk:srcBias];
+	
+//	[self gotoDiff];
+//	[self refreshDisplay];
+	
+	[self setNeedsDisplay:YES];
+	[dstView setNeedsDisplay:YES];	
+}
+
+-(void) updateLinesIndexes:(NSUInteger) firstLineIndex
+{
+	NSArray	   *subarray;
+	NSUInteger prevLineLength;
+	NSUInteger currentCharIndex;
+	NSUInteger length;
+	CCDiffLine *firstLine;
+	NSRange	   range;
+	
+	NSMutableArray *newCharIndexes;
+	NSRange indexesRange;
+	
+	firstLine = [lines objectAtIndex:firstLineIndex];
+	length = [lines count] - firstLineIndex - 1;
+	range = NSMakeRange(firstLineIndex+1, length);
+	subarray = [lines subarrayWithRange:range];
+		
+	if ( lineIndexes )
+	{
+		currentCharIndex = [[lineIndexes objectAtIndex:firstLineIndex] integerValue];
+		
+		NSUInteger indexesLength = [lineIndexes count] - firstLineIndex - 1;
+		indexesRange = NSMakeRange( firstLineIndex+1, indexesLength ); 
+		
+		newCharIndexes = [[NSMutableArray alloc] initWithCapacity:indexesLength];
+	}
+	else
+	{
+		indexesRange = range;
+		currentCharIndex = 0;
+		newCharIndexes = [[NSMutableArray alloc] initWithCapacity:range.length + 1];
+		[newCharIndexes addObject:[NSNumber numberWithInteger:0]];
+	}
+
+
+	prevLineLength = [firstLine length] + 1;
+	
+	for ( CCDiffLine *line in subarray )
+	{
+		currentCharIndex += prevLineLength;
+		[newCharIndexes addObject:[NSNumber numberWithInteger:currentCharIndex]];
+		
+		prevLineLength = [line length] + 1;
+	}
+	
+	if ( lineIndexes )
+	{
+		[lineIndexes replaceObjectsInRange:indexesRange 
+					  withObjectsFromArray:newCharIndexes];
+	}
+	else
+	{
+		lineIndexes = newCharIndexes;
+	}
+}
+
+- (NSRange) charRangeFromLines:(NSRange) lineRange
+{
+	NSRange charRange;
+	
+	BOOL first = YES;
+	
+	charRange.length = 0;
+	
+	for ( CCDiffLine *line in [lines subarrayWithRange:lineRange] )
+	{
+		if ( first )
+		{
+			charRange.location = 
+				[[lineIndexes objectAtIndex:lineRange.location] integerValue];
+			first = NO;
+		}
+		charRange.length += [line length] + 1;
+	}
+	
+	return charRange;
 }
 
 -(void) generateHunks
@@ -479,6 +746,9 @@
 	LineDiffStatus prevStatus;
 	LineDiffStatus status;		
 
+	[hunks release];
+	hunks = [[NSMutableArray alloc] init];
+	
 	prevStatus = [(CCDiffLine *)[lines objectAtIndex:0] status];
 	
 	hunk = nil;
@@ -529,30 +799,44 @@
 	NSTrackingArea *trackingArea;
 	NSDictionary *userInfoDict;
 	
+	NSUInteger lineWidth;
+	
 	boundsRect = [self bounds];
 	
+	[hunkMarkers release];
 	hunkMarkers = [[NSMutableArray alloc] init];
 	
 	NSLayoutManager *layoutManager = [self layoutManager];
 	
+	lineWidth = [layoutManager defaultLineHeightForFont:font];
+	
 	for ( CCDiffHunk *hunk in hunks )
 	{
+		startRect = NSMakeRect(0, lineWidth * [hunk firstLineNumber], 
+							   NSIntegerMax, lineWidth );
+		endRect = startRect;
+		endRect.origin.y = lineWidth * [hunk lastLineNumber];
+		
+		/*
 		startRect = [layoutManager
 					 lineFragmentRectForGlyphAtIndex:[hunk startCharIndex]
 									  effectiveRange:nil];
 		endRect = [layoutManager
+				   
 				   lineFragmentRectForGlyphAtIndex:[hunk endCharIndex]
 									effectiveRange:nil];
-		
+		*/
 		unionRect = NSIntersectionRect( NSUnionRect(startRect, endRect),
 									    boundsRect );
 		
 		hunkMarker = [[HunkMarker alloc] initWithRect:unionRect
-											   status:[hunk status]];
+												 hunk:hunk];
 		userInfoDict = 
 			[NSDictionary dictionaryWithObjectsAndKeys:
 				hunkMarker, @"hunkMarker", 
 				nil];
+		
+		[hunkMarker release];
 
 		trackingArea = 
 		[[NSTrackingArea alloc] initWithRect:unionRect 
@@ -564,11 +848,10 @@
 		
 		[self addTrackingArea:trackingArea];
 		[trackingArea release];
-		
+		 
 		[hunkMarkers addObject:hunkMarker];
 	}
 }
-
 
 -(void) updateAnimation:(NSAnimationProgress) progress
 {
@@ -587,9 +870,7 @@
 {
 	[super drawViewBackgroundInRect:rect];
 	
-	
 	// Check if bounds rect has changed
-	
 	if ( NSEqualRects( [self bounds], prevBounds ) == NO )
 	{
 		prevBounds = [self bounds];
@@ -614,24 +895,32 @@
 			HunkMarker *hunkMarker = [hunkMarkers objectAtIndex:index];
 			
 			if ( NSIntersectsRect([hunkMarker rect], rect) )
-			{								
+			{
 				[hunkMarker draw];
 				
-				if ( index == selectedHunk )
+				if ( index == selectedHunkIndex )
 				{				
 					[self drawHunkMarker:[hunkMarker rect] 
 							   fillColor:currentSelectorColor
-							 strokeColor:currentSelectorStroke];
+							 strokeColor:currentSelectorStroke
+							   drawLines:YES];
+				}
+				else if ( index == selectedHunkMarker )
+				{
+					[self drawHunkMarker:[hunkMarker rect] 
+							   fillColor:currentSelectorColor
+							 strokeColor:currentSelectorStroke
+							   drawLines:NO];
 				}
 			}
 		}
 	}
 }
 
-
 -(void) drawHunkMarker:(NSRect) rect 
 			 fillColor:(NSColor*) fillColor
 		   strokeColor:(NSColor*) strokeColor
+			 drawLines:(BOOL) drawLines
 {
 	// Draw background color
 	NSBezierPath* path = [NSBezierPath bezierPathWithRect:rect];
@@ -642,14 +931,15 @@
 	[NSBezierPath setDefaultLineWidth:0.0];
 	[strokeColor set];
 	
-	// Upper line
+	if ( drawLines )
 	{
+		// Upper line
 		CGFloat x1, y1, x2, y2;
 		
 		x1 = rect.origin.x;
-		y1 = rect.origin.y;
+		y1 = ceil(rect.origin.y) + 0.5;
 		x2 = x1 + rect.size.width;
-		y2 = y1 + rect.size.height;
+		y2 = floor(y1 + rect.size.height) + 0.5;
 		
 		path = [NSBezierPath bezierPath];
 		[path moveToPoint:NSMakePoint( x1, y1 )];
@@ -694,6 +984,21 @@
 	}
 }
 
+- (BOOL) isHunkVisible:(NSUInteger) hunkIndex
+{
+	NSRect visibleRect = [scrollView documentVisibleRect];
+	
+	HunkMarker *hunkMarker = [hunkMarkers objectAtIndex:hunkIndex];
+	
+	if ( NSIntersectsRect(visibleRect, [hunkMarker rect]) )
+	{
+		return YES;
+	}
+	else
+	{
+		return NO;
+	}
+}
 
 - (void) scrollToHunk:(NSUInteger) hunkIndex
 {
@@ -705,35 +1010,29 @@
 
 - (void) moveToNextDiff
 {
-	if ( selectedHunk < [hunks count] - 1 )
+	if ( selectedHunkIndex < [hunks count] - 1 )
 	{
-		selectedHunk ++;
+		selectedHunkIndex ++;
 	}
 }
 
 - (void) moveToPreviousDiff
 {
-	if ( selectedHunk > 0 )
+	if ( selectedHunkIndex > 0 )
 	{
-		selectedHunk --;
+		selectedHunkIndex --;
 	}
-}
-
-
--(NSUInteger) selectedHunkIndex
-{
-	return selectedHunk;
 }
 
 - (void) moveToHunk:(NSInteger) hunkIndex
 {
-	selectedHunk = hunkIndex;
-	[self scrollToHunk:selectedHunk];
+	selectedHunkIndex = hunkIndex;
+	[self scrollToHunk:selectedHunkIndex];
 }
 
 -(CCDiffHunk*) selectedHunk
 {
-	return [hunks objectAtIndex:selectedHunk];
+	return [hunks objectAtIndex:selectedHunkIndex];
 }
 
 -(void) removeHunk:(CCDiffHunk*) hunk
@@ -743,26 +1042,27 @@
 
 -(void) removeSelectedHunk:(NSInteger) bias
 {
-	CCDiffHunk *hunk = [self selectedHunk];
+	CCDiffHunk *hunk;
 		
 	// Update char indexes and lines of all hunks after this one
-	for ( int i = selectedHunk+1; i < [hunks count]; i++ )
+	for ( int i = selectedHunkIndex+1; i < [hunks count]; i++ )
 	{
 		hunk = [hunks objectAtIndex:i];
 		
 		[hunk setStartCharIndex:[hunk startCharIndex] + bias];
 	}
 	
-	[hunks removeObjectAtIndex:selectedHunk];
+	[hunks removeObjectAtIndex:selectedHunkIndex];
 	
-	// TODO: Remove hunk marker.
+	[hunkMarkers removeObjectAtIndex:selectedHunkIndex];
 	
-	if ( selectedHunk >= [hunks count] )
+	if ( selectedHunkIndex >= [hunks count] )
 	{
-		selectedHunk = [hunks count] - 1;
+		selectedHunkIndex = [hunks count] - 1;
 	}
 }
 
+/*
 -(void) keyDown:(NSEvent *)theEvent
 {
 	[super keyDown:theEvent];
@@ -780,10 +1080,10 @@
 			break;
 	}
 }
+ */
 
 - (void)updateTrackingAreas
 {
-	/*
 	for ( NSTrackingArea *ta in [super trackingAreas] )
 	{
 		[self removeTrackingArea:ta];
@@ -793,7 +1093,6 @@
 	
 	[self generateTrackingAreas];
 	[self display];
-	 */
 }
 
 - (void) mouseEntered:(NSEvent *)event
@@ -805,12 +1104,13 @@
 		HunkMarker *hunkMarker = [userInfo objectForKey:@"hunkMarker"];
 		if ( hunkMarker )
 		{
-			[hunkMarker startRollOver:self 
-						  targetColor:[NSColor selectedLineColor]];
+			//[hunkMarker startRollOver:self 
+			//			  targetColor:[NSColor selectedLineColor]];
 			
-			selectedHunkMarker = [hunkMarkers indexOfObject:hunkMarker];
+			[controller setHunkSelector:[hunkMarkers indexOfObject:hunkMarker]];
 		}
 	}
+	[super mouseEntered:event];
 }
 
 - (void) mouseExited:(NSEvent *)event
@@ -822,10 +1122,11 @@
 		HunkMarker *hunkMarker = [userInfo objectForKey:@"hunkMarker"];
 		if ( hunkMarker )
 		{
-			[hunkMarker endRollOver:self];
-			selectedHunkMarker = -1;
+			//[hunkMarker endRollOver:self];
+			[controller setHunkSelector:-1];
 		}
 	}
+	[super mouseExited:event];
 }
 
 -(void) mouseDown:(NSEvent*) event
@@ -833,12 +1134,13 @@
 	// Set current hunk as the selected one ( if any ).
 	if ( selectedHunkMarker != -1 )
 	{
-		if ( selectedHunk < [hunks count] - 1 )
+		if ( selectedHunkIndex < [hunks count] )
 		{
-			selectedHunk = selectedHunkMarker;
+			selectedHunkIndex = selectedHunkMarker;
 		}
 		[controller gotoDiffIndex:selectedHunkMarker];
 	}
+	[super mouseDown:event];
 }
 
 
@@ -882,31 +1184,109 @@
 }
 */
 
+- (void)textViewDidChangeSelection:(NSNotification *)aNotification
+{
+	//NSLog(@"Changed selection");
+	
+	// Check if cursor is on an empty line or not.
+}
+
+
+-(BOOL) shouldAllowEditing:(NSUInteger) index
+{
+	NSRect rect = [[self layoutManager]
+				   lineFragmentRectForGlyphAtIndex:index
+				   effectiveRange:nil];
+	
+	NSUInteger line = rect.origin.y / 
+	[[self layoutManager] defaultLineHeightForFont:font];
+	
+	CCDiffLine *diffLine = [lines objectAtIndex:line];
+		
+	if ( [diffLine status] == kLineEmpty )
+	{
+		return NO;
+	}
+	else
+	{
+		return YES;
+	}
+}
+
+- (BOOL)textView:(NSTextView *)aTextView 
+shouldChangeTextInRange:(NSRange)range 
+replacementString:(NSString *)replacementString
+{
+	return [self shouldAllowEditing:range.location];
+}
+
+- (NSRange)textView:(NSTextView *)aTextView 
+willChangeSelectionFromCharacterRange:(NSRange)oldSelectedCharRange 
+   toCharacterRange:(NSRange)newSelectedCharRange
+{
+	NSRect rect = [[self layoutManager]
+				   lineFragmentRectForGlyphAtIndex:newSelectedCharRange.location
+				   effectiveRange:nil];
+	
+	NSInteger line = rect.origin.y / 
+	[[self layoutManager] defaultLineHeightForFont:font];
+	
+	CCDiffLine *diffLine = [lines objectAtIndex:line];
+	
+	if ( [diffLine status] == kLineEmpty )
+	{
+		NSInteger emptyLinesCount = 0;
+		do {
+			if ( oldSelectedCharRange.location < newSelectedCharRange.location )
+			{
+				emptyLinesCount++;
+				line++;
+			}
+			else
+			{
+				emptyLinesCount--;
+				line--;
+			}
+
+			if ( line < 0 ) break;
+			if ( line >= [lines count] ) break;
+				
+			diffLine = [lines objectAtIndex:line];
+		} while ([diffLine status] == kLineEmpty);
+				  
+		newSelectedCharRange.location += emptyLinesCount;
+	}
+
+	return newSelectedCharRange;
+}
+
 - (void)viewDidMoveToWindow
 {
 	//
 }
 
-// Move to Controller class!
--(void) updateButtonsStates
+- (CCDiffHunk*) nextHunk
 {
-	if ( selectedHunk > 0) 
+	if ( selectedHunkIndex < [hunks count] - 1 )
 	{
-		[prevButton setEnabled:YES];
+		return [hunks objectAtIndex:selectedHunkIndex+1];
 	}
 	else
 	{
-		[prevButton setEnabled:NO];
+		return nil;
 	}
+}
 
-	if ( ( [hunks count] > 0 ) && ( selectedHunk < [hunks count]-1 ) )
+- (CCDiffHunk*) prevHunk
+{
+	if ( selectedHunkIndex > 0 )
 	{
-		[nextButton setEnabled:YES];
+		return [hunks objectAtIndex:selectedHunkIndex-1];
 	}
 	else
 	{
-		[nextButton setEnabled:NO];
-	}
+		return nil;
+	}	
 }
 
 @end

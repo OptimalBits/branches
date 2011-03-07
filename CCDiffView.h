@@ -3,7 +3,7 @@
 //  gitfend
 //
 //  Created by Manuel Astudillo on 9/18/10.
-//  Copyright 2010 CodeTonic. All rights reserved.
+//  Copyright 2010 Optimal Bits Sweden AB. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -25,12 +25,15 @@ typedef enum CCDiffViewLineMask
 @interface CCDiffView : NSTextView {
 	NSRect prevBounds;
 	
-	NSArray *lines;
+	NSMutableArray *lines;
 	NSMutableArray *hunks;
 	NSMutableArray *hunkMarkers;
+	
+	NSMutableArray *lineIndexes; // start char index for every line.
+	
 	NSInteger selectedHunkMarker;
 	
-	NSUInteger selectedHunk;
+	NSInteger selectedHunkIndex;
 	
 	NSFont *font;
 	NSRect fontBoundingRect;
@@ -43,7 +46,6 @@ typedef enum CCDiffViewLineMask
 	
 	OBSDiffScroller *diffScroller;
 	
-	
 	CCDiffViewController *controller;
 	
 	IBOutlet NSButton *prevButton;
@@ -51,14 +53,21 @@ typedef enum CCDiffViewLineMask
 	IBOutlet NSButton *stageButton;
 }
 
+@property (readonly)  NSMutableArray *lines;
+@property (readwrite) NSInteger selectedHunkIndex;
+@property (readwrite) NSInteger selectedHunkMarker;
+
+
 - (id) initWithScrollView:(NSScrollView*) view 
 					 font:(NSFont*) font
-					lines:(NSArray*) lines
+					lines:(NSMutableArray*) lines
 					 mask:(CCDiffViewLineMask) mask
 			   controller:(CCDiffViewController*) controller;
 
+-(void) updateStorage:(NSTextStorage*) storage;
 
-- (NSUInteger) selectedHunkIndex;
+- (NSRange) charRangeFromLines:(NSRange) lineRange;
+
 - (CCDiffHunk*) selectedHunk;
 
 
@@ -66,6 +75,17 @@ typedef enum CCDiffViewLineMask
 - (void) moveToPreviousDiff;
 
 - (void) moveToDiff;
+
+- (CCDiffHunk*) nextHunk;
+- (CCDiffHunk*) prevHunk;
+
+-(void) mergeTo:(CCDiffView*) dstView;
+
+
+/**
+	Returns YES if the hunk is in the visible part of the document view.
+ */
+- (BOOL) isHunkVisible:(NSUInteger) hunkIndex;
 
 
 /**
@@ -78,5 +98,10 @@ typedef enum CCDiffViewLineMask
 -(void) removeHunk:(CCDiffHunk*) hunk;
 -(void) removeSelectedHunk:(NSInteger) bias;
 
+-(void) updateStorage:(NSRange) oldCharRange
+		 newLineRange:(NSRange) newLineRange;
+
 @end
+
+
 

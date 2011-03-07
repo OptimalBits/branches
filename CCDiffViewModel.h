@@ -19,8 +19,8 @@
 	NSMutableArray *rightLines;
 }
 
-@property (readonly) NSArray* leftLines;
-@property (readonly) NSArray* rightLines;
+@property (readonly) NSMutableArray* leftLines;
+@property (readonly) NSMutableArray* rightLines;
 
 -(id) initWithDiffLines:(NSArray*) lines;
 

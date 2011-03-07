@@ -3,10 +3,38 @@
 //  DiffMerge
 //
 //  Created by Manuel Astudillo on 8/20/10.
-//  Copyright 2010 Optimal Bits Software AB. All rights reserved.
+//  Copyright 2010 Optimal Bits Sweden AB. All rights reserved.
 //
 
 #import "CCDiff.h"
+#import "NSString+OBSDiff.h"
+
+static NSArray* longestCommonSubsequence( NSArray* beforeLines, 
+										  NSArray *afterLines );
+
+static NSArray* diff( NSArray *before, 
+					  NSArray *after, 
+					  id (^removedBlock)(NSString *string, NSUInteger index),
+					  id (^addedBlock)(NSString *string, NSUInteger index),
+					  id (^originalBlock)(NSString *string, NSUInteger index) );
+
+
+@implementation CCDiffChar
+
+@synthesize charIndex;
+@synthesize status;
+
++(id) diffChar:(NSUInteger) index status:(CharDiffStatus) _status
+{
+	CCDiffChar *diffChar = [[CCDiffChar alloc] init];
+	
+	[diffChar setCharIndex:index];
+	[diffChar setStatus:_status];
+	
+	return [diffChar autorelease];
+}
+
+@end
 
 
 @implementation CCDiffHunk
@@ -63,21 +91,16 @@
 	return charRange;
 }
 
--(NSUInteger) startCharIndex
-{
-	return startCharIndex;
-}
-
 -(NSUInteger) endCharIndex
 {
-	return startCharIndex + [self charLength] - 1;
+	return (startCharIndex + [self charLength]) - 1;
 }
 
 -(NSUInteger) lastLineNumber
 {	
-	if ( [lines count] > 1 )
+	if ( [lines count] > 0 )
 	{
-		return firstLineNumber + [lines count];
+		return firstLineNumber + [lines count] - 1;
 	}
 	else
 	{
@@ -93,6 +116,8 @@
 @synthesize line;
 @synthesize status;
 @synthesize number;
+@synthesize charDiffs;
+//@synthesize charIndex;
 
 -(id) initWithLine:(NSString*) _line 
 			status:(LineDiffStatus) _status 
@@ -104,8 +129,16 @@
 		line = _line;
 		status = _status;
 		number = _number;
+		//charIndex = 0;
 	}
 	return self;
+}
+
+-(void) dealloc
+{
+	[line release];
+	[charDiffs release];
+	[super dealloc];
 }
 
 +(id) emptyLine:(NSUInteger) _number
@@ -128,7 +161,74 @@
 	}
 }
 
+-(NSArray*) diff:(CCDiffLine*) afterLine
+{
+	NSArray *charactersBefore;
+	NSArray *charactersAfter;
+	
+	charactersBefore = [line arrayWithStringCharacters];
+	charactersAfter = [[afterLine line] arrayWithStringCharacters];
+
+	return diff( charactersBefore, charactersAfter, 
+				^( NSString *string, NSUInteger index )
+				{
+					return [CCDiffChar diffChar:index status:kCharRemoved];
+				},
+				^( NSString *string, NSUInteger index)
+				{
+					return [CCDiffChar diffChar:index status:kCharAdded];
+				},
+				^( NSString *string, NSUInteger index)
+				{
+					return [CCDiffChar diffChar:index status:kCharOriginal];
+				} );
+}
+
 @end
+
+void updateLineCharDiff(CCDiffLine* before, CCDiffLine* after)
+{
+	NSArray *charactersBefore;
+	NSArray *charactersAfter;
+	
+	charactersBefore = [[before line] arrayWithStringCharacters];
+	charactersAfter  = [[after line] arrayWithStringCharacters];
+	
+	NSArray *charDiffs = diff( charactersBefore, charactersAfter, 
+				^( NSString *string, NSUInteger index )
+				{
+					return [CCDiffChar diffChar:index status:kCharRemoved];
+				},
+				^( NSString *string, NSUInteger index)
+				{
+					return [CCDiffChar diffChar:index status:kCharAdded];
+				},
+				^( NSString *string, NSUInteger index)
+				{
+					return [CCDiffChar diffChar:index status:kCharOriginal];
+				} );
+	
+	NSMutableArray *beforeCharDiffs = [[NSMutableArray alloc] init];
+	NSMutableArray *afterCharDiffs = [[NSMutableArray alloc] init];
+	
+	for ( CCDiffChar *c in charDiffs )
+	{
+		if ( [c status] == kCharRemoved )
+		{
+			[beforeCharDiffs addObject:c];
+		}
+		else if ( [c status] == kCharAdded )
+		{
+			[afterCharDiffs addObject:c];
+		}
+	}
+	
+	[before setCharDiffs:beforeCharDiffs];
+	[after setCharDiffs:afterCharDiffs];
+	
+	[beforeCharDiffs release];
+	[afterCharDiffs release];
+}
 
 
 typedef struct 
@@ -164,16 +264,61 @@ static NSArray *getLines( NSString *s );
 	[super dealloc];
 }
 
--(NSArray*) longestCommonSubsequence
+-(NSArray*) diff
+{
+	return diff( beforeLines, afterLines, 
+				^( NSString *string, NSUInteger index )
+				{
+					return [[[CCDiffLine alloc] initWithLine:string
+													  status:kLineRemoved
+													  number:index] 
+							autorelease];
+				},
+				^( NSString *string, NSUInteger index)
+				{
+					return [[[CCDiffLine alloc] initWithLine:string
+													  status:kLineAdded
+													  number:index] 
+							autorelease];
+				},
+				^( NSString *string, NSUInteger index)
+				{
+					return [[[CCDiffLine alloc] initWithLine:string
+													  status:kLineOriginal
+													  number:index] 
+							autorelease];
+				} );
+}
+
+@end
+
+
+static NSArray *getLines( NSString *s )
+{
+	NSMutableArray *lines = [[[NSMutableArray alloc] init] autorelease];
+	[s enumerateLinesUsingBlock:
+		 ^(NSString *line, BOOL *stop){[lines addObject:line];}];
+	
+	return lines;
+}
+
+static NSArray* longestCommonSubsequence( NSArray* beforeLines, 
+										  NSArray *afterLines )
 {
 	int32_t i, j;
 	uint32_t beforeLinesCount, afterLinesCount;
 	
 	NSArray *trimmedBeforeLines, *trimmedAfterLines;
-
+	
 	DynProgTable table;
-		
+	
 	uint32_t headLength, tailStart, tailLength;
+	
+	if ( ( [beforeLines count] == 0 ) || 
+		 ( [afterLines count] == 0 ) )
+	{
+		return [NSArray array];
+	}
 	
 	// trim inputs to improve performance on large almost unmodified files
 	afterLinesCount = [afterLines count];
@@ -183,9 +328,9 @@ static NSArray *getLines( NSString *s );
 		if ([line isEqualToString:[afterLines objectAtIndex:headLength]])
 		{
 			headLength ++;
-			if ( headLength > afterLinesCount )
+			if ( headLength >= afterLinesCount )
 			{
-				return nil;
+				return afterLines;
 			}
 		}
 		else
@@ -195,11 +340,11 @@ static NSArray *getLines( NSString *s );
 	}
 	
 	trimmedBeforeLines = 
-		[beforeLines subarrayWithRange:NSMakeRange(headLength, 
-												   [beforeLines count]-headLength)];
+	[beforeLines subarrayWithRange:NSMakeRange(headLength, 
+											   [beforeLines count]-headLength)];
 	trimmedAfterLines = 
-		[afterLines subarrayWithRange:NSMakeRange(headLength, 
-												  [afterLines count]-headLength)];
+	[afterLines subarrayWithRange:NSMakeRange(headLength, 
+											  [afterLines count]-headLength)];
 	
 	i = [trimmedBeforeLines count] - 1;
 	j = [trimmedAfterLines count] - 1;
@@ -259,10 +404,10 @@ static NSArray *getLines( NSString *s );
 	u_int32_t length = TABLE( table, 0, 0 ) + headLength + tailLength;
 	
 	NSMutableArray *sequence = 
-		[[[NSMutableArray alloc] initWithCapacity:length] autorelease];
+	[[[NSMutableArray alloc] initWithCapacity:length] autorelease];
 	
 	[sequence addObjectsFromArray:
-		[beforeLines subarrayWithRange:NSMakeRange(0, headLength)]];
+	 [beforeLines subarrayWithRange:NSMakeRange(0, headLength)]];
 	
     i = 0;
     j = 0;
@@ -278,48 +423,54 @@ static NSArray *getLines( NSString *s );
 		}
 		else if (TABLE((table), i+1, j) >= TABLE((table),i,j+1)) 
 		{
-			 i++;
+			i++;
 		}
 		else 
 		{
-			 j++;
+			j++;
 		}
     }
 	
 	free( table.cells );
 	
 	[sequence addObjectsFromArray:
-		[trimmedBeforeLines subarrayWithRange:NSMakeRange(tailStart, 
-														  tailLength)]];
-	
+	 [trimmedBeforeLines subarrayWithRange:NSMakeRange(tailStart, 
+													   tailLength)]];
 	return sequence;
 }
 
--(NSArray*) diff
+
+typedef id (*removed)(NSString *string, NSUInteger index);
+typedef id (*added)(NSString *string, NSUInteger index);
+typedef id (*original)(NSString *string, NSUInteger index);
+
+NSArray* diff( NSArray *before, 
+			   NSArray *after, 
+			   id (^removedBlock)(NSString *string, NSUInteger index),
+			   id (^addedBlock)(NSString *string, NSUInteger index),
+			   id (^originalBlock)(NSString *string, NSUInteger index))
 {
 	NSMutableArray *result;
 	
-	CCDiffLine *diffLine;
+	NSArray *lcs = longestCommonSubsequence( before, after );
 	
-	NSArray *lcs = [self longestCommonSubsequence];
-	
-	u_int32_t bCount = [beforeLines count];
-	u_int32_t aCount = [afterLines count];
+	u_int32_t bCount = [before count];
+	u_int32_t aCount = [after count];
 	
 	result = 
-	[[[NSMutableArray alloc] initWithCapacity:MAX(bCount,aCount)] autorelease];
+	 [[[NSMutableArray alloc] initWithCapacity:MAX(bCount,aCount)] autorelease];
 	
 	u_int32_t bIndex = 0;
 	u_int32_t aIndex = 0;
 	
-	u_int32_t bLineNumber = 1;
-	u_int32_t aLineNumber = 1;
+	u_int32_t bLineNumber = 0;
+	u_int32_t aLineNumber = 0;
 	
 	for( NSString *s in lcs )
 	{
 		while ( bIndex < bCount )
 		{
-			NSString *b = [beforeLines objectAtIndex:bIndex];
+			NSString *b = [before objectAtIndex:bIndex];
 			bIndex++;
 			
 			if ( [b isEqualToString:s] )
@@ -327,22 +478,16 @@ static NSArray *getLines( NSString *s );
 				break;
 			}
 			else
-			{
-				diffLine = [[[CCDiffLine alloc] initWithLine:b 
-													  status:kLineRemoved
-													  number:bLineNumber] 
-							autorelease];
-				
-				
-				[result addObject:diffLine];
-				
+			{				
+				[result addObject:removedBlock( b, bLineNumber )];
+				 
 				bLineNumber++;
 			}
 		}
 		
 		while ( aIndex < aCount )
 		{
-			NSString *a = [afterLines objectAtIndex:aIndex];
+			NSString *a = [after objectAtIndex:aIndex];
 			aIndex++;
 			
 			if ( [a isEqualToString:s] )
@@ -351,41 +496,28 @@ static NSArray *getLines( NSString *s );
 			}
 			else
 			{
-				diffLine = [[[CCDiffLine alloc] initWithLine:a
-													  status:kLineAdded
-													  number:aLineNumber]
-							autorelease];
-				[result addObject:diffLine];
+				[result addObject:addedBlock( a, aLineNumber)];
 				
 				aLineNumber++;
 			}
 		}
 		
-		diffLine = [[[CCDiffLine alloc] initWithLine:s
-											  status:kLineOriginal
-											   number:0] autorelease];
-		[result addObject:diffLine];
+		[result addObject:originalBlock( s, 0 )];
 		bLineNumber++;
 		aLineNumber++;
 	}
 	
 	while( bIndex < bCount )
 	{
-		diffLine = [[[CCDiffLine alloc] initWithLine:[beforeLines objectAtIndex:bIndex]
-											  status:kLineRemoved
-											  number:bLineNumber] autorelease];
-		[result addObject:diffLine];
+		[result addObject:removedBlock([before objectAtIndex:bIndex], bLineNumber)];
 		
 		bIndex++;
 		bLineNumber++;
 	}
 	
 	while( aIndex < aCount )
-	{		
-		diffLine = [[[CCDiffLine alloc] initWithLine:[afterLines objectAtIndex:aIndex]
-											  status:kLineAdded
-											  number:aLineNumber] autorelease];
-		[result addObject:diffLine];
+	{
+		[result addObject:addedBlock([after objectAtIndex:aIndex], aLineNumber)];
 		
 		aIndex++;
 		aLineNumber++;
@@ -394,16 +526,4 @@ static NSArray *getLines( NSString *s );
 	return result;
 }
 
-
-@end
-
-
-static NSArray *getLines( NSString *s )
-{
-	NSMutableArray *lines = [[[NSMutableArray alloc] init] autorelease];
-	[s enumerateLinesUsingBlock:
-		 ^(NSString *line, BOOL *stop){[lines addObject:line];}];
-	
-	return lines;
-}
 

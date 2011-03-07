@@ -3,15 +3,14 @@
 //  Branches
 //
 //  Created by Manuel Astudillo on 9/10/10.
-//  Copyright 2010 Optimal Bits Software AB. All rights reserved.
+//  Copyright 2010 Optimal Bits Sweden AB. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 
-@class NoodleLineNumberView;
 @class CCDiffView, CCDiffViewModel, OBSScrollViewAnimation;
 
-@interface CCDiffViewController : NSViewController {
+@interface CCDiffViewController : NSViewController <NSAnimationDelegate>{
 	CCDiffView *leftView;
 	CCDiffView *rightView;
 	
@@ -22,11 +21,11 @@
 	
 	OBSScrollViewAnimation *leftScrollViewAnimator;
 	OBSScrollViewAnimation *rightScrollViewAnimator;
-	
-	NoodleLineNumberView *lineNumberViewLeft;
-	NoodleLineNumberView *lineNumberViewRight;
-	
+		
 	BOOL ignoreViewSynchronization;
+	BOOL allowMoveHunkMarker;
+	
+	NSFont *font;
 }
 
 - (id) init;
@@ -38,13 +37,16 @@
 
 - (void)synchronizedViewContentBoundsDidChange:(NSNotification *)notification;
 
-- (IBAction) mergeToRight:(id) sender;
-- (IBAction) mergeToLeft:(id) sender;
-
-- (IBAction) stageDiff:(id) sender;
 - (IBAction) nextDiff:(id) sender;
 - (IBAction) prevDiff:(id) sender;
+- (IBAction) mergeRight:(id) sender;
+- (IBAction) mergeLeft:(id) sender;
+
+- (void) merge:(CCDiffView*) srcView to:(CCDiffView*) dstView;
 
 - (void) gotoDiffIndex:(NSUInteger) index;
+
+- (void) setHunkSelector:(NSInteger) index;
+
 
 @end

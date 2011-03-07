@@ -54,22 +54,48 @@ typedef enum
 
 -(NSUInteger) lastLineNumber;
 
+@end
+
+
+typedef enum
+{
+	kCharOriginal,
+	kCharAdded,
+	kCharRemoved,
+} CharDiffStatus;
+
+@interface CCDiffChar : NSObject
+{
+	NSUInteger charIndex;
+	CharDiffStatus status;
+}
+
+@property (readwrite) NSUInteger charIndex;
+@property (readwrite) CharDiffStatus status;
+
++(id) diffChar:(NSUInteger) index status:(CharDiffStatus) status;
 
 @end
+
 
 /**
  
  */
 @interface CCDiffLine : NSObject
 {
-	NSString *line;
+	NSString	   *line;
 	LineDiffStatus status;
-	NSUInteger number;
+	NSUInteger	   number;
+//	NSUInteger	   charIndex;
+	NSArray *charDiffs;
 }
 
 @property (readonly)	NSString *line;
 @property (readwrite)	LineDiffStatus status;
 @property (readonly)	NSUInteger number;
+//@property (readwrite)	NSUInteger charIndex;
+
+@property (readwrite, retain) NSArray *charDiffs;
 
 +(id) emptyLine:(NSUInteger) number;
 
@@ -81,6 +107,8 @@ typedef enum
 
 @end
 
+void updateLineCharDiff(CCDiffLine* before, CCDiffLine* after);
+
 
 @interface CCDiff : NSObject {
 	
@@ -91,12 +119,6 @@ typedef enum
 
 -(id) initWithBefore:(NSString*) left andAfter:(NSString*) right;
 
-
-/**
-	Returns an array with the longest common subsequence. Every element in the
-	array will be a common line between the before and after strings.
- */
--(NSArray*) longestCommonSubsequence;
 
 /**
 	Returns an array with CCDiffLine objects representing the diff between
