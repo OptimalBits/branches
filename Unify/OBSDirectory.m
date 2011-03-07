@@ -113,6 +113,150 @@
 @end
 
 
+@implementation OBSCompareDirectories
+
+@synthesize resultTree;
+
+-(id) initWithLeftDirectory:(OBSDirectory *) _leftDirectory 
+			 rightDirectory:(OBSDirectory *) _rightDirectory
+{
+	if ( self = [super init] )
+	{
+		leftDirectory = [_leftDirectory retain];
+		rightDirectory = [_rightDirectory retain];
+		
+		resultTree = nil;
+	}
+	return self;
+}
+
+-(void) dealloc
+{
+	[resultTree release];
+	[leftDirectory release];
+	[rightDirectory release];
+	[super dealloc];
+}
+
+-(void) main
+{
+	OBSDirectoryComparedNode *comparedNode;
+	
+	isCanceled = NO;
+	
+	comparedNode = [[OBSDirectoryComparedNode alloc] 
+					initWithLeftEntry:[leftDirectory root]
+					right:[rightDirectory root]
+					status:kOBSFileOriginal];
+	
+	resultTree = [[NSTreeNode alloc] initWithRepresentedObject:comparedNode];
+	[comparedNode release];
+	
+	[self compareDirectoryEntry:[leftDirectory root] 
+						   with:[rightDirectory root] 
+						onArray:[resultTree mutableChildNodes]];
+}
+
+-(void) cancel
+{
+	isCanceled = YES;
+}
+
+-(OBSDirectoryCompareStatus) 
+compareDirectoryEntry:(OBSDirectoryEntry*) leftEntry
+with:(OBSDirectoryEntry*) rightEntry
+onArray:(NSMutableArray*) mutableChildNodes
+{
+	if ( isCanceled ) return kOBSFileOriginal;
+	
+	OBSDirectoryCompareStatus currentCompareStatus;
+	NSDictionary *leftChildren = [leftEntry children];
+	NSDictionary *rightChildren = [rightEntry children];
+	
+	NSSet *allChildren = [[NSSet setWithArray:[leftChildren allKeys]] 
+						  setByAddingObjectsFromArray:[rightChildren allKeys]];
+	
+	currentCompareStatus = kOBSFileOriginal;
+	
+	for ( NSString *p in allChildren )
+	{
+		NSTreeNode *treeNode;
+		
+		OBSDirectoryCompareStatus childCompareStatus;
+		OBSDirectoryCompareStatus compareStatus;
+		OBSDirectoryComparedNode *comparedNode;
+		
+		OBSDirectoryEntry *leftEntryChild;
+		OBSDirectoryEntry *rightEntryChild;
+		
+		compareStatus = kOBSFileOriginal;
+		
+		leftEntryChild = [leftChildren objectForKey:p];
+		rightEntryChild = [rightChildren objectForKey:p];
+		
+		if ( leftEntryChild == nil )
+		{
+			compareStatus = kOBSFileAdded;
+		}
+		else if ( rightEntryChild == nil )
+		{
+			compareStatus = kOBSFileRemoved;
+		}
+		else
+		{
+			if ( !( [leftEntryChild fileStatus].st_mode & S_IFDIR ) &&
+				!( [rightEntryChild fileStatus].st_mode & S_IFDIR ) )
+			{
+				if ( [leftEntryChild fileStatus].st_size != 
+					[rightEntryChild fileStatus].st_size )
+				{
+					compareStatus = kOBSFileModified;
+				}
+				else
+				{
+					NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+					
+					NSData *leftFile = [leftEntry contentsOfChild:p];
+					NSData *rightFile = [rightEntry contentsOfChild:p];
+					
+					if ( [leftFile isEqualToData:rightFile] == NO)
+					{
+						compareStatus = kOBSFileModified;
+					}
+					[pool drain];
+				}
+			}
+		}
+		
+		comparedNode = 
+		[[OBSDirectoryComparedNode alloc] initWithLeftEntry:leftEntryChild 
+													  right:rightEntryChild
+													 status:compareStatus];
+		
+		treeNode = [NSTreeNode treeNodeWithRepresentedObject:comparedNode];
+		
+		childCompareStatus = [self compareDirectoryEntry:leftEntryChild 
+													with:rightEntryChild 
+												 onArray:[treeNode mutableChildNodes]];
+		if ( childCompareStatus != kOBSFileOriginal )
+		{
+			[comparedNode setStatus:childCompareStatus];
+			currentCompareStatus = kOBSFileModified;
+		}
+		
+		[comparedNode release];
+		[mutableChildNodes addObject:treeNode];
+	}
+	
+	return currentCompareStatus;
+}
+
+@end
+
+
+
+
+
 @interface OBSDirectory (Private)
 
 - (void) getDirectoryContents:(NSString*) path 
@@ -120,10 +264,9 @@
 
 - (NSMutableDictionary*) createDirectoryTree:(NSString*) _path;
 
--(void) compareDirectoryEntry:(OBSDirectoryEntry*) leftEntry
-						 with:(OBSDirectoryEntry*) rightEntry
-					  onArray:(NSMutableArray*) mutableChildNodes;
-
+-(OBSDirectoryCompareStatus) compareDirectoryEntry:(OBSDirectoryEntry*) leftEntry
+											  with:(OBSDirectoryEntry*) rightEntry
+										   onArray:(NSMutableArray*) mutableChildNodes;
 @end
 
 
@@ -151,7 +294,7 @@
 -(void) dealloc
 {
 	[root release];
-	[super dealloc];	
+	[super dealloc];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -165,98 +308,11 @@
 	[encoder encodeObject:[root path] forKey:@"path"];
 }
 
-
--(NSTreeNode*) compareDirectory:(OBSDirectory*) directory
+-(BOOL) isEqual:(id)object
 {
-	NSTreeNode *tree;
-	OBSDirectoryComparedNode *comparedNode;
-	
-	comparedNode = [[OBSDirectoryComparedNode alloc] 
-					initWithLeftEntry:[self root]
-								right:[directory root]
-							   status:kOBSFileOriginal];
-	
-	tree = [NSTreeNode treeNodeWithRepresentedObject:comparedNode];
-	[comparedNode release];
-	
-	[self compareDirectoryEntry:[self root] 
-						   with:[directory root] 
-						onArray:[tree mutableChildNodes]];
-	
-	return tree;
+	return [[[self root] path] isEqual:[[object root] path]];
 }
 
-// TODO: this function should return a OBSDirectoryCompareStatus
--(void) compareDirectoryEntry:(OBSDirectoryEntry*) leftEntry
-						 with:(OBSDirectoryEntry*) rightEntry
-					  onArray:(NSMutableArray*) mutableChildNodes
-{
-	NSDictionary *leftChildren = [leftEntry children];
-	NSDictionary *rightChildren = [rightEntry children];
-	
-	NSSet *allChildren = [[NSSet setWithArray:[leftChildren allKeys]] 
-						  setByAddingObjectsFromArray:[rightChildren allKeys]];
-	
-	for ( NSString *p in allChildren )
-	{
-		NSTreeNode *treeNode;
-		
-		OBSDirectoryCompareStatus compareStatus;
-		OBSDirectoryComparedNode *comparedNode;
-		
-		OBSDirectoryEntry *leftEntryChild;
-		OBSDirectoryEntry *rightEntryChild;
-		
-		leftEntryChild = [leftChildren objectForKey:p];
-		rightEntryChild = [rightChildren objectForKey:p];
-		
-		if ( leftEntryChild == nil )
-		{
-			compareStatus = kOBSFileAdded;
-		}
-		else if ( rightEntryChild == nil )
-		{
-			compareStatus = kOBSFileRemoved;
-		}
-		else
-		{
-			if ( [leftEntryChild fileStatus].st_size != 
-				 [rightEntryChild fileStatus].st_size )
-			{
-				compareStatus = kOBSFileModified;
-			}
-			else
-			{
-				// Read and compare files byte by byte
-				NSData *leftFile = [leftEntry contentsOfChild:p];
-				NSData *rightFile = [rightEntry contentsOfChild:p];
-				
-				if ( [leftFile isEqualToData:rightFile] )
-				{
-					compareStatus = kOBSFileOriginal;
-				}
-				else
-				{
-					compareStatus = kOBSFileModified;
-				}
-			}
-		}
-		
-		comparedNode = 
-			[[OBSDirectoryComparedNode alloc] initWithLeftEntry:leftEntryChild 
-														  right:rightEntryChild
-														 status:compareStatus];
-		
-		treeNode = [NSTreeNode treeNodeWithRepresentedObject:comparedNode];
-		
-		[self compareDirectoryEntry:leftEntryChild 
-							   with:rightEntryChild 
-							onArray:[treeNode mutableChildNodes]];
-		
-		[comparedNode release];
-		[mutableChildNodes addObject:treeNode];
-	}
-}
 
 -(NSMutableDictionary*) createDirectoryTree:(NSString*) _path
 {	
@@ -282,7 +338,8 @@
 		
 		if ( stat([p UTF8String], &file_status) == 0 )
 		{
-			if ( file_status.st_mode & S_IFDIR )
+			if ( ( file_status.st_mode & S_IFDIR ) && 
+				 !( file_status.st_mode & S_IFLNK ) )
 			{
 				children = [self createDirectoryTree:p];
 			}

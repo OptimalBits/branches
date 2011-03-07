@@ -38,10 +38,10 @@
 
 typedef enum
 {
-	kOBSFileOriginal,
-	kOBSFileModified,
-	kOBSFileAdded,
-	kOBSFileRemoved
+	kOBSFileOriginal	= 0,
+	kOBSFileModified	= 1,
+	kOBSFileAdded		= 2,
+	kOBSFileRemoved		= 4
 } OBSDirectoryCompareStatus;
 
 
@@ -84,4 +84,29 @@ typedef enum
 -(NSTreeNode*) compareDirectory:(OBSDirectory*) directory;
 
 @end
+
+
+@interface OBSCompareDirectories : NSOperation
+{
+	OBSDirectory *leftDirectory;
+	OBSDirectory *rightDirectory;
+	
+	NSTreeNode *resultTree;
+	
+	BOOL isCanceled;
+}
+
+@property (readonly) NSTreeNode *resultTree;
+
+-(id) initWithLeftDirectory:(OBSDirectory*) leftDirectory 
+			 rightDirectory:(OBSDirectory*) rightDirectory;
+
+-(OBSDirectoryCompareStatus) 
+				compareDirectoryEntry:(OBSDirectoryEntry*) leftEntry
+								 with:(OBSDirectoryEntry*) rightEntry
+							  onArray:(NSMutableArray*) mutableChildNodes;
+@end
+
+
+
 
