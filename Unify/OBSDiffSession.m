@@ -13,6 +13,17 @@
 
 @synthesize leftSource, rightSource;
 
+-(id) init
+{
+	if ( self = [super init] )
+	{
+		name = nil;
+		leftSource = nil;
+		rightSource = nil;
+	}
+	return self;
+}
+
 -(void) dealloc
 {
 	[leftSource release];
@@ -57,7 +68,6 @@
 	return self;
 }
 
-
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
 	if ( name ) 
@@ -66,7 +76,21 @@
 	}
 
 	[encoder encodeObject:leftSource forKey:@"leftSource"];
-	[encoder encodeObject:leftSource forKey:@"rightSource"];
+	[encoder encodeObject:rightSource forKey:@"rightSource"];
 }
 
+/*
+-(BOOL) isEqual:(id)object
+{
+	if ( [[self leftSource] isEqual:[object leftSource]] &&
+		 [[self rightSource] isEqual:[object rightSource]] )
+	{
+		return YES;
+	}
+	else
+	{
+		return NO;
+	}
+}
+*/
 @end
