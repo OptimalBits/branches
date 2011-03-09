@@ -21,7 +21,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="4"/>
+			<integer value="2"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -165,7 +165,7 @@
 												</object>
 											</object>
 										</object>
-										<string key="NSFrame">{{0, 412}, {896, 23}}</string>
+										<string key="NSFrame">{{0, 394}, {896, 23}}</string>
 										<reference key="NSSuperview" ref="833591869"/>
 										<object class="NSColor" key="BWGBFillStartingColor">
 											<int key="NSColorSpace">1</int>
@@ -205,15 +205,15 @@
 												<string>NSFilenamesPboardType</string>
 											</object>
 										</object>
-										<string key="NSFrame">{{448, 393}, {448, 20}}</string>
+										<string key="NSFrame">{{448, 375}, {448, 20}}</string>
 										<reference key="NSSuperview" ref="833591869"/>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSPathCell" key="NSCell" id="267632270">
 											<int key="NSCellFlags">337772033</int>
-											<int key="NSCellFlags2">131072</int>
+											<int key="NSCellFlags2">163840</int>
 											<object class="NSURL" key="NSContents">
 												<nil key="NS.base"/>
-												<string key="NS.relative">file://localhost/Applications/</string>
+												<string key="NS.relative">file://localhost/Users/</string>
 											</object>
 											<reference key="NSSupport" ref="26"/>
 											<reference key="NSControlView" ref="246460597"/>
@@ -225,8 +225,8 @@
 												<bool key="EncodedWithXMLCoder">YES</bool>
 												<object class="NSPathComponentCell">
 													<int key="NSCellFlags">67239488</int>
-													<int key="NSCellFlags2">132096</int>
-													<string key="NSContents">Leopard</string>
+													<int key="NSCellFlags2">1024</int>
+													<string key="NSContents">Lazarus</string>
 													<reference key="NSSupport" ref="26"/>
 													<object class="NSColor" key="NSBackgroundColor" id="385323164">
 														<int key="NSColorSpace">6</int>
@@ -253,14 +253,14 @@
 												</object>
 												<object class="NSPathComponentCell">
 													<int key="NSCellFlags">67239488</int>
-													<int key="NSCellFlags2">132096</int>
-													<string key="NSContents">Applications</string>
+													<int key="NSCellFlags2">1024</int>
+													<string key="NSContents">Users</string>
 													<reference key="NSSupport" ref="26"/>
 													<reference key="NSBackgroundColor" ref="385323164"/>
 													<reference key="NSTextColor" ref="878478304"/>
 													<object class="NSURL" key="NSURL">
 														<nil key="NS.base"/>
-														<string key="NS.relative">file://localhost/Applications</string>
+														<string key="NS.relative">file://localhost/Users</string>
 													</object>
 												</object>
 											</object>
@@ -278,15 +278,15 @@
 												<string>NSFilenamesPboardType</string>
 											</object>
 										</object>
-										<string key="NSFrame">{{0, 393}, {448, 20}}</string>
+										<string key="NSFrame">{{0, 375}, {448, 20}}</string>
 										<reference key="NSSuperview" ref="833591869"/>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSPathCell" key="NSCell" id="773553769">
 											<int key="NSCellFlags">337772033</int>
-											<int key="NSCellFlags2">131072</int>
+											<int key="NSCellFlags2">163840</int>
 											<object class="NSURL" key="NSContents">
 												<nil key="NS.base"/>
-												<string key="NS.relative">file://localhost/Applications/</string>
+												<string key="NS.relative">file://localhost/Users/</string>
 											</object>
 											<reference key="NSSupport" ref="26"/>
 											<reference key="NSControlView" ref="74116968"/>
@@ -298,8 +298,8 @@
 												<bool key="EncodedWithXMLCoder">YES</bool>
 												<object class="NSPathComponentCell">
 													<int key="NSCellFlags">67239488</int>
-													<int key="NSCellFlags2">132096</int>
-													<string key="NSContents">Leopard</string>
+													<int key="NSCellFlags2">1024</int>
+													<string key="NSContents">Lazarus</string>
 													<reference key="NSSupport" ref="26"/>
 													<reference key="NSBackgroundColor" ref="385323164"/>
 													<reference key="NSTextColor" ref="878478304"/>
@@ -310,14 +310,14 @@
 												</object>
 												<object class="NSPathComponentCell">
 													<int key="NSCellFlags">67239488</int>
-													<int key="NSCellFlags2">132096</int>
-													<string key="NSContents">Applications</string>
+													<int key="NSCellFlags2">1024</int>
+													<string key="NSContents">Users</string>
 													<reference key="NSSupport" ref="26"/>
 													<reference key="NSBackgroundColor" ref="385323164"/>
 													<reference key="NSTextColor" ref="878478304"/>
 													<object class="NSURL" key="NSURL">
 														<nil key="NS.base"/>
-														<string key="NS.relative">file://localhost/Applications</string>
+														<string key="NS.relative">file://localhost/Users</string>
 													</object>
 												</object>
 											</object>
@@ -337,13 +337,13 @@
 													<object class="NSOutlineView" id="1022451088">
 														<reference key="NSNextResponder" ref="47566194"/>
 														<int key="NSvFlags">4370</int>
-														<string key="NSFrameSize">{894, 375}</string>
+														<string key="NSFrameSize">{896, 358}</string>
 														<reference key="NSSuperview" ref="47566194"/>
 														<bool key="NSEnabled">YES</bool>
 														<object class="NSTableHeaderView" key="NSHeaderView" id="320951986">
 															<reference key="NSNextResponder" ref="158094594"/>
-															<int key="NSvFlags">256</int>
-															<string key="NSFrameSize">{894, 17}</string>
+															<int key="NSvFlags">288</int>
+															<string key="NSFrameSize">{896, 17}</string>
 															<reference key="NSSuperview" ref="158094594"/>
 															<reference key="NSTableView" ref="1022451088"/>
 														</object>
@@ -401,7 +401,7 @@
 																<bool key="NSIsResizeable">YES</bool>
 																<bool key="NSIsEditable">YES</bool>
 																<reference key="NSTableView" ref="1022451088"/>
-																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype">
+																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype" id="417913816">
 																	<string key="NSKey">leftEntry.path</string>
 																	<bool key="NSAscending">YES</bool>
 																	<string key="NSSelector">compare:</string>
@@ -433,7 +433,7 @@
 																<bool key="NSIsResizeable">YES</bool>
 																<bool key="NSIsEditable">YES</bool>
 																<reference key="NSTableView" ref="1022451088"/>
-																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype">
+																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype" id="292983202">
 																	<string key="NSKey">leftEntry.size</string>
 																	<bool key="NSAscending">YES</bool>
 																	<string key="NSSelector">compare:</string>
@@ -470,7 +470,7 @@
 																<bool key="NSIsResizeable">YES</bool>
 																<bool key="NSIsEditable">YES</bool>
 																<reference key="NSTableView" ref="1022451088"/>
-																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype">
+																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype" id="71929932">
 																	<string key="NSKey">leftEntry.modificationDate</string>
 																	<bool key="NSAscending">YES</bool>
 																	<string key="NSSelector">compare:</string>
@@ -502,7 +502,7 @@
 																<bool key="NSIsResizeable">YES</bool>
 																<bool key="NSIsEditable">YES</bool>
 																<reference key="NSTableView" ref="1022451088"/>
-																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype" id="268618019">
+																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype">
 																	<string key="NSKey">rightEntry.path</string>
 																	<bool key="NSAscending">YES</bool>
 																	<string key="NSSelector">compare:</string>
@@ -534,7 +534,7 @@
 																<bool key="NSIsResizeable">YES</bool>
 																<bool key="NSIsEditable">YES</bool>
 																<reference key="NSTableView" ref="1022451088"/>
-																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype">
+																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype" id="85677440">
 																	<string key="NSKey">rightEntry.size</string>
 																	<bool key="NSAscending">YES</bool>
 																	<string key="NSSelector">compare:</string>
@@ -542,7 +542,7 @@
 															</object>
 															<object class="NSTableColumn" id="388507959">
 																<string key="NSIdentifier">Modified2</string>
-																<double key="NSWidth">132</double>
+																<double key="NSWidth">134</double>
 																<double key="NSMinWidth">10</double>
 																<double key="NSMaxWidth">3.4028234663852886e+38</double>
 																<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -566,7 +566,7 @@
 																<bool key="NSIsResizeable">YES</bool>
 																<bool key="NSIsEditable">YES</bool>
 																<reference key="NSTableView" ref="1022451088"/>
-																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype">
+																<object class="NSSortDescriptor" key="NSSortDescriptorPrototype" id="31222408">
 																	<string key="NSKey">rightEntry.modificationDate</string>
 																	<bool key="NSAscending">YES</bool>
 																	<string key="NSSelector">compare:</string>
@@ -591,7 +591,16 @@
 														<reference key="NSDataSource"/>
 														<object class="NSArray" key="NSSortDescriptors">
 															<bool key="EncodedWithXMLCoder">YES</bool>
-															<reference ref="268618019"/>
+															<reference ref="417913816"/>
+															<reference ref="31222408"/>
+															<reference ref="85677440"/>
+															<object class="NSSortDescriptor">
+																<string key="NSKey">rightEntry.path</string>
+																<bool key="NSAscending">NO</bool>
+																<string key="NSSelector">compare:</string>
+															</object>
+															<reference ref="71929932"/>
+															<reference ref="292983202"/>
 														</object>
 														<int key="NSColumnAutoresizingStyle">4</int>
 														<int key="NSDraggingSourceMaskForLocal">15</int>
@@ -600,7 +609,7 @@
 														<int key="NSTableViewDraggingDestinationStyle">0</int>
 													</object>
 												</object>
-												<string key="NSFrame">{{1, 17}, {894, 375}}</string>
+												<string key="NSFrame">{{0, 17}, {896, 358}}</string>
 												<reference key="NSSuperview" ref="427739388"/>
 												<reference key="NSNextKeyView" ref="1022451088"/>
 												<reference key="NSDocView" ref="1022451088"/>
@@ -633,7 +642,7 @@
 													<bool key="EncodedWithXMLCoder">YES</bool>
 													<reference ref="320951986"/>
 												</object>
-												<string key="NSFrame">{{1, 0}, {894, 17}}</string>
+												<string key="NSFrameSize">{896, 17}</string>
 												<reference key="NSSuperview" ref="427739388"/>
 												<reference key="NSNextKeyView" ref="320951986"/>
 												<reference key="NSDocView" ref="320951986"/>
@@ -642,10 +651,10 @@
 											</object>
 											<reference ref="683319822"/>
 										</object>
-										<string key="NSFrameSize">{896, 393}</string>
+										<string key="NSFrameSize">{896, 375}</string>
 										<reference key="NSSuperview" ref="833591869"/>
 										<reference key="NSNextKeyView" ref="47566194"/>
-										<int key="NSsFlags">562</int>
+										<int key="NSsFlags">560</int>
 										<reference key="NSVScroller" ref="497777148"/>
 										<reference key="NSHScroller" ref="1047338441"/>
 										<reference key="NSContentView" ref="47566194"/>
@@ -654,7 +663,7 @@
 										<bytes key="NSScrollAmts">QSAAAEEgAABBmAAAQZgAAA</bytes>
 									</object>
 								</object>
-								<string key="NSFrameSize">{896, 435}</string>
+								<string key="NSFrameSize">{896, 417}</string>
 								<reference key="NSSuperview" ref="868270905"/>
 								<string key="NSClassName">NSView</string>
 							</object>
@@ -671,11 +680,11 @@
 											<object class="NSView" id="404554192">
 												<reference key="NSNextResponder" ref="869624812"/>
 												<int key="NSvFlags">256</int>
-												<string key="NSFrameSize">{902, 332}</string>
+												<string key="NSFrameSize">{896, 316}</string>
 												<reference key="NSSuperview" ref="869624812"/>
 											</object>
 										</object>
-										<string key="NSFrame">{{-4, -4}, {902, 347}}</string>
+										<string key="NSFrameSize">{896, 316}</string>
 										<reference key="NSSuperview" ref="413953903"/>
 										<string key="NSOffsets">{0, 0}</string>
 										<object class="NSTextFieldCell" key="NSTitleCell">
@@ -691,17 +700,17 @@
 										</object>
 										<reference key="NSContentView" ref="404554192"/>
 										<int key="NSBorderType">0</int>
-										<int key="NSBoxType">0</int>
-										<int key="NSTitlePosition">2</int>
+										<int key="NSBoxType">4</int>
+										<int key="NSTitlePosition">0</int>
 										<bool key="NSTransparent">NO</bool>
 									</object>
 								</object>
-								<string key="NSFrame">{{0, 445}, {896, 329}}</string>
+								<string key="NSFrame">{{0, 427}, {896, 316}}</string>
 								<reference key="NSSuperview" ref="868270905"/>
 								<string key="NSClassName">NSView</string>
 							</object>
 						</object>
-						<string key="NSFrame">{{0, -31}, {896, 774}}</string>
+						<string key="NSFrameSize">{896, 743}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<int key="NSDividerStyle">3</int>
 					</object>
@@ -761,6 +770,22 @@
 						<reference key="destination" ref="1022451088"/>
 					</object>
 					<int key="connectionID">63</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">leftPathControl</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="74116968"/>
+					</object>
+					<int key="connectionID">64</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">rightPathControl</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="246460597"/>
+					</object>
+					<int key="connectionID">65</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1108,7 +1133,7 @@
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>{{53, 147}, {896, 743}}</string>
+					<string>{{159, 263}, {896, 743}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{628, 654}</string>
 					<string>{{217, 442}, {480, 272}}</string>
@@ -1186,7 +1211,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">63</int>
+			<int key="maxID">65</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1233,17 +1258,6 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">UnifyFolderDiffController</string>
 					<string key="superclassName">NSViewController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">startDiffSession:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">startDiffSession:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">startDiffSession:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
@@ -1251,16 +1265,20 @@
 							<string>diffContainer</string>
 							<string>filesView</string>
 							<string>leftDirectoryViewController</string>
+							<string>leftPathControl</string>
 							<string>nameColumn</string>
 							<string>rightDirectoryViewController</string>
+							<string>rightPathControl</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>NSBox</string>
 							<string>NSOutlineView</string>
 							<string>NSTreeController</string>
+							<string>NSPathControl</string>
 							<string>NSTableColumn</string>
 							<string>NSTreeController</string>
+							<string>NSPathControl</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -1270,8 +1288,10 @@
 							<string>diffContainer</string>
 							<string>filesView</string>
 							<string>leftDirectoryViewController</string>
+							<string>leftPathControl</string>
 							<string>nameColumn</string>
 							<string>rightDirectoryViewController</string>
+							<string>rightPathControl</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1288,12 +1308,20 @@
 								<string key="candidateClassName">NSTreeController</string>
 							</object>
 							<object class="IBToOneOutletInfo">
+								<string key="name">leftPathControl</string>
+								<string key="candidateClassName">NSPathControl</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">nameColumn</string>
 								<string key="candidateClassName">NSTableColumn</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">rightDirectoryViewController</string>
 								<string key="candidateClassName">NSTreeController</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">rightPathControl</string>
+								<string key="candidateClassName">NSPathControl</string>
 							</object>
 						</object>
 					</object>
