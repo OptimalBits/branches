@@ -599,8 +599,8 @@ NSRect rectForCharacterIndex( NSUInteger charIndex,
 	NSRange dstCharRange;
 	NSRange srcCharRange;
 	
-	NSInteger dstBias;
-	NSInteger srcBias;
+//	NSInteger dstBias;
+//	NSInteger srcBias;
 	
 	CCDiffHunk *dstHunk = [dstView selectedHunk];
 	CCDiffHunk *srcHunk = [self selectedHunk];
@@ -613,11 +613,11 @@ NSRect rectForCharacterIndex( NSUInteger charIndex,
 	
 	if ( [srcHunk status] == kLineEmpty )
 	{		
-		[srcStorage deleteCharactersInRange:srcCharRange];
+//		[srcStorage deleteCharactersInRange:srcCharRange];
 		[dstStorage deleteCharactersInRange:dstCharRange];
 		
-		srcBias = -srcCharRange.length;
-		dstBias = -dstCharRange.length;
+//		srcBias = -srcCharRange.length;
+//		dstBias = -dstCharRange.length;
 	}
 	else
 	{
@@ -641,21 +641,21 @@ NSRect rectForCharacterIndex( NSUInteger charIndex,
 		[dstStorage replaceCharactersInRange:dstCharRange
 						withAttributedString:string];
 		
-		[srcStorage setAttributes:textAttr range:srcCharRange];
-		[dstStorage setAttributes:textAttr range:dstCharRange];
+//		[srcStorage setAttributes:textAttr range:srcCharRange];
+//		[dstStorage setAttributes:textAttr range:dstCharRange];
 		
-		srcBias = 0;
-		dstBias = srcCharRange.length - dstCharRange.length;
+//		srcBias = 0;
+//		dstBias = srcCharRange.length - dstCharRange.length;
 	}
 	
-	[dstView removeSelectedHunk:dstBias];
-	[self removeSelectedHunk:srcBias];
+//	[dstView removeSelectedHunk:dstBias];
+//	[self removeSelectedHunk:srcBias];
 	
 //	[self gotoDiff];
 //	[self refreshDisplay];
 	
-	[self setNeedsDisplay:YES];
-	[dstView setNeedsDisplay:YES];	
+//	[self setNeedsDisplay:YES];
+//	[dstView setNeedsDisplay:YES];	
 }
 
 -(void) updateLinesIndexes:(NSUInteger) firstLineIndex

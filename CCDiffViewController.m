@@ -436,6 +436,7 @@ static NSRange charRangeFromLines( NSArray *lines, NSRange lineRange );
 	NSString *oldString = getSubstringFromLineRange(modifiedLines, 
 													lineRange,
  													&numEmptyLines );
+	oldRange.length -= numEmptyLines; // HAck
 	NSString *newString = 
 		[oldString stringByReplacingCharactersInRange:oldRange
 										   withString:substring];
@@ -449,7 +450,8 @@ static NSRange charRangeFromLines( NSArray *lines, NSRange lineRange );
 	
 	NSRange oldOriginalCharRange = [originalView charRangeFromLines:lineRange];
 	NSRange oldModifiedCharRange = NSMakeRange( oldCharLineRange.location, 
-	 										   [newString length] + numEmptyLines );
+	 									//	   [newString length] + numEmptyLines );
+											   [newString length] );
 	
 	[modifiedLines replaceObjectsInRange:lineRange 
 					withObjectsFromArray:[model leftLines]];
