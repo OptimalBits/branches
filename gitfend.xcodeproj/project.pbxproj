@@ -447,8 +447,8 @@
 		64197EAC120EE0C900AA687A /* Index */ = {
 			isa = PBXGroup;
 			children = (
-				64DBE2F611C3EC9B00DFB667 /* GitIndex.m */,
 				64DBE2F511C3EC9B00DFB667 /* GitIndex.h */,
+				64DBE2F611C3EC9B00DFB667 /* GitIndex.m */,
 				64197F9712109C8A00AA687A /* GitFile.h */,
 				64197F9812109C8A00AA687A /* GitFile.m */,
 			);
