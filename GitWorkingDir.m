@@ -396,7 +396,7 @@ static void updateStatus( NSTreeNode *node, GitFileStatus status );
 								   ignoreFile:ignoreFile];
 		}
 		else
-		{			
+		{
 			newStatus = [[repo index] fileStatus:u
 									  workingDir:[[repo workingDir] path]];
 		}
