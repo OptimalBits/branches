@@ -18,6 +18,34 @@
 
 #import "NSFileManager+DirectoryLocations.h"
 
+
+@interface PXSourceList (SelectItem)
+
+- (void)setSelectedItem:(id)item;
+
+@end
+
+@implementation PXSourceList (SelectItem)
+
+- (void)setSelectedItem:(id)item {
+    NSInteger itemIndex = [self rowForItem:item];
+    if (itemIndex < 0) {
+        // You need to decide what happens if the item doesn't exist
+        return;
+    }
+	
+    [self selectRowIndexes:[NSIndexSet indexSetWithIndex:itemIndex] byExtendingSelection:NO];
+}
+	
+@end
+
+
+@interface UnifyAppController (Private)
+
+-(void) startFolderDiffSession:(OBSDiffSession*) session;
+
+@end
+
 @implementation UnifyAppController
 
 @synthesize bookmarks, recents;
@@ -64,15 +92,88 @@
 	[bottomInfoText setStringValue:@"Ready"];
 	
 	folderDiffController = [[UnifyFolderDiffController alloc] init];
-	[mainContainer displayViewController:folderDiffController];
+	currentViewController = nil;
+	
+	operationQueue = [[NSOperationQueue alloc] init];
+	
+	//
+	//[toolbar validateVisibleItems];
 }
 
 -(void) dealloc
 {
+	[operationQueue release];
 	[bookmarks release];
 	[recents release];
 	[folderDiffController release];
 	[super dealloc];
+}
+
+
+- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
+{
+	SEL action = [anItem action];
+	
+    if ( action == @selector(nextDiff:)	||
+		 action == @selector(prevDiff:) ||
+		 action == @selector(mergeLeft:) ||
+		 action == @selector(mergeRight:) )
+	{
+		return [currentViewController validateUserInterfaceItem:anItem];
+	}
+	
+	return NO;
+}
+
+-(BOOL)validateToolbarItem:(NSToolbarItem *)toolbarItem
+{
+	SEL action = [toolbarItem action];
+	
+    if ( action == @selector(nextDiff:)	||
+		 action == @selector(prevDiff:) ||
+		 action == @selector(mergeLeft:) ||
+		 action == @selector(mergeRight:) )
+	{
+		return [currentViewController validateToolbarItem:toolbarItem];
+	}
+	return NO;
+}
+
+
+- (IBAction) nextDiff:(NSToolbarItem*) item
+{
+	[currentViewController nextDiff:item];
+}
+
+- (IBAction) prevDiff:(NSToolbarItem*) item
+{
+	[currentViewController prevDiff:item];
+}
+
+- (IBAction) mergeRight:(NSToolbarItem*) item
+{
+	[currentViewController mergeRight:item];
+}
+
+- (IBAction) mergeLeft:(NSToolbarItem*) item
+{
+	[currentViewController mergeLeft:item];
+}
+
+- (IBAction) saveChanges:(NSToolbarItem*) item
+{
+	
+}
+
+/**
+	This will forward all not implemented actions to the current controller.
+ */
+- (void)forwardInvocation:(NSInvocation *) invocation
+{
+    if ([currentViewController respondsToSelector:[invocation selector]])
+	{
+        [invocation invokeWithTarget:currentViewController];
+	}
 }
 
 - (IBAction) showNewSessionSheet:(id) sender
@@ -88,6 +189,9 @@
 
 - (IBAction) endNewSessionSheet:(id) sender
 {
+	[NSApp endSheet:newSessionSheet];
+	[newSessionSheet orderOut:sender];
+
 	if ( [sender tag] == 0 )
 	{
 		if ( ( [leftFilePath stringValue] != nil ) && 
@@ -100,27 +204,29 @@
 			[[[OBSDirectory alloc] initWithPath:[rightFilePath stringValue]] autorelease];
 			
 			[currentSession release];
+			
 			currentSession = [[OBSDiffSession alloc] init];
 			[currentSession setLeftSource:leftSource];
 			[currentSession setRightSource:rightSource];
 			
 			// TODO: move to own method
-			[recents insertObject:currentSession atIndex:0];
-			if ( [recents count] > 20 )
+			//if ( [recents containsObject:currentSession] == NO)
 			{
-				[recents removeLastObject];
+				[recents insertObject:currentSession atIndex:0];
+				if ( [recents count] > 20 )
+				{
+					[recents removeLastObject];
+				}
+				NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:recents];
+				[archivedData writeToFile:recentsArchivePath atomically:YES];
 			}
-			NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:recents];
-			[archivedData writeToFile:recentsArchivePath atomically:YES];
-			
+				
 			[bookmarksView reloadData];
-			
-			[folderDiffController setDiffSession:currentSession];
+
+			[bookmarksView expandItem:recents];
+			[bookmarksView setSelectedItem:currentSession];
 		}
-	}
-	
-	[NSApp endSheet:newSessionSheet];
-	[newSessionSheet orderOut:sender];
+	}	
 }
 
 - (IBAction) selectPath:(id)sender
@@ -167,11 +273,45 @@
 	}
 }
 
+-(void) startFolderDiffSession:(OBSDiffSession*) session
+{
+	OBSCompareDirectories *compareDirectories;
+	
+	[folderDiffProgressIndicator startAnimation:self];
+	
+	[mainContainer setContentView:folderDiffProgressIndicator];
+	
+	currentSession = session;
+	
+	[operationQueue cancelAllOperations];
+	
+	compareDirectories = [[OBSCompareDirectories alloc] 
+						  initWithLeftDirectory:[currentSession leftSource]
+						  rightDirectory:[currentSession rightSource]];
+	
+	[compareDirectories setCompletionBlock:^void (void)
+	 {
+		 if ([compareDirectories isFinished])
+		 {
+			 [folderDiffController setDiffTree:[compareDirectories resultTree]];
+			 [folderDiffController setDiffSession:currentSession];
+			 [folderDiffProgressIndicator startAnimation:self];
+			 [mainContainer displayViewController:folderDiffController];
+			 currentViewController = folderDiffController;
+		 }
+	 }
+	 ];
+	
+	[compareDirectories setThreadPriority:1.0];
+	
+	[operationQueue addOperation:compareDirectories];
+}
+
 // -------------------- Bookmarks  Data Source Start ---------------------------
 
-- (id)outlineView:(NSOutlineView *)outlineView 
-			child:(NSInteger)index 
-		   ofItem:(id)item
+- (id)sourceList:(PXSourceList *)aSourceList 
+		   child:(NSUInteger)index 
+		  ofItem:(id)item
 {
 	if ( item == nil )
 	{
@@ -192,17 +332,13 @@
 	}
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView 
-   isItemExpandable:(id)item
+- (BOOL)sourceList:(PXSourceList *)aSourceList 
+  isItemExpandable:(id)item
 {
-	//if ( ( item ) && ( item != recents ) && ( item != bookmarks ) )
-	{
-		return [self outlineView:outlineView numberOfChildrenOfItem:item] > 0;
-	}
-	//return NO;
+	return [self sourceList:aSourceList numberOfChildrenOfItem:item] > 0;
 }
 
-- (NSInteger)outlineView:(NSOutlineView *)outlineView 
+- (NSUInteger)sourceList:(PXSourceList *)sourceList 
   numberOfChildrenOfItem:(id)item
 {
 	if ( item )
@@ -222,64 +358,54 @@
 	}
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView 
-objectValueForTableColumn:(NSTableColumn *)tableColumn 
-		   byItem:(id)item
+- (id)sourceList:(PXSourceList *)aSourceList objectValueForItem:(id)item
 {
-	if ( [[tableColumn identifier] isEqualToString:@"bookmarks"] )
+	if ( item == nil )
 	{
-		if ( item == nil )
-		{
-			return @"--";
-		}
-		if ( item == bookmarks )
-		{
-			return @"BOOKMARKS";
-		}
-		else if ( item == recents )
-		{
-			return @"RECENTS";
-		}
-		else
-		{
-			OBSDiffSession *session = item;
-			return [session name];
-		}
+		return @"--";
 	}
+	if ( item == bookmarks )
+	{
+		return @"BOOKMARKS";
+	}
+	else if ( item == recents )
+	{
+		return @"RECENTS";
+	}
+	else
+	{
+		OBSDiffSession *session = item;
+		return [session name];
+	}
+}
+
+- (void)sourceList:(PXSourceList *)aSourceList setObjectValue:(id)object forItem:(id)item
+{
+	
+}
+
+- (BOOL)sourceList:(PXSourceList *)aSourceList itemHasIcon:(id)item
+{
+	return NO;
+}
+
+- (NSImage *)sourceList:(PXSourceList *)aSourceList iconForItem:(id)item
+{
 	return nil;
 }
 
-/*
-- (void)outlineView:(NSOutlineView *)outlineView 
-sortDescriptorsDidChange:(NSArray *)oldDescriptors
-{
-	NSArray *newDescriptors = [outlineView sortDescriptors];
-	[diffTree sortWithSortDescriptors:newDescriptors recursively:YES];
-	[outlineView reloadData];
-}
-*/
 
 // -------------------------- Data Source End ----------------------------------
 
 
 // --------------------- OutlineView Delegate Start ----------------------------
-
-- (void)outlineView:(NSOutlineView *)outlineView 
-didClickTableColumn:(NSTableColumn *)tableColumn
+- (void)sourceListSelectionDidChange:(NSNotification *)notification
 {
-	// Pass
-}
-
-
-- (void)outlineViewSelectionDidChange:(NSNotification *)notification
-{
-	//[self updateViews];
 	id item = [bookmarksView itemAtRow:[bookmarksView selectedRow]];
 	
 	if ( [item isKindOfClass:[OBSDiffSession class]] )
 	{
-		currentSession = item;
-		[folderDiffController setDiffSession:currentSession];
+		[self startFolderDiffSession:item];
 	}
 }
 
@@ -312,24 +438,21 @@ didClickTableColumn:(NSTableColumn *)tableColumn
 			   item:(id)item
 {
 	OBSTextCell *textCell = (OBSTextCell*) cell;
-	
+/*	
 	if ( ( item == bookmarks ) || ( item == recents ) )
 	{
+		[textCell setFont:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]];
 		[textCell setTextColor:[NSColor darkGrayColor]];
 		//[textCell setBackgroundStyle:NSBackgroundStyleRaised];
 		//[textCell setDrawsBackground:NO];
-		
-		[textCell setFont:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]];
 	}
 	else
 	{
-		[textCell setTextColor:[NSColor blackColor]];
 		[textCell setFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]];
+		[textCell setTextColor:[NSColor blackColor]];
 	}
+ */
 }
-
-
-
 
 
 // --------------------- OutlineView Delegate End ------------------------------
