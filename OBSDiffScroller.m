@@ -43,9 +43,9 @@
 	NSRect rect;
 	
 	scaleFactor = (slotRect.size.height - knobRect.size.height) / numLines;
-	
-	rect.origin.x	= slotRect.origin.x;
-	rect.size.width = slotRect.size.width;
+
+	rect.size.width = slotRect.size.width * 0.7;
+	rect.origin.x	= ceil(slotRect.origin.x + slotRect.size.width * 0.15);
 	
 	[NSBezierPath setDefaultLineWidth:0.0];
 	
@@ -58,9 +58,9 @@
 		firstLine = [hunk firstLineNumber];
 		lastLine = [hunk lastLineNumber];
 		
-		rect.origin.y = round( firstLine * scaleFactor + 
+		rect.origin.y = floor( firstLine * scaleFactor + 
 							   knobRect.size.height / 2 +
-							   slotRect.origin.y);
+							   slotRect.origin.y) + 0.5;
 		
 		rect.size.height = ((lastLine + 1) - firstLine) * scaleFactor;
 		
